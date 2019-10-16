@@ -82,10 +82,6 @@ class Caller(ABC):
         except InvalidInputError as e:
             self.send_warning(f"Error: {e}")
             raise
-        except TypeError as e:
-            # TODO: Remove this as dicts will not be passed like this
-            self.send_warning(f"(pyosc) Error: {e}. The key of a dict must be a primitive or a tuple.")
-            raise InvalidInputError(e)
 
         try:
             func, args, kwargs = self._parse_args(parsed_args_list)
@@ -97,10 +93,6 @@ class Caller(ABC):
             # Case: Multiple arguments with the same name/position
             self.send_warning(f"(pyosc) Error: {e}")
             raise TypeError(e)
-        # TODO: Remove. Never caught by current tests
-        # except TypeError as e:
-        #     self.send_warning(f"(pyosc) Error: {e}. Likely, the first argument does not match a function name.")
-        #     raise InvalidInputError(e)
 
         try:
             func(*args, **kwargs)

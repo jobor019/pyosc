@@ -1,4 +1,3 @@
-import json
 from timeit import default_timer as timer
 
 import numpy as np
@@ -113,7 +112,7 @@ def test_caller_valid_input():
 
 class TestClass(Caller):
     def __init__(self):
-        super(TestClass, self).__init__(parse_parenthesis_as_tuple=True)
+        super(TestClass, self).__init__(parse_parenthesis_as_list=False)
         self.var = -1
         self.warning_count = 0
 

@@ -8,7 +8,6 @@ from maxosc.Exceptions import InvalidInputError
 
 
 class TokenType(IntEnum):
-    # TODO: Remove rbrace lbrace colon from enum too
     INT, FLOAT, BOOL, NONE, WS, LBRACK, RBRACK, LPAR, RPAR, \
     STR1, STR2, PARAM_NAME, RAW_STR, ANYTHING = range(14)
 
