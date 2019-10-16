@@ -43,18 +43,17 @@ class Parser:
     RBRACK = r'\]'
     STR1 = r'"'
     STR2 = r'\''
-    COLON = r':'
     PARAM_NAME = r'[A-Za-z_][A-Za-z0-9_]*='
     RAW_STR = r'^[^=]+$'
     ANYTHING = r'.*'
 
     SEPARATORS = r'([A-Za-z0-9_]+=|["\'()[\]]|\s+)'
 
-    def __init__(self, parse_parenthesis_as_tuple: bool = False):
+    def __init__(self, parse_parenthesis_as_list: bool = False):
         self.logger = logging.getLogger(__name__)
         self.tokens: [Token] = deque()
         self.results: [object] = []
-        self.parse_parenthesis_as_tuple: bool = parse_parenthesis_as_tuple
+        self.parse_parenthesis_as_list: bool = parse_parenthesis_as_list
 
     def process(self, text) -> [object]:
         self._reset()
@@ -91,8 +90,6 @@ class Parser:
                 self.tokens.append(Token(TokenType.STR1, atom))
             elif re.fullmatch(Parser.STR2, atom, flags=re.IGNORECASE):
                 self.tokens.append(Token(TokenType.STR2, atom))
-            elif re.fullmatch(Parser.COLON, atom, flags=re.IGNORECASE):
-                self.tokens.append(Token(TokenType.COLON, atom))
             elif re.fullmatch(Parser.PARAM_NAME, atom, flags=re.IGNORECASE):
                 self.tokens.append(Token(TokenType.PARAM_NAME, atom))
             elif re.fullmatch(Parser.RAW_STR, atom, flags=re.IGNORECASE):
@@ -140,10 +137,10 @@ class Parser:
         elif t.token_type == TokenType.LPAR:
             tup_as_list: [object] = []
             self._tuple(tup_as_list)
-            if self.parse_parenthesis_as_tuple:
-                return tuple(tup_as_list)
-            else:
+            if self.parse_parenthesis_as_list:
                 return tup_as_list
+            else:
+                return tuple(tup_as_list)
         elif t.token_type == TokenType.STR1:
             str_list: [str] = []
             next_token: Token = self._pop_ws()
@@ -209,7 +206,7 @@ class Parser:
             else:
                 self.tokens.popleft()
         # The function should never reach this point assuming input is correctly formatted
-        raise InvalidInputError("incorrectly formatted input. Reached end before list/tuple/dict was completed.")
+        raise InvalidInputError("incorrectly formatted input. Reached end before list/tuple was terminated.")
 
     def _is_empty(self):
         return not len(self.tokens) or all([t.token_type == TokenType.WS for t in self.tokens])

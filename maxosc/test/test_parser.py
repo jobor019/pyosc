@@ -1,3 +1,4 @@
+import json
 from timeit import default_timer as timer
 
 import numpy as np
@@ -35,11 +36,6 @@ def test_parseTree_valid_input():
     assert (p.process("(())") == [((),)])
     assert (p.process("()()") == [(), ()])
 
-    # assert (p.process("{}") == ['{}'])
-    # assert (p.process("{k:v}") == ['{"k": "v"}'])
-    # assert (p.process("{k:v 5:8 9:11}") == [{"k": "v", 5: 8, 9: 11}])
-    # assert (p.process("{k:{k:v} kk:{k:v}}") == [{"k": {"k": "v"}, "kk": {"k": "v"}}])
-
     assert (p.process("my_param=1234") == [FunctionParam("my_param", 1234)])
     assert (p.process("my_param=[complex (array of) informat 1 0 n.]")
             == [FunctionParam("my_param", ["complex", ("array", "of"), "informat", 1, 0, "n."])])
@@ -50,6 +46,9 @@ def test_parseTree_valid_input():
     assert (p.process("'my_param = 1234'") == ["my_param = 1234"])
     assert (p.process("'{}= 1234'") == ["{}= 1234"])
     assert (p.process("ÅåÄäÆæÖöØøçÇéêèμィァアィイゥウェエォオカガキギク") == ["ÅåÄäÆæÖöØøçÇéêèμィァアィイゥウェエォオカガキギク"])
+
+    # Max dicts
+    # assert (json.dumps(p.process('{\"k\":\"v\"}')) == {"k":"v"})
 
 
 def test_parseTree_invalid_input():
@@ -81,11 +80,6 @@ def test_caller_valid_input():
     t.call("func_one_mand []")
     assert (t.var == [] and t.warning_count == 0)
     t.call("func_one_mand [1 2 3]")
-    # assert (t.var == [1, 2, 3] and t.warning_count == 0)
-    # t.call("func_one_mand {k:{k:v}}")
-    # assert (t.var == {"k": {"k": "v"}} and t.warning_count == 0)
-    # t.call("func_one_mand {(1 2 3):v}")
-    # assert (t.var == {(1, 2, 3): "v"} and t.warning_count == 0)
 
     t.call("func_one_opt")
     assert (t.var == None and t.warning_count == 0)

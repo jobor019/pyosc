@@ -12,8 +12,8 @@ class Caller(ABC):
        An abstract method `send_warning` is also provided to let the user redirect the output of any warnings freely.
     """
 
-    def __init__(self, parse_parenthesis_as_tuple: bool):
-        self.__parse_tree_parser: Parser = Parser(parse_parenthesis_as_tuple)
+    def __init__(self, parse_parenthesis_as_list: bool):
+        self.__parse_tree_parser: Parser = Parser(parse_parenthesis_as_list)
 
     def call(self, string: str):
         """Parses a string and if content of string matches a function, calls that function with provided arguments.
@@ -65,6 +65,7 @@ class Caller(ABC):
         ------
         InvalidInputError: Raised if input in any way is incorrectly formatted
         TypeError: Raised if function doesn't exist or has invalid argument names/values.
+        Exception: Any exception can technically be raised by the function called.
 
         Notes
         -----

@@ -7,7 +7,6 @@ class MaxTests(MaxOsc):
         super(MaxTests, self).__init__()
         self.run()
 
-
     def no_args(self):
         print("no args")
         self.send_llll("/no_args", "bang")
@@ -35,6 +34,10 @@ class MaxTests(MaxOsc):
     def throughput_llll(self, ret_adr, *args):
         print("throughput_llll Args are {}".format(args))
         self.send_llll(ret_adr, *args)
+
+    def throughput_dict(self, ret_adr, dd: str):
+        dd_dict = self.parse_maxdict(dd)
+        self.send_maxdict(ret_adr, dd_dict)
 
 
 if __name__ == '__main__':

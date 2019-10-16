@@ -1,3 +1,4 @@
+import json
 import logging
 
 from maxosc.Caller import Caller
@@ -21,9 +22,9 @@ class MaxOsc(Caller):
        All calls from max should be sent to the address `/call` and typically contain the return address as an argument.
     """
 
-    def __init__(self, ip="127.0.0.1", port_in=8081, port_out=8080):
+    def __init__(self, ip="127.0.0.1", port_in=8081, port_out=8080, parse_parenthesis_as_list=True):
         self.logger = logging.getLogger(__name__)
-        super(MaxOsc, self).__init__()
+        super(MaxOsc, self).__init__(parse_parenthesis_as_list)
         self._client = SimpleUDPClient(ip, port_out)
         self._max_formatter: MaxFormatter = MaxFormatter()
         dispatcher = Dispatcher()
@@ -39,7 +40,11 @@ class MaxOsc(Caller):
             else:
                 args_formatted.append(str(arg))
         args_str: str = " ".join([str(arg) for arg in args_formatted])
-        self.call(args_str)
+        try:
+            self.call(args_str)
+        except InvalidInputError:
+            pass    # Warnings are sent through send_warning
+
 
     def _default_handler(self):
         warning = "OSCWarning: message received on unregistered address. No action performed."
@@ -58,6 +63,9 @@ class MaxOsc(Caller):
             self._client.send_message(address, llll_string)
         except InvalidInputError as e:
             self.send_warning(str(e))
+
+    def parse_maxdict(self, dd: str) -> dict:
+        return json.loads(dd)
 
     def send_maxdict(self, address: str, dd: dict):
         self._client.send_message(address, self._max_formatter.format_maxdict(dd))
