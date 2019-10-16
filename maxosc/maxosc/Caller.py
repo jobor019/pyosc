@@ -12,8 +12,8 @@ class Caller(ABC):
        An abstract method `send_warning` is also provided to let the user redirect the output of any warnings freely.
     """
 
-    def __init__(self):
-        self.__parse_tree_parser: Parser = Parser()
+    def __init__(self, parse_parenthesis_as_tuple: bool):
+        self.__parse_tree_parser: Parser = Parser(parse_parenthesis_as_tuple)
 
     def call(self, string: str):
         """Parses a string and if content of string matches a function, calls that function with provided arguments.
@@ -96,6 +96,7 @@ class Caller(ABC):
             # Case: Multiple arguments with the same name/position
             self.send_warning(f"(pyosc) Error: {e}")
             raise TypeError(e)
+        # TODO: Remove. Never caught by current tests
         # except TypeError as e:
         #     self.send_warning(f"(pyosc) Error: {e}. Likely, the first argument does not match a function name.")
         #     raise InvalidInputError(e)

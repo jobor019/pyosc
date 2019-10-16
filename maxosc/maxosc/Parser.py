@@ -8,8 +8,9 @@ from maxosc.Exceptions import InvalidInputError
 
 
 class TokenType(IntEnum):
-    INT, FLOAT, BOOL, NONE, WS, LPAR, RPAR, LBRACK, RBRACK, LBRACE, RBRACE, \
-    STR1, STR2, COLON, PARAM_NAME, RAW_STR, ANYTHING = range(17)
+    # TODO: Remove rbrace lbrace colon from enum too
+    INT, FLOAT, BOOL, NONE, WS, LBRACK, RBRACK, LPAR, RPAR, \
+    STR1, STR2, PARAM_NAME, RAW_STR, ANYTHING = range(14)
 
 
 class Token:
@@ -40,21 +41,20 @@ class Parser:
     RPAR = r'\)'
     LBRACK = r'\['
     RBRACK = r'\]'
-    LBRACE = r'\{'
-    RBRACE = r'\}'
     STR1 = r'"'
     STR2 = r'\''
     COLON = r':'
     PARAM_NAME = r'[A-Za-z_][A-Za-z0-9_]*='
-    RAW_STR = r'^[^=:]+$'
+    RAW_STR = r'^[^=]+$'
     ANYTHING = r'.*'
 
-    SEPARATORS = r'([A-Za-z0-9_]+=|[:"\'{}()[\]]|\s+)'
+    SEPARATORS = r'([A-Za-z0-9_]+=|["\'()[\]]|\s+)'
 
-    def __init__(self):
+    def __init__(self, parse_parenthesis_as_tuple: bool = False):
         self.logger = logging.getLogger(__name__)
         self.tokens: [Token] = deque()
         self.results: [object] = []
+        self.parse_parenthesis_as_tuple: bool = parse_parenthesis_as_tuple
 
     def process(self, text) -> [object]:
         self._reset()
@@ -87,10 +87,6 @@ class Parser:
                 self.tokens.append(Token(TokenType.LBRACK, atom))
             elif re.fullmatch(Parser.RBRACK, atom, flags=re.IGNORECASE):
                 self.tokens.append(Token(TokenType.RBRACK, atom))
-            elif re.fullmatch(Parser.LBRACE, atom, flags=re.IGNORECASE):
-                self.tokens.append(Token(TokenType.LBRACE, atom))
-            elif re.fullmatch(Parser.RBRACE, atom, flags=re.IGNORECASE):
-                self.tokens.append(Token(TokenType.RBRACE, atom))
             elif re.fullmatch(Parser.STR1, atom, flags=re.IGNORECASE):
                 self.tokens.append(Token(TokenType.STR1, atom))
             elif re.fullmatch(Parser.STR2, atom, flags=re.IGNORECASE):
@@ -144,11 +140,10 @@ class Parser:
         elif t.token_type == TokenType.LPAR:
             tup_as_list: [object] = []
             self._tuple(tup_as_list)
-            return tuple(tup_as_list)
-        elif t.token_type == TokenType.LBRACE:
-            d: Dict = {}
-            self._dict(d)
-            return d
+            if self.parse_parenthesis_as_tuple:
+                return tuple(tup_as_list)
+            else:
+                return tup_as_list
         elif t.token_type == TokenType.STR1:
             str_list: [str] = []
             next_token: Token = self._pop_ws()
@@ -183,13 +178,6 @@ class Parser:
             t = self._peek_nws()
         self._pop_nws()
 
-    def _dict(self, d: Dict):
-        t: Token = self._peek_nws()
-        while t.token_type != TokenType.RBRACE:
-            self._kvpair(d)
-            t = self._peek_nws()
-        self._pop_nws()
-
     def _kvpair(self, d: Dict):
         k = self._obj()
         if self._pop_nws().token_type != TokenType.COLON:
@@ -210,7 +198,7 @@ class Parser:
     def _pop_ws(self):
         try:
             return self.tokens.popleft()
-        except IndexError as e:
+        except IndexError:
             raise InvalidInputError("incorrectly formatted input. Reached end of content before string was terminated.")
 
     def _peek_nws(self):

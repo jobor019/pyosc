@@ -1,10 +1,11 @@
-from maxosc.maxosc.MaxOsc import MaxOsc
+from maxosc.MaxOsc import MaxOsc
 
 
 class MaxTests(MaxOsc):
 
     def __init__(self):
         super(MaxTests, self).__init__()
+        self.run()
 
 
     def no_args(self):
