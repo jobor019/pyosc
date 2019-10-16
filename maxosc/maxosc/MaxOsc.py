@@ -1,10 +1,11 @@
 import logging
 
+from maxosc.Caller import Caller
+from maxosc.Exceptions import InvalidInputError
+from maxosc.MaxFormatter import MaxFormatter
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
 from pythonosc.udp_client import SimpleUDPClient
-
-from .MaxOscLib import Caller, MaxFormatter, InvalidInputError
 
 
 class MaxOsc(Caller):
@@ -64,4 +65,3 @@ class MaxOsc(Caller):
     def send_warning(self, warning: str, *args, **kwargs):
         self.logger.warning(warning)
         self._client.send_message("/warning", warning)
-
