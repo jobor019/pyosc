@@ -32,6 +32,8 @@ class MaxOsc(Caller):
         dispatcher.set_default_handler(self._default_handler)
         self._server = BlockingOSCUDPServer((ip, port_in), dispatcher)
 
+        self.logger.info(f"MaxOsc initialized on ip {ip} with incoming port {port_in} and outgoing port {port_out}.")
+
     def _handle_msg(self, _address, *args):
         args_formatted: [str] = []
         for arg in args:

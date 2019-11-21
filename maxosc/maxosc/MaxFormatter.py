@@ -1,6 +1,8 @@
+import collections.abc
 import json
 import re
 from typing import Any, Dict
+from collections.abc import Iterable
 
 from maxosc.Exceptions import InvalidInputError
 
@@ -42,6 +44,23 @@ class MaxFormatter:
 
     @staticmethod
     def format_maxdict(dd: Dict[Any, Any]) -> str:
+        """ Parse a dict into a single string """
         dd_str: str = json.dumps(dd, ensure_ascii=False, allow_nan=False)
         dd_escaped: str = re.sub(r'"', "\\\"", dd_str)
-        return '"' + dd_escaped + '"'
+        return dd_escaped
+
+    def format_maxdict_large(self, dd: Dict[Any, Any]) -> [(str, str)]:
+        """ Formats a large dict into several max-compatible key-value pairs.
+         Will only handle dicts of dicts (of dicts of ...), not lists/tuples containing dicts."""
+        parsed_dict: [(str, str)] = []
+        self._format_maxdict_recursive(dd, parsed_dict, "somax")
+        return parsed_dict
+
+
+    def _format_maxdict_recursive(self, dd: Dict[Any, Any], results: [(str, str)], parent_key: str):
+        for k, v in dd.items():
+            key: str = parent_key + "::" + k
+            if isinstance(v, collections.abc.Mapping):
+                self._format_maxdict_recursive(v, results, key)
+            else:
+                results.append((key, v))
