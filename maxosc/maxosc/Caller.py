@@ -1,7 +1,7 @@
-from abc import abstractmethod, ABC
+from abc import ABC
 from typing import Any, Dict, Callable, List
 
-from maxosc.Exceptions import DuplicateKeyError, InvalidInputError
+from maxosc.Exceptions import DuplicateKeyError, InvalidInputError, MaxOscError
 from maxosc.Parser import FunctionParam, Parser
 
 
@@ -15,7 +15,8 @@ class Caller(ABC):
     def __init__(self, parse_parenthesis_as_list: bool):
         self.__parse_tree_parser: Parser = Parser(parse_parenthesis_as_list)
 
-    def call(self, string: str):
+    def call(self, string: str) -> Any:
+        # TODO: Update docstring
         """Parses a string and if content of string matches a function, calls that function with provided arguments.
 
        The elements of the string should be space-separated, any other separator (comma, semicolon) will be
@@ -32,7 +33,7 @@ class Caller(ABC):
 
         Examples
         --------
-        Given an instance `m` of a class `MyClass` with function my_func(a, b=None) (extending `Caller`):
+        Given an instance `m` of a class `MyClass` with function my_func(a, b) (extending `Caller`):
         >>> m = MyClass(Caller)
         >>> m.call("my_func 1 2")
         >>> m.call("my_func 1 b=2")
@@ -63,9 +64,9 @@ class Caller(ABC):
 
         Raises
         ------
-        InvalidInputError: Raised if input in any way is incorrectly formatted
-        TypeError: Raised if function doesn't exist or has invalid argument names/values.
-        Exception: Any exception can technically be raised by the function called.
+        MaxOscError: Raised if input in any way is incorrectly formatted, if function doesn't exist
+                     or has invalid argument names/values.
+        Exception: Any uncaught exception by the function called will be raised here.
 
         Notes
         -----
@@ -80,33 +81,21 @@ class Caller(ABC):
         try:
             parsed_args_list = self.__parse_tree_parser.process(string)
         except InvalidInputError as e:
-            self.send_warning(f"Error: {e}")
-            raise
+            raise MaxOscError(f"[PyOsc Error]: {e}") from e
 
         try:
             func, args, kwargs = self._parse_args(parsed_args_list)
         except AttributeError as e:
-            # Case: A function with the name does not exist
-            self.send_warning(f"(pyosc) Error: {e}")
-            raise InvalidInputError(e)
+            raise MaxOscError("[PyOsc Error]: A function with that name does not exist.") from e
         except DuplicateKeyError as e:
-            # Case: Multiple arguments with the same name/position
-            self.send_warning(f"(pyosc) Error: {e}")
-            raise TypeError(e)
-
+            raise MaxOscError("[PyOsc Error]: Multiple arguments with the same name/position were given.") from e
         try:
-            func(*args, **kwargs)
+            return func(*args, **kwargs)
         except TypeError as e:
-            self.send_warning(f"(pyosc) Error: {e}. The arguments for function {func.__name__} "
-                              f"are: {func.__code__.co_varnames[1:]}")
-            raise
+            raise MaxOscError(f"[PyOsc Error]: {e}. The arguments for function {func.__name__} "
+                              f"are: {func.__code__.co_varnames[1:]}") from e
         except Exception as e:
-            self.send_warning(f"(pyosc) Error: {e}")
-            raise
-
-    @abstractmethod
-    def send_warning(self, warning: str, *args, **kwargs):
-        raise NotImplementedError("no send_warning function has been implemented")
+            raise type(e)(f"[PyOsc Error]: An exception occurred in function '{func.__name__}. {e}'") from e
 
     def _parse_args(self, parsed_args: [Any]) -> (Callable, List[Any], {str: Any}):
         func_name: str = parsed_args[0]
@@ -118,7 +107,7 @@ class Caller(ABC):
                 if arg.name not in kwargs:
                     kwargs[arg.name] = arg.value
                 else:
-                    raise DuplicateKeyError(f"got multiple values for argument '{arg.name}'.")
+                    raise DuplicateKeyError(f"Got multiple values for argument '{arg.name}'.")
             else:
                 args.append(arg)
         return func, args, kwargs
