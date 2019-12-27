@@ -72,8 +72,7 @@ class Caller(ABC):
         -----
         Note that this function will never return any value and can not be modified to do so. A
         ny function call must be self contained.
-
-        Also note that the symbols `=` (equal) `:` (colon) and `'` (single quote) are not allowed in strings,
+Also note that the symbols `=` (equal) `:` (colon) and `'` (single quote) are not allowed in strings,
         as they are use for named parameters, dictionaries and multiword strings respectively.
 
         The parser is not case sensitive for booleans/None and can handle any number of whitespaces as separators.
@@ -92,8 +91,8 @@ class Caller(ABC):
         try:
             return func(*args, **kwargs)
         except TypeError as e:
-            raise MaxOscError(f"[PyOsc Error]: {e}. The arguments for function {func.__name__} "
-                              f"are: {func.__code__.co_varnames[1:]}") from e
+            raise TypeError(f"[PyOsc Error]: {e}. The arguments for function {func.__name__} "
+                            f"are: {func.__code__.co_varnames[1:]}") from e
         except Exception as e:
             raise type(e)(f"[PyOsc Error]: An exception occurred in function '{func.__name__}. {e}'") from e
 

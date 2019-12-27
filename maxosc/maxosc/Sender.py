@@ -35,7 +35,7 @@ class Sender:
 
     def _send_raw(self, address: str, *args):
         """ Raises: ValueError if invalid send format"""
-        self._client.send_message(address, args)
+        self._client.send_message(address, *args)
 
     def _send_flat(self, address: str, *args):
         """ Raises: ValueError if invalid send format or trying to send custom class, etc.

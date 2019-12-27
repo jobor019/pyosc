@@ -25,7 +25,7 @@ class MaxOsc(Caller):
        All calls from max should be sent to the address `/call` and typically contain the return address as an argument.
     """
 
-    def __init__(self, ip: str = "127.0.0.1", port_in: int = 8081, port_out: int = 8080,
+    def __init__(self, ip: str = "127.0.0.1", port_in: int = 8081, port_out: int = 8080, recv_address: str = "/pyosc",
                  parse_parenthesis_as_list: bool = False, send_format: SendFormat = SendFormat.FLATTEN,
                  osc_log_level: Optional[int] = logging.INFO):
         """
@@ -45,7 +45,7 @@ class MaxOsc(Caller):
             self.logger.addHandler(handler)
 
         dispatcher = Dispatcher()
-        dispatcher.map("/call", self.main_callback)
+        dispatcher.map(recv_address, self.main_callback)
         dispatcher.set_default_handler(self._default_handler)
         self._server = BlockingOSCUDPServer((ip, port_in), dispatcher)
         self.logger.info(f"MaxOsc initialized on ip {ip} with incoming port {port_in} and outgoing port {port_out}.")
@@ -54,7 +54,7 @@ class MaxOsc(Caller):
         args_formatted: str = MaxFormatter.format_as_string(*args)
         try:
             return_value: Any = self.call(args_formatted)
-            self.sender.send(return_value)
+            self.sender.send(send_address, return_value)
         except MaxOscError as e:
             self._handle_max_osc_error(e)
         except TypeError as e:
@@ -82,4 +82,3 @@ class MaxOsc(Caller):
 
     def run(self) -> None:
         self._server.serve_forever()
-

@@ -35,9 +35,9 @@ class MaxTests(MaxOsc):
         print("throughput_llll Args are {}".format(args))
         self._send_llll(ret_adr, *args)
 
-    def throughput_dict(self, ret_adr, dd: str):
-        dd_dict = self.parse_maxdict(dd)
-        self.send_maxdict(ret_adr, dd_dict)
+    # def throughput_dict(self, ret_adr, dd: str):
+    #     dd_dict = self.parse_maxdict(dd)
+    #     self.send_maxdict(ret_adr, dd_dict)
 
 
 if __name__ == '__main__':

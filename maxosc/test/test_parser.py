@@ -3,7 +3,7 @@ from timeit import default_timer as timer
 import numpy as np
 import pytest
 from maxosc.Caller import Caller
-from maxosc.Exceptions import InvalidInputError
+from maxosc.Exceptions import InvalidInputError, MaxOscError
 from maxosc.Parser import Parser, FunctionParam
 
 
@@ -64,6 +64,8 @@ def test_parseTree_invalid_input():
     with pytest.raises(InvalidInputError): p.process("'some text")
 
 
+# TODO: These tests have been deprecated with the removal of send_warning from Caller.
+#       Needs to be updated with `with pytest.raises` rather than warning count assertions.
 def test_caller_valid_input():
     t = TestClass()
 
@@ -140,7 +142,7 @@ def test_caller_invalid_input():
     t = TestClass()
 
     # Nonexistent function
-    with pytest.raises(InvalidInputError):
+    with pytest.raises(MaxOscError):
         t.call("nonexistent_function")
     assert (t.warning_count == 1)
 
