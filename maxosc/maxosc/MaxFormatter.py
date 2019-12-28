@@ -9,6 +9,9 @@ from maxosc.Exceptions import InvalidInputError
 class MaxFormatter:
     DICT_DEPTH = float('inf')
 
+    NONE_NAME = "null"
+
+
     @staticmethod
     def format_as_string(*args) -> str:
         args_as_strings: [str] = []
@@ -48,7 +51,7 @@ class MaxFormatter:
                 MaxFormatter._parse_to_lll(string_list, *arg)
                 string_list.append(")")
             elif arg is None:
-                string_list.append("null")
+                string_list.append(MaxFormatter.NONE_NAME)
             else:
                 raise InvalidInputError(f"Type {type(arg)} is not supported by the llll syntax.")
 
@@ -95,14 +98,18 @@ class MaxFormatter:
 
     @staticmethod
     def flatten(l: Any) -> [Any]:
-        """ Raises: TypeError if dict"""
+        """ Raises: TypeError if dict
+            Note: Any nested empty lists etc will be removed. Nones will be replaced with the string 'null'"""
         return MaxFormatter._flatten([], l)
 
     @staticmethod
     def _flatten(flat_list: [Any], l: Any) -> [Any]:
         """ Raises: TypeError if dict"""
         if not isinstance(l, Iterable) or isinstance(l, (str, bytes)):
-            flat_list.append(l)
+            if l is None:
+                flat_list.append(MaxFormatter.NONE_NAME)
+            else:
+                flat_list.append(l)
         elif isinstance(l, collections.abc.Mapping):
             raise TypeError("Cannot parse dicts as return arguments")  # TODO: Handle when implem. dict strategy
         else:
