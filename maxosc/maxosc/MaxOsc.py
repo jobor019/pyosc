@@ -26,8 +26,8 @@ class MaxOsc(Caller):
     """
 
     def __init__(self, ip: str = "127.0.0.1", port_in: int = 8081, port_out: int = 8080, recv_address: str = "/pyosc",
-                 parse_parenthesis_as_list: bool = False, send_format: SendFormat = SendFormat.FLATTEN,
-                 osc_log_level: Optional[int] = logging.INFO):
+                 parse_parenthesis_as_list: bool = False, discard_duplicate_arguments: bool = True,
+                 send_format: SendFormat = SendFormat.FLATTEN, osc_log_level: Optional[int] = logging.INFO):
         """
 
         :param ip:
@@ -37,7 +37,7 @@ class MaxOsc(Caller):
         :param send_format:
         :param osc_log_level: Forward log messages to Max. Will not forward if set to None. To forward only some messages, override _handle_max_osc_error, _handle_type_error or _handle_error
         """
-        super(MaxOsc, self).__init__(parse_parenthesis_as_list)
+        super(MaxOsc, self).__init__(parse_parenthesis_as_list, discard_duplicate_arguments)
         self.logger = logging.getLogger(__name__)
         self.sender: Sender = Sender(ip, port_out, send_format)
         if osc_log_level:

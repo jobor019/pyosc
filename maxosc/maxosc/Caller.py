@@ -12,8 +12,25 @@ class Caller(ABC):
        An abstract method `send_warning` is also provided to let the user redirect the output of any warnings freely.
     """
 
-    def __init__(self, parse_parenthesis_as_list: bool):
+    SELF_ARGUMENT_KEYWORD = "self"
+    VARIABLE_ARGUMENTS_KEYWORD = "args"
+
+    def __init__(self, parse_parenthesis_as_list: bool, discard_duplicate_args: bool):
+        # TODO: Docstring
+        """ discard_duplicate_args: if True: will discard any named argument (kwarg) that already exists,
+        either as positional or optional argument. The leftmost value will be kept
+
+        Example: when calling a function my_func(a,b,c):
+            my_func a=1 a=2 a=3 b=4 c=5 will result in my_func(1,4,5)
+            my_func 1 2 a=3 c=4         will result in my_func(1,2,4)
+            my_func a=1 2 3 4           will still raise an error (2 will still be treated as first positional arg)
+
+        If function accepts a variable number arguments, make sure that the last parameter is named `*args`.
+
+        If false: will raise an error upon duplicate keys.
+            """
         self.__parse_tree_parser: Parser = Parser(parse_parenthesis_as_list)
+        self.discard_duplicate_args: bool = discard_duplicate_args
 
     def call(self, string: str) -> Any:
         # TODO: Update docstring
@@ -83,11 +100,13 @@ Also note that the symbols `=` (equal) `:` (colon) and `'` (single quote) are no
             raise MaxOscError(f"[PyOsc Error]: {e}") from e
 
         try:
-            func, args, kwargs = self._parse_args(parsed_args_list)
+            func, args, kwargs = self._parse_args(parsed_args_list, self.discard_duplicate_args)
         except AttributeError as e:
             raise MaxOscError("[PyOsc Error]: A function with that name does not exist.") from e
         except DuplicateKeyError as e:
             raise MaxOscError("[PyOsc Error]: Multiple arguments with the same name/position were given.") from e
+        except IndexError as e:
+            raise MaxOscError("[PyOsc Error]: ") from e
         try:
             return func(*args, **kwargs)
         except TypeError as e:
@@ -96,17 +115,37 @@ Also note that the symbols `=` (equal) `:` (colon) and `'` (single quote) are no
         except Exception as e:
             raise type(e)(f"[PyOsc Error]: An exception occurred in function '{func.__name__}. {e}'") from e
 
-    def _parse_args(self, parsed_args: [Any]) -> (Callable, List[Any], {str: Any}):
+    def _parse_args(self, parsed_args: [Any], discard_duplicate_args: bool) -> (Callable, List[Any], {str: Any}):
+        # TODO: Docstring
+        """ Raises: DuplicateKeyError if discard_duplicate_args"""
         func_name: str = parsed_args[0]
         func: Callable = getattr(self, func_name)
         args: [Any] = []
         kwargs: Dict[str: Any] = {}
-        for arg in parsed_args[1:]:
-            if isinstance(arg, FunctionParam):
-                if arg.name not in kwargs:
-                    kwargs[arg.name] = arg.value
+        # Discards any duplicate arguments within kwargs, preferring the leftmost instance,
+        # as well as any kwarg that already exists as a positional argument in args.
+        if discard_duplicate_args:
+            variable_names: [str] = list(func.__code__.co_varnames)
+            if self.SELF_ARGUMENT_KEYWORD in variable_names:
+                variable_names.remove(self.SELF_ARGUMENT_KEYWORD)
+            for arg in parsed_args[1:]:
+                if isinstance(arg, FunctionParam):
+                    if arg.name not in kwargs and arg.name in variable_names:
+                        kwargs[arg.name] = arg.value
+                        variable_names.remove(arg.name)
                 else:
-                    raise DuplicateKeyError(f"Got multiple values for argument '{arg.name}'.")
-            else:
-                args.append(arg)
+                    if variable_names:
+                        args.append(arg)
+                        # If function accepts a variable number of arguments, don't discard the last name (*args)
+                        if not variable_names[0] == self.VARIABLE_ARGUMENTS_KEYWORD:
+                            variable_names.pop(0)
+        else:
+            for arg in parsed_args[1:]:
+                if isinstance(arg, FunctionParam):
+                    if arg.name not in kwargs:
+                        kwargs[arg.name] = arg.value
+                    else:
+                        raise DuplicateKeyError(f"Got multiple values for argument '{arg.name}'.")
+                else:
+                    args.append(arg)
         return func, args, kwargs
