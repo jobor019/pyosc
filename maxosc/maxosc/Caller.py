@@ -92,7 +92,7 @@ Also note that the symbols `=` (equal) `:` (colon) and `'` (single quote) are no
             return func(*args, **kwargs)
         except TypeError as e:
             raise TypeError(f"[PyOsc Error]: {e}. The arguments for function {func.__name__} "
-                            f"are: {func.__code__.co_varnames[1:]}") from e
+                            f"are: {func.__code__.co_varnames}") from e
         except Exception as e:
             raise type(e)(f"[PyOsc Error]: An exception occurred in function '{func.__name__}. {e}'") from e
 
