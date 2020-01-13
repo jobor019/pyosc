@@ -28,7 +28,7 @@ if __name__ == '__main__':
 ```
 
 ##### Max Code:
-!["Max code"]("./docs/misc/readme1.png")
+!["Max code"]("docs/misc/readme1.png")
 
 <details><summary>Show code</summary>
 
