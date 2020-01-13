@@ -1,4 +1,4 @@
-from maxosc.MaxOsc import MaxOsc
+from maxosc.maxosc import MaxOsc
 
 
 class MaxTestDefault(MaxOsc):

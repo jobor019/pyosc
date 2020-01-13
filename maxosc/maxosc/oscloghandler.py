@@ -1,6 +1,6 @@
 import logging
 
-from maxosc.Sender import Sender
+from maxosc.sender import Sender
 
 
 class OscLogHandler(logging.Handler):

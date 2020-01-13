@@ -4,7 +4,7 @@ from collections import deque
 from enum import IntEnum
 from typing import Any, Dict
 
-from maxosc.Exceptions import InvalidInputError
+from maxosc.exceptions import InvalidInputError
 
 
 class TokenType(IntEnum):

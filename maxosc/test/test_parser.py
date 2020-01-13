@@ -2,9 +2,9 @@ from timeit import default_timer as timer
 
 import numpy as np
 import pytest
-from maxosc.Caller import Caller
-from maxosc.Exceptions import InvalidInputError, MaxOscError
-from maxosc.Parser import Parser, FunctionParam
+from maxosc.caller import Caller
+from maxosc.exceptions import InvalidInputError, MaxOscError
+from maxosc.parser import Parser, FunctionParam
 
 
 def test_parseTree_valid_input():

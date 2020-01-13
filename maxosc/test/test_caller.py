@@ -2,8 +2,8 @@ from timeit import default_timer as timer
 
 import numpy as np
 import pytest
-from maxosc.Caller import Caller
-from maxosc.Exceptions import MaxOscError
+from maxosc.caller import Caller
+from maxosc.exceptions import MaxOscError
 
 
 class TestClass(Caller):

@@ -1,1 +1,3 @@
-from .MaxOsc import MaxOsc
+__version__ = "0.0.1"
+
+from .maxosc import MaxOsc

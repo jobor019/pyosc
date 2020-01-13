@@ -3,7 +3,7 @@ import json
 import re
 from typing import Any, Dict, Iterable
 
-from maxosc.Exceptions import InvalidInputError
+from maxosc.exceptions import InvalidInputError
 
 
 class MaxFormatter:

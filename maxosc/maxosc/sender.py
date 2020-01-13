@@ -2,7 +2,7 @@ import logging
 from enum import IntEnum
 from typing import Any
 
-from maxosc.MaxFormatter import MaxFormatter
+from maxosc.maxformatter import MaxFormatter
 from pythonosc.udp_client import SimpleUDPClient
 
 

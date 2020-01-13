@@ -1,8 +1,8 @@
 from abc import ABC
 from typing import Any, Dict, Callable, List
 
-from maxosc.Exceptions import DuplicateKeyError, InvalidInputError, MaxOscError
-from maxosc.Parser import FunctionParam, Parser
+from maxosc.exceptions import DuplicateKeyError, InvalidInputError, MaxOscError
+from maxosc.parser import FunctionParam, Parser
 
 
 class Caller(ABC):

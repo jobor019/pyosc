@@ -1,14 +1,14 @@
-import json
 import logging
 from typing import Any, Optional
 
-from maxosc.Caller import Caller
-from maxosc.Exceptions import MaxOscError
-from maxosc.MaxFormatter import MaxFormatter
-from maxosc.OscLogHandler import OscLogHandler
-from maxosc.Sender import Sender, SendFormat
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
+
+from maxosc.caller import Caller
+from maxosc.exceptions import MaxOscError
+from maxosc.maxformatter import MaxFormatter
+from maxosc.oscloghandler import OscLogHandler
+from maxosc.sender import Sender, SendFormat
 
 
 class MaxOsc(Caller):
