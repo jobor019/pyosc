@@ -28,7 +28,7 @@ if __name__ == '__main__':
 ```
 
 ##### Max Code:
-![Max code](docs/misc/readme1.png)
+<img src="docs/misc/readme1.png" width="50%">
 
 <details><summary>Show code</summary>
 
