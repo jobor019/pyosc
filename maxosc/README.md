@@ -1,5 +1,3 @@
-### Project Description
-
 MaxOsc is a package designed to conveniently call python code from MaxMSP over OSC. It's a wrapper of the [python-osc](https://pypi.org/project/python-osc/) package with a built-in parser.
 
 The python code should be run independently of Max (in a terminal or similar) and can be used in conjuncture with the set of Max abstractions available [here](https://github.com/jobor019/pyosc/tree/master/pyosc) or directly through the [CNMAT externals](https://cnmat.berkeley.edu/downloads) for OSC (also available through the Max package manager).
@@ -8,7 +6,7 @@ The python code should be run independently of Max (in a terminal or similar) an
 
 The project is currently in development.
 
-Documentation is currently limited. Further documentation will be available later.
+Documentation is currently limited, further documentation will be available later.
 
 
 
@@ -35,7 +33,7 @@ if __name__ == '__main__':
 ```
 
 If the [pyosc abstractions](https://github.com/jobor019/pyosc/tree/master/pyosc) are available in your path, the following Max patcher can be used:
-<img src="docs/misc/readme1.png" width="50%">
+<img src="https://raw.githubusercontent.com/jobor019/pyosc/master/maxosc/docs/misc/readme1.png" width="50%">
 
 <details><summary>Show Max patcher</summary>
 
@@ -100,7 +98,7 @@ if __name__ == '__main__':
 ```
 
 ##### Max Code:
-<img src="docs/misc/readme2.png" width="95%">
+<img src="https://raw.githubusercontent.com/jobor019/pyosc/master/maxosc/docs/misc/readme2.png" width="95%">
 <details><summary>Show Max patcher</summary>
 <pre><code>
 ----------begin_max5_patcher----------
