@@ -1,13 +1,19 @@
-# MaxOsc
+### Project Description
 
-Library to call python code from MaxMSP over OSC. 
+MaxOsc is a package designed to conveniently call python code from MaxMSP over OSC. It's a wrapper of the [python-osc](https://pypi.org/project/python-osc/) package with a built-in parser.
 
-Use in combination with the pyosc package in MaxMSP.
+The python code should be run independently of Max (in a terminal or similar) and can be used in conjuncture with the set of Max abstractions available [here](https://github.com/jobor019/pyosc/tree/master/pyosc) or directly through the [CNMAT externals](https://cnmat.berkeley.edu/downloads) for OSC (also available through the Max package manager).
 
-Further documentation will be available later.
+### Project Status
+
+The project is currently in development.
+
+Documentation is currently limited. Further documentation will be available later.
+
+
 
 ### Minimal Example
-##### Python Code:
+Run the following code in a separate terminal. Note that `MaxOsc.run()` will instantiate a [blocking OSC server](https://python-osc.readthedocs.io/en/latest/server.html#blocking-server), hence no code below that point will ever be executed.
 ```python
 from maxosc import MaxOsc
 
@@ -28,10 +34,10 @@ if __name__ == '__main__':
 
 ```
 
-##### Max Code:
+If the [pyosc abstractions](https://github.com/jobor019/pyosc/tree/master/pyosc) are available in your path, the following Max patcher can be used:
 <img src="docs/misc/readme1.png" width="50%">
 
-<details><summary>Show code</summary>
+<details><summary>Show Max patcher</summary>
 
 ```
 <pre><code>
@@ -95,7 +101,7 @@ if __name__ == '__main__':
 
 ##### Max Code:
 <img src="docs/misc/readme2.png" width="95%">
-<details><summary>Show code</summary>
+<details><summary>Show Max patcher</summary>
 <pre><code>
 ----------begin_max5_patcher----------
 1581.3ocyZF0bahCDG+YmOE6vKocFWeHDfgNSd35C2SW6K2My8PhmLXrrM4v
