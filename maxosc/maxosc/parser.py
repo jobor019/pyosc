@@ -32,7 +32,7 @@ class FunctionParam:
 
 class Parser:
     INT = r"-?\d+"
-    FLOAT = r"-?(\d+\.[\d]*|\.[\d]+)"
+    FLOAT = r"-?(\d+\.[\d]*|\.[\d]+)(e-?\d+)?"
     BOOL = r'(true|false)'
     NONE = r'none'
     WS = r'\s+|^$'
