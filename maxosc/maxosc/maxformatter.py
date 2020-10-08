@@ -97,22 +97,24 @@ class MaxFormatter:
             return max([MaxFormatter._depth(e, depth) for e in l])
 
     @staticmethod
-    def flatten(l: Any) -> [Any]:
+    def flatten(l: Any, cnmat_compatibility: bool = True) -> [Any]:
         """ Raises: TypeError if dict
             Note: Any nested empty lists etc will be removed. Nones will be replaced with the string 'null'"""
-        return MaxFormatter._flatten([], l)
+        return MaxFormatter._flatten([], l, cnmat_compatibility=cnmat_compatibility)
 
     @staticmethod
-    def _flatten(flat_list: [Any], l: Any) -> [Any]:
+    def _flatten(flat_list: [Any], l: Any, cnmat_compatibility: bool) -> [Any]:
         """ Raises: TypeError if dict"""
         if not isinstance(l, Iterable) or isinstance(l, (str, bytes)):
             if l is None:
                 flat_list.append(MaxFormatter.NONE_NAME)
+            elif isinstance(l, int) and cnmat_compatibility and l < 0:
+                flat_list.append(float(l))
             else:
                 flat_list.append(l)
         elif isinstance(l, collections.abc.Mapping):
             raise TypeError("Cannot parse dicts as return arguments")  # TODO: Handle when implem. dict strategy
         else:
             for e in l:
-                MaxFormatter._flatten(flat_list, e)
+                MaxFormatter._flatten(flat_list, e, cnmat_compatibility=cnmat_compatibility)
         return flat_list

@@ -14,9 +14,12 @@ class SendFormat(IntEnum):
 
 class Sender:
     def __init__(self, ip: str, port: int, send_format: SendFormat = SendFormat.FLATTEN,
-                 warning_address: str = "/warning"):
+                 cnmat_compatibility: bool = True, warning_address: str = "/warning"):
+        """ cnmat_compatibility: send negative integers as floats to circumvent bug in cnmat external as of 2020-10-08
+                                 only applies when send_format is set to `SendFormat.FLATTEN` """
         self.logger = logging.getLogger(__name__)
         self._send_format: SendFormat = send_format
+        self._cnmat_compatibility: bool = cnmat_compatibility
         self._client: SimpleUDPClient = SimpleUDPClient(ip, port)
         self._warning_address: str = warning_address
 
@@ -40,7 +43,7 @@ class Sender:
     def _send_flat(self, address: str, *args):
         """ Raises: ValueError if invalid send format or trying to send custom class, etc.
                     TypeError if trying to send a dict"""
-        args_flattened: [Any] = MaxFormatter.flatten(*args)
+        args_flattened: [Any] = MaxFormatter.flatten(*args, cnmat_compatibility=self._cnmat_compatibility)
         self._send_raw(address, args_flattened)
 
     def _send_llll(self, address: str, *args):
