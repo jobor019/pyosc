@@ -103,9 +103,8 @@ class Parser:
         self._params()
 
     def _params(self):
-        self._param()
-        if not self._is_empty():
-            self._params()
+        while not self._is_empty():
+            self._param()
 
     def _param(self):
         # named_param

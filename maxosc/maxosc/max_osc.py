@@ -20,7 +20,7 @@ class MaxOsc(Caller):
        (int, float, bool, str, None, list, tuple, dict).
 
        The class contains a method for formatting any native python content (apart from dicts) as a bach.llll and send
-       back over OSC. It lalso forwards any warning (manually) caught in python to the address "/warning".
+       back over OSC. It also forwards any warning (manually) caught in python to the address "/warning".
 
        All calls from max should be sent to the address `/call` and typically contain the return address as an argument.
     """
