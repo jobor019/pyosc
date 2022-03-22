@@ -1,0 +1,6 @@
+[submodule "pyosc/source/min-api"]
+	path = pyosc/source/min-api
+	url = https://github.com/Cycling74/min-api.git
+[submodule "pyosc/source/min-lib"]
+	path = pyosc/source/min-lib
+	url = https://github.com/Cycling74/min-lib.git

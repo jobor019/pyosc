@@ -1,0 +1,4 @@
+class AgentObject {
+public:
+    AgentObject() {}
+};

@@ -222,3 +222,24 @@ dmypy.json
 .pyre/
 
 # End of https://www.gitignore.io/api/osx,python,pycharm+all
+
+
+# From min-devkit's .gitignore
+__*
+sysbuild
+*.sdf
+*.suo
+*.sln
+*.opensdf
+log.txt
+externals
+extensions
+support
+build
+tests
+*.o
+*.dylib
+tmp
+.DS_Store
+.vs
+package-info.json
