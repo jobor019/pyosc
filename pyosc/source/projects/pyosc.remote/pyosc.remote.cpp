@@ -8,7 +8,7 @@
 using namespace c74::min;
 
 
-class hello_world : public object<hello_world> {
+class server : public object<server> {
 public:
     MIN_DESCRIPTION	{"Post to the Max Console."};
     MIN_TAGS		{"utilities"};
@@ -59,4 +59,4 @@ public:
 };
 
 
-MIN_EXTERNAL(hello_world);
+MIN_EXTERNAL(server);

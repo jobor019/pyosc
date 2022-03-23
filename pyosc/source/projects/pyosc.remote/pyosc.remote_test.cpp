@@ -14,8 +14,8 @@ SCENARIO("object produces correct output") {
 
     GIVEN("An instance of our object") {
 
-        test_wrapper<hello_world> an_instance;
-        hello_world&              my_object = an_instance;
+        test_wrapper<server> an_instance;
+        server&              my_object = an_instance;
 
         // check that default attr values are correct
         REQUIRE((my_object.greeting == symbol("hello world")));

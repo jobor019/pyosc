@@ -1,4 +1,0 @@
-class AgentObject {
-public:
-    AgentObject() {}
-};
