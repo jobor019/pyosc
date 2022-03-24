@@ -1,15 +1,23 @@
 cmake_minimum_required(VERSION 3.15)
 
+
+
+
+include_directories(
+        "${C74_INCLUDES}"
+)
+
 set(SOURCE_FILES
         agent_object.h
         base_object.h
         connector.h
         pyosc_manager.h
         pyosc_max_base.h
-        osc_receiver.h
+        juce_osc_receiver.h
         juce_osc_input_stream.h
         remote_object.h
-        text_gen.h
+        oscpack_receiver.h
+        oscpack_sender.h
         )
 
 

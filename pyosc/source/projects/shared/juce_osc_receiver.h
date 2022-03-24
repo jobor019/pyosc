@@ -1,6 +1,6 @@
 
-#ifndef PYOSC_OSC_RECEIVER_H
-#define PYOSC_OSC_RECEIVER_H
+#ifndef PYOSC_JUCE_OSC_RECEIVER_H
+#define PYOSC_JUCE_OSC_RECEIVER_H
 
 #include "juce_osc_input_stream.h"
 
@@ -77,4 +77,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PyOscReceiver)
 };
 
-#endif //PYOSC_OSC_RECEIVER_H
+#endif //PYOSC_JUCE_OSC_RECEIVER_H

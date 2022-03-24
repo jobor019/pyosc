@@ -21,7 +21,7 @@ set( SOURCE_FILES
 	${PROJECT_NAME}.cpp
 		../shared/connector.h
 	../shared/juce_osc_input_stream.h
-	../shared/osc_receiver.h
+		../shared/juce_osc_receiver.h
 	../shared/pyosc_manager.h
 	../shared/pyosc_max_base.h
 	../shared/remote_object.h

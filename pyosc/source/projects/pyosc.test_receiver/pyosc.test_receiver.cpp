@@ -5,7 +5,7 @@
 
 #include "c74_min.h"
 #include "../shared/agent_object.h"
-#include "../shared/osc_receiver.h"
+#include "../shared/juce_osc_receiver.h"
 
 using namespace c74::min;
 
