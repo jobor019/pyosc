@@ -9,6 +9,7 @@ set(SOURCE_FILES
         osc_receiver.h
         juce_osc_input_stream.h
         remote_object.h
+        text_gen.h
         )
 
 
@@ -33,3 +34,17 @@ target_link_libraries(standalone
         PUBLIC
         juce::juce_core
         juce::juce_osc)
+
+target_link_libraries(standalone
+        PUBLIC
+        oscpack)
+
+target_include_directories(standalone PUBLIC
+        "${PROJECT_BINARY_DIR}"
+        "${PROJECT_SOURCE_DIR}/"
+        "${PROJECT_SOURCE_DIR}/source/oscpack/ip"
+        "${PROJECT_SOURCE_DIR}/source/oscpack/osc"
+        )
+
+
+message("${PROJECT_SOURCE_DIR}/source/oscpack")

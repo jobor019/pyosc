@@ -4,3 +4,6 @@
 [submodule "pyosc/source/min-lib"]
 	path = pyosc/source/min-lib
 	url = https://github.com/Cycling74/min-lib.git
+[submodule "pyosc/source/oscpack"]
+	path = pyosc/source/oscpack
+	url = https://github.com/RossBencina/oscpack.git

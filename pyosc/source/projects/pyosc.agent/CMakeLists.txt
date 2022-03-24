@@ -19,7 +19,7 @@ include_directories(
 
 set( SOURCE_FILES
 	${PROJECT_NAME}.cpp
-)
+        ../shared/text_gen.h)
 
 
 add_library( 
