@@ -19,11 +19,9 @@ public:
 
     }
 
-    OscSendMessage(std::unique_ptr<char[]> buffer, std::__1::unique_ptr<osc::OutboundPacketStream> stream) : buffer(
-            std::move(buffer)), stream(std::move(stream)) {}
-
-    std::unique_ptr<char[]> buffer;
-    std::unique_ptr<osc::OutboundPacketStream> stream;
+    OscSendMessage(std::unique_ptr<char[]> buffer, std::__1::unique_ptr<osc::OutboundPacketStream> stream) :
+            buffer(std::move(buffer))
+            , stream(std::move(stream)) {}
 
     /**
      * @raises: osc::OutOfBufferMemoryException if buffer is full
@@ -75,6 +73,8 @@ public:
     }
 
 private:
+    std::unique_ptr<char[]> buffer;
+    std::unique_ptr<osc::OutboundPacketStream> stream;
 
 };
 

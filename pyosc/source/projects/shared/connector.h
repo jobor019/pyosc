@@ -16,7 +16,10 @@ public:
     /**
      * @raises: std::runtime_error if fails to connect to port
      */
-    Connector(const std::string& ip, int send_port, int recv_port) : sender(ip, send_port), receiver(recv_port) {
+    Connector(const std::string& ip, int send_port, int recv_port) : send_port(send_port)
+                                                                     , recv_port(recv_port)
+                                                                     , sender(ip, send_port)
+                                                                     , receiver(recv_port) {
         receiver.run();
     }
 
@@ -49,9 +52,22 @@ public:
     }
 
     std::vector<osc::ReceivedMessage> terminate() {
+        std::lock_guard<std::mutex> recv_lock{recv_mutex};
         auto msgs = receiver.stop();
         terminated = true;
         return msgs;
+    }
+
+    [[nodiscard]] bool is_terminated() const {
+        return terminated;
+    }
+
+    [[nodiscard]] int get_send_port() const {
+        return send_port;
+    }
+
+    [[nodiscard]] int get_recv_port() const {
+        return recv_port;
     }
 
 
@@ -60,6 +76,9 @@ private:
 
     std::mutex send_mutex;
     std::mutex recv_mutex;
+
+    const int send_port;
+    const int recv_port;
 
     OscPackSender sender;
     OscPackReceiver receiver;
