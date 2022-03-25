@@ -1,12 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
 
-
-
-include_directories(
-        "${C74_INCLUDES}"
-)
-
 set(SOURCE_FILES
         agent_object.h
         base_object.h
@@ -18,6 +12,7 @@ set(SOURCE_FILES
         remote_object.h
         oscpack_receiver.h
         oscpack_sender.h
+        text_gen.h
         )
 
 
@@ -38,10 +33,6 @@ add_executable(standalone
         ${SOURCE_FILES}
         )
 
-target_link_libraries(standalone
-        PUBLIC
-        juce::juce_core
-        juce::juce_osc)
 
 target_link_libraries(standalone
         PUBLIC

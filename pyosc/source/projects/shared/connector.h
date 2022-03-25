@@ -3,14 +3,14 @@
 
 
 #include <iostream>
+#include <map>
 
-#include "juce_osc/juce_osc.h"
-#include "juce_osc_receiver.h"
 #include "oscpack_sender.h"
 #include "oscpack_receiver.h"
+#include "osc_send_message.h"
 
 
-class Connector : juce::OSCReceiver {
+class Connector {
 
 public:
     /**
@@ -20,12 +20,13 @@ public:
         receiver.run();
     }
 
-    bool send(OscSendMessage& msg) {
-        return false;
+    void send(OscSendMessage& msg) {
+        std::lock_guard<std::mutex> send_lock{send_mutex};
+        sender.send(msg);
     }
 
     std::vector<osc::ReceivedMessage> receive(std::string& address) {
-        std::lock_guard<std::mutex> myLock{recv_mutex};
+        std::lock_guard<std::mutex> recv_lock{recv_mutex};
         auto new_messages = receiver.receive();
         for (auto& msg: new_messages) {
             std::string msg_address = std::string(msg.AddressPattern());

@@ -8,32 +8,19 @@
 #include <iostream>
 #include "UdpSocket.h"
 #include "OscOutboundPacketStream.h"
-
-class OscSendMessage {
-    OscSendMessage(std::unique_ptr<char[]> buffer, std::unique_ptr<osc::OutboundPacketStream> stream) : buffer(
-            std::move(buffer)), stream(std::move(stream)) {}
-
-    std::unique_ptr<char[]> buffer;
-    std::unique_ptr<osc::OutboundPacketStream> stream;
-
-public:
-    [[nodiscard]] char* getBuffer() const {
-        return buffer.get();
-    }
-
-    [[nodiscard]] osc::OutboundPacketStream* getStream() const {
-        return stream.get();
-    }
-};
+#include "osc_send_message.h"
 
 class OscPackSender {
     //
 public:
-    OscPackSender(const std::string& ip, int port) : socket(IpEndpointName(ip.c_str(), port)) {}
+    OscPackSender(const std::string ip, int port) : socket(IpEndpointName(ip.c_str(), port)) {}
 
 
+    /**
+     * @raises: osc::MalformedMessageException if message has improper formatting
+     */
     void send(OscSendMessage& message) {
-        auto* stream = message.getStream();
+        auto* stream = message.get_sendable_stream();
         socket.Send(stream->Data(), stream->Size());
     }
 
