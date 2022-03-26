@@ -86,6 +86,7 @@ public:
 
     void update_status() {
         // TODO: Mutex
+        // TODO: Should probably also handle case if `init` or `runtime` are terminated/deleted
 
         // User has opted to not use `poll_status`
         if (!status_address) {
@@ -141,6 +142,17 @@ public:
 
     [[nodiscard]] Status get_status() {
         return status;
+    }
+
+protected:
+
+    std::shared_ptr<BaseOscObject> get_object(std::string& object_name) {
+        // TODO
+    }
+
+    std::shared_ptr<Connector> initialize_connector(std::optional<PortSpec> port_spec = std::nullopt,
+                                                    std::optional<std::string> ip = std::nullopt) {
+        // TODO
     }
 
 
