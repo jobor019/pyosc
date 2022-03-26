@@ -11,13 +11,14 @@
 enum class Status {
     invalid_status = -3         // status outside valid range
     , not_applicable = -2       // user has opted for no poll_status address
-    , parent_not_created = -1   // object has an `init_object_name` which hasn't been created yet
-    , parent_offline = 0        // object has an `init_object_name` which has been created but has no connector
-    , parent_initializing = 1   // object has an `init_object_name` with valid connector but currently init'ing on server
-    , offline = 2               // object has no `init_object_name`
-    , uninitialized = 3         // object has an `init_object` that is `ready` but `initialize` hasn't been called
-    , initializing = 4          // `initialize` has been called but has not yet completed
-    , ready = 5                 // `initialize` has completed
+    , init_obj_missing = -1     // this object has an `init_object_name` which hasn't been created yet
+    , init_obj_not_ready = 0    // this object has an `init_object` which returns a non-ready status
+    , runtime_obj_missing = 1   // this object has a `runtime_object_name` which hasn't been created yet
+    , runtime_obj_not_ready = 2 // this object has a `runtime_object` which return a non-ready status
+    , uninitialized = 3         // both `init_object` and `runtime_object` exists and return ready status
+    , initializing = 4          // `init` has been called but server object has not returned ready yet
+    , ready = 5                 // server object returns ready
+    , no_response = 6
 };
 
 
@@ -32,6 +33,7 @@ public:
 
     const static Status MIN_STATUS = Status::invalid_status;
     const static Status MAX_STATUS = Status::ready;
+    const static long TIMEOUT_SECONDS = 5;
 
     BaseOscObject(const std::string name
                   , const std::string base_address
@@ -79,32 +81,73 @@ public:
     }
 
     void terminate() {
-        throw std::runtime_error("Not implemented yet");
+        throw std::runtime_error("Not implemented yet"); // TODO: Implement
     }
 
-    /**
-     *
-     * @throws std::runtime error if receiving invalid status code
-     */
-    [[nodiscard]] Status poll_status() {
-        // TODO: Mutex - lock guard or try_lock?
+    void update_status() {
+        // TODO: Mutex
+
+        // User has opted to not use `poll_status`
         if (!status_address) {
-            return Status::not_applicable;
+            status = Status::not_applicable;
+        }
+            // the object is initialized through an object that has not been created yet
+        else if (init_object_name && !init_object) {
+            status = Status::init_obj_missing;
+        }
+            // the object is initialized through an object that isn't ready yet
+        else if (init_object && init_object->get_status() != Status::ready) {
+            status = Status::init_obj_not_ready;
+        }
+            // the object communicates through an object that has not been created yet
+        else if (runtime_object_name && !runtime_object) {
+            status = Status::runtime_obj_missing;
+        }
+            // the object communicates through an object that isn't ready yet
+        else if (runtime_object && runtime_object->get_status() != Status::ready) {
+            status = Status::runtime_obj_not_ready;
+        }
+            // both `init_object` and `runtime_object` exist and return `Status::ready`
+            //  but this object hasn't called initialize()
+        else if (!initialized) {
+            status = Status::uninitialized;
         } else {
+            // initialize has been called but has not yet received any response from the server
+            if (!last_response) {
+                status = Status::initializing;
+            }
+
+            // This should never happen: `status_address` should've been set at initialize()
+            if (!status_address) {
+                set_status_address();
+            }
+
+            // Read status messages from receiver
             auto new_status_values = receive(status_address.value());
 
+            // If status message received: set status to received message and update time
             if (!new_status_values.empty()) {
                 auto last_status_candidate = new_status_values.back();
                 status = parse_status(last_status_candidate);
+                last_response = std::chrono::system_clock::now();
+                // if
+            } else if (std::chrono::duration_cast<std::chrono::seconds>(
+                    std::chrono::system_clock::now() - last_response.value()
+            ).count() > TIMEOUT_SECONDS) {
+                status = Status::no_response;
             }
-
-            return status;
         }
+    }
+
+    [[nodiscard]] Status get_status() {
+        return status;
     }
 
 
 private:
-    Status status = Status::offline;
+    Status status = Status::runtime_obj_not_ready;
+    std::optional<std::chrono::time_point<std::chrono::system_clock> > last_response;
+
 
     const std::string name;
 
@@ -124,9 +167,20 @@ private:
     std::shared_ptr<BaseOscObject> init_object;
     std::shared_ptr<BaseOscObject> runtime_object;
 
+    bool initialized = false;
+
+
+//    bool is_connected() {
+//        return runtime_object && runtime_object->is_connected()
+//    }
+
+    void set_status_address() {
+        std::runtime_error("not implemented yet"); // TODO
+    }
+
     Status parse_status(osc::ReceivedMessage& msg) {
         if (msg.ArgumentCount() != 1) {
-            throw std::runtime_error("invalid number of arguments encountered in status message");
+            return Status::invalid_status;
         }
 
         int status_code;
@@ -134,17 +188,17 @@ private:
 
         if (arg->IsInt32()) {
             status_code = static_cast<int>(arg->AsInt32());
-        } else if (arg->IsInt64()){
+        } else if (arg->IsInt64()) {
             status_code = static_cast<int>(arg->AsInt64());
         } else {
-            throw std::runtime_error("invalid type encountered in status message");
+            return Status::invalid_status;
         }
 
         if (status_code >= static_cast<int>(MIN_STATUS) && status_code <= static_cast<int>(MAX_STATUS)) {
             return static_cast<Status>(status_code);
         }
 
-        throw std::runtime_error("invalid status code");
+        return Status::invalid_status;
     }
 
 };
