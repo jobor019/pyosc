@@ -11,11 +11,11 @@
 enum class Status {
     invalid_status = -3         // status outside valid range
     , not_applicable = -2       // user has opted for no poll_status address
-    , init_obj_missing = -1     // this object has an `init_object_name` which hasn't been created yet
-    , init_obj_not_ready = 0    // this object has an `init_object` which returns a non-ready status
-    , runtime_obj_missing = 1   // this object has a `runtime_object_name` which hasn't been created yet
-    , runtime_obj_not_ready = 2 // this object has a `runtime_object` which return a non-ready status
-    , uninitialized = 3         // both `init_object` and `runtime_object` exists and return ready status
+    , parent_obj_missing = -1     // this object has an `parent_obj_name` which hasn't been created yet
+    , parent_obj_not_ready = 0    // this object has an `parent_connection` which returns a non-ready status
+    , runtime_obj_missing = 1   // this object has a `runtime_obj_name` which hasn't been created yet
+    , runtime_obj_not_ready = 2 // this object has a `runtime_connection` which return a non-ready status
+    , uninitialized = 3         // both `parent_connection` and `runtime_connection` exists and return ready status
     , initializing = 4          // `init` has been called but server object has not returned ready yet
     , ready = 5                 // server object returns ready
     , no_response = 6
@@ -40,17 +40,35 @@ public:
                   , const std::string ip
                   , const std::optional<PortSpec> port_spec
                   , const std::optional<std::string> status_base_address
-                  , const std::optional<std::string> init_object_name
-                  , const std::optional<std::string> runtime_object_name)
+                  , const std::optional<std::string> parent_obj_name
+                  , const bool has_own_runtime)
             : name(name)
               , base_address(base_address)
               , ip(ip)
               , port_spec(port_spec)
-              , status_base_address(status_base_address) {}
+              , status_base_address(status_base_address) {
+
+        if (!parent_obj_name and !has_own_runtime) {
+            raise std::runtime_error("invalid configuration");
+        }
+
+        // Server/root object: does not have a connection for initialization
+        if (!parent_obj_name) {
+            parent_connection == std::nullopt;
+        }
+
+        if (has_own_runtime) {
+            // TODO: Split in decl + implementation for this to work
+            runtime_connection = PyOscManager::get_connector();
+        }
+
+
+    }
 
 
     void initialize() {
         // TODO: Mutex - lock guard or try_lock?
+        // TODO: How do we pass send_port and recv_port to python?????
 
     }
 
@@ -60,7 +78,7 @@ public:
      */
     bool send(OscSendMessage& msg) {
         // TODO: Mutex - lock guard or try_lock?
-        if (!runtime_object) {
+        if (!runtime_connection) {
             throw std::runtime_error("object not initialized");
         } else {
             throw std::runtime_error("Not implemented yet");
@@ -73,7 +91,7 @@ public:
      */
     std::vector<osc::ReceivedMessage> receive(std::string& address) {
         // TODO: Mutex - lock guard or try_lock?
-        if (!runtime_object) {
+        if (!runtime_connection) {
             throw std::runtime_error("object not initialized");
         } else {
             throw std::runtime_error("Not implemented yet"); // TODO: Implement
@@ -93,22 +111,22 @@ public:
             status = Status::not_applicable;
         }
             // the object is initialized through an object that has not been created yet
-        else if (init_object_name && !init_object) {
-            status = Status::init_obj_missing;
+        else if (parent_obj_name && !parent_connection) {
+            status = Status::parent_obj_missing;
         }
             // the object is initialized through an object that isn't ready yet
-        else if (init_object && init_object->get_status() != Status::ready) {
-            status = Status::init_obj_not_ready;
+        else if (parent_connection && parent_connection->get_status() != Status::ready) {
+            status = Status::parent_obj_not_ready;
         }
             // the object communicates through an object that has not been created yet
-        else if (runtime_object_name && !runtime_object) {
+        else if (runtime_obj_name && !runtime_connection) {
             status = Status::runtime_obj_missing;
         }
             // the object communicates through an object that isn't ready yet
-        else if (runtime_object && runtime_object->get_status() != Status::ready) {
+        else if (runtime_connection && runtime_connection->get_status() != Status::ready) {
             status = Status::runtime_obj_not_ready;
         }
-            // both `init_object` and `runtime_object` exist and return `Status::ready`
+            // both `parent_connection` and `runtime_connection` exist and return `Status::ready`
             //  but this object hasn't called initialize()
         else if (!initialized) {
             status = Status::uninitialized;
@@ -173,17 +191,17 @@ private:
     std::optional<std::string> address;
     std::optional<std::string> status_address;
 
-    const std::optional<std::string> init_object_name;
-    const std::optional<std::string> runtime_object_name;
+    const std::optional<std::string> parent_obj_name;
+    const std::optional<std::string> runtime_obj_name;
 
-    std::shared_ptr<BaseOscObject> init_object;
-    std::shared_ptr<BaseOscObject> runtime_object;
+    std::shared_ptr<BaseOscObject> parent_connection;
+    std::shared_ptr<BaseOscObject> runtime_connection;
 
     bool initialized = false;
 
 
 //    bool is_connected() {
-//        return runtime_object && runtime_object->is_connected()
+//        return runtime_connection && runtime_connection->is_connected()
 //    }
 
     void set_status_address() {
