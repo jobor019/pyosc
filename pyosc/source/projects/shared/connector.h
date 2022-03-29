@@ -28,7 +28,7 @@ public:
         sender.send(msg);
     }
 
-    std::vector<osc::ReceivedMessage> receive(std::string& address) {
+    std::vector<osc::ReceivedMessage> receive(const std::string& address) {
         std::lock_guard<std::mutex> recv_lock{recv_mutex};
         auto new_messages = receiver.receive();
         for (auto& msg: new_messages) {

@@ -42,18 +42,18 @@ int main() {
 
 
     // Initializing object without default port should work
-    auto c1 = manager.initialize_connector(a1);
+    auto c1 = manager.new_connector(a1);
     std::cout << "send: " << c1->get_send_port() << " recv: " << c1->get_recv_port() << "\n";
 
     // Initializing object again should throw std::runtime_error
     try {
-        auto c2 = manager.initialize_connector(a1);
+        auto c2 = manager.new_connector(a1);
     } catch (std::runtime_error& e) {
         std::cout << "[EXPECTED ERROR]: " << e.what() << "\n";
     }
 
     // Object not previously added
-    auto c2 = manager.initialize_connector(a2);
+    auto c2 = manager.new_connector(a2);
     std::cout << "send: " << c2->get_send_port() << " recv: " << c2->get_recv_port() << "\n";
 
 
@@ -62,43 +62,43 @@ int main() {
     std::cout << "Add a2 [0]: " << res << "\n";
 
     // Removing a2
-    res = manager.delete_object(a2);
+    res = manager.remove_object(a2);
     std::cout << "Remove a2 [1]: " << res << "\n";
 
 
     // Removing a2 that doesn't exist
-    res = manager.delete_object(a2);
+    res = manager.remove_object(a2);
     std::cout << "Remove a2 [0]: " << res << "\n";
 
     // Adding a2 should be same ports as above
-    auto c3 = manager.initialize_connector(a2);
+    auto c3 = manager.new_connector(a2);
     std::cout << "Add a2 [same ports as above] send: " << c2->get_send_port() << " recv: " << c2->get_recv_port()
               << "\n";
-    res = manager.delete_object(a2);
+    res = manager.remove_object(a2);
 
     // Manual pathspec (not taken)
-    auto c4 = manager.initialize_connector(a2, PortSpec{"127.0.0.1", 8080, 8081});
+    auto c4 = manager.new_connector(a2, PortSpec{"127.0.0.1", 8080, 8081});
     std::cout << "manual pathspec [8080, 8081] send: " << c4->get_send_port() << " recv: " << c4->get_recv_port()
               << "\n";
 
     // Manual pathspec (taken)
     try {
-        auto c4 = manager.initialize_connector(a2, PortSpec{"127.0.0.1", 8080, 8081});
+        auto c4 = manager.new_connector(a2, PortSpec{"127.0.0.1", 8080, 8081});
     } catch (std::runtime_error& e) {
         std::cout << "[EXPECTED ERROR]: " << e.what() << "\n";
     }
 
 
     // Manual pathspec (ports outside available/allowed range, but working ports)
-    res = manager.delete_object(a2);
-    auto c5 = manager.initialize_connector(a2, PortSpec{"127.0.0.1", 1234, 1235});
+    res = manager.remove_object(a2);
+    auto c5 = manager.new_connector(a2, PortSpec{"127.0.0.1", 1234, 1235});
     std::cout << "manual pathspec [1234, 1235] send: " << c5->get_send_port() << " recv: " << c5->get_recv_port()
               << "\n";
 
     // Manual pathspec (previously taken but since object was deleted, should be available again)
-    res = manager.delete_object(a2);
+    res = manager.remove_object(a2);
     c4.reset();
-    auto c6 = manager.initialize_connector(a2, PortSpec{"127.0.0.1", 8080, 8081});
+    auto c6 = manager.new_connector(a2, PortSpec{"127.0.0.1", 8080, 8081});
     std::cout << "manual pathspec after deletion [8080, 8081] send: " << c6->get_send_port() << " recv: " << c6->get_recv_port()
               << "\n";
 
