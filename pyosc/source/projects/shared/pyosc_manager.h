@@ -1,6 +1,0 @@
-#ifndef PYOSC_PYOSC_MANAGER_H
-#define PYOSC_PYOSC_MANAGER_H
-
-
-
-#endif //PYOSC_PYOSC_MANAGER_H

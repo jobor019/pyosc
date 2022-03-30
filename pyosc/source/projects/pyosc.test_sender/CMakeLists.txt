@@ -22,8 +22,7 @@ set( SOURCE_FILES
 		../shared/connector.h
 	../shared/juce_osc_input_stream.h
         ../shared/juce_osc_receiver.h
-	../shared/pyosc_manager.h
-	../shared/pyosc_max_base.h
+        ../shared/pyosc_max_base.h
         )
 
 

@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.15)
 set(SOURCE_FILES
         pyosc_base.h
         connector.h
-        pyosc_manager.h
         pyosc_max_base.h
         juce_osc_receiver.h
         juce_osc_input_stream.h

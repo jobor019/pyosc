@@ -16,8 +16,7 @@ public:
             : BaseOscObject(name, status_address)
               , termination_message(termination_message)
             // Note: if BaseOscObject ctor fails, connector will never be initialized so no need to clean this up
-              , connector(create_connector(port_spec, ip)) {}
-
+              , connector(create_connector(ip, port_spec)) {}
 
     // TODO: This doesn't work very well with the interface - shouldn't pass OscSendMessage
     bool initialize(OscSendMessage& init_message) override {
@@ -49,7 +48,7 @@ public:
         // TODO: Doesn't handle the case of a temporary timeout properly
         if (termination_message && status == Status::ready) {
             auto msg = OscSendMessage(address);
-            msg.add_string(termination_message.value());
+            msg.add_string(*termination_message);
             send(msg);
 
         }
@@ -79,7 +78,9 @@ public:
               , parent_name(parent_name)
               , termination_message(termination_message)
             // Note: if BaseOscObject ctor fails, connector will never be initialized so no need to clean this up
-              , connector(PyOscManager::get_instance().new_connector(ip, port_spec)) {}
+              , connector(create_connector(ip, port_spec)) {}
+
+    // TODO: dtor to reallocate ports, delete copy/move constr/asgn.
 
     bool initialize(OscSendMessage& init_message) override {
         if (initialized) {

@@ -45,6 +45,17 @@ public:
                   , const std::string& status_address);
 
 
+    ~BaseOscObject();
+
+    BaseOscObject(const BaseOscObject&) = delete;
+
+    BaseOscObject& operator=(const BaseOscObject&) = delete;
+
+    BaseOscObject(BaseOscObject&&) = delete;
+
+    BaseOscObject& operator=(BaseOscObject&&) = delete;
+
+
     /**
      * initializes the object on the server
      */
@@ -73,7 +84,7 @@ public:
      *  Max object deleted. Since this object may be used by other objects, it cannot be directly deleted at the same
      *  time as the owning max object, but will rather be flagged for deletion manually
      */
-     void delete_object();
+    void delete_object();
 
 
     virtual void update_status() = 0;
@@ -100,9 +111,9 @@ protected:
     static std::shared_ptr<BaseOscObject> get_object(std::string& object_name);
 
 
-    Connector create_connector(std::optional<PortSpec> port_spec = std::nullopt
-                               , std::optional<std::string> ip = std::nullopt);
+    static Connector create_connector(const std::string& ip, std::optional<PortSpec> port_spec = std::nullopt);
 
+    static void reallocate_connector_ports(Connector& connector);
 
     Status read_server_status();
 
@@ -113,10 +124,6 @@ private:
     std::optional<std::chrono::time_point<std::chrono::system_clock> > last_response;
 
     const std::string name;
-
-
-
-
 
 
 };
@@ -141,10 +148,10 @@ public:
     bool add_object(std::shared_ptr<BaseOscObject> object);
 
 
-    std::shared_ptr<BaseOscObject> get_object();
+    std::shared_ptr<BaseOscObject> get_object(const std::string& name);
 
 
-    bool remove_object(std::string& name);
+    void remove_object(const std::string& name);
 
 
     /**
@@ -155,27 +162,12 @@ public:
 
     bool reallocate_connector(Connector& connector);
 
-//    /**
-//     *
-//     * @return connector associated with name or nullptr if not found
-//     */
-//    std::shared_ptr<Connector> get_connector(std::string& owner) {
-//        std::lock_guard<std::mutex> lock{mutex};
-//        auto it = connectors.find(owner);
-//        if (it != connectors.end()) {
-//            return it->second;
-//        }
-//        return nullptr;
-//    }
-
-
 
 private:
 
     std::vector<int> allowed_ports;
     std::vector<int> available_ports;   // not guaranteed to be available, just not taken by this system
-    std::vector<std::string> object_names;
-    std::map<std::string, std::shared_ptr<Connector>> connectors;
+    std::vector<std::shared_ptr<BaseOscObject> > objects;
 
     std::mutex mutex;
 
@@ -191,12 +183,7 @@ private:
 
     static bool port_is_bound(int port);
 
-    bool name_exists(std::string& object_name);
-
-    bool connector_exists(std::string& object_name);
-
-    int pop_available_port();
-
+    bool name_exists(const std::string& object_name);
 
 };
 
