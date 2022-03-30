@@ -1,6 +1,8 @@
 #ifndef PYOSC_PYOSC_OBJECTS_H
 #define PYOSC_PYOSC_OBJECTS_H
 
+#include <utility>
+
 #include "pyosc_base.h"
 
 class Server : public BaseOscObject {
@@ -9,30 +11,31 @@ public:
      * @throws: std::runtime_error if name already exists.
      */
     Server(const std::string& name
-           , const std::string status_address
-           , const std::optional<std::string> termination_message
-           , const std::string& ip
-           , const std::optional<PortSpec> port_spec)
-            : BaseOscObject(name, status_address)
+           , const std::string& status_address
+           , std::optional<std::string>  termination_message
+           , std::unique_ptr<Connector> connector)
+            : BaseOscObject(name, "/" + name, status_address)
               , termination_message(termination_message)
-            // Note: if BaseOscObject ctor fails, connector will never be initialized so no need to clean this up
-              , connector(create_connector(ip, port_spec)) {}
+              , connector(std::move(connector)) {}
 
     // TODO: This doesn't work very well with the interface - shouldn't pass OscSendMessage
-    bool initialize(OscSendMessage& init_message) override {
+    bool initialize(OscSendMessage init_message) override {
         initialized = true;
         return initialized;
     }
 
     bool send(OscSendMessage& msg) override {
         if (status == Status::ready) {
-            connector.send(msg);
+            connector->send(msg);
         }
         return false;
     }
 
     std::vector<osc::ReceivedMessage> receive(const std::string& address) override {
-        return connector.receive(address);
+        if (status != Status::deleted) {
+            return connector->receive(address);
+        }
+        return {};
     }
 
 
@@ -56,8 +59,21 @@ public:
         initialized = false;
     }
 
+    void flag_for_deletion() override {
+        status = Status::deleted;
+        connector.reset();  // delete socket to allow reallocation of ports
+    }
+
+    int get_send_port() {
+        return connector->get_send_port();
+    }
+
+    int get_recv_port() {
+        return connector->get_recv_port();
+    }
+
 private:
-    Connector connector;
+    std::unique_ptr<Connector> connector;
     std::optional<std::string> termination_message;
 };
 
@@ -71,18 +87,19 @@ public:
     Thread(const std::string& name
            , const std::string& status_address
            , const std::string& termination_message
-           , const std::string& ip
-           , const std::optional<PortSpec> port_spec
-           , const std::string& parent_name)
-            : BaseOscObject(name, status_address)
-              , parent_name(parent_name)
+           , std::unique_ptr<Connector> connector
+           , const std::string& parent_name
+           , std::shared_ptr<BaseOscObject> parent_object = nullptr)
+            : BaseOscObject(name, "/" + name, status_address)
               , termination_message(termination_message)
-            // Note: if BaseOscObject ctor fails, connector will never be initialized so no need to clean this up
-              , connector(create_connector(ip, port_spec)) {}
+              , connector(std::move(connector))
+              , parent_name(parent_name)
+              , parent(std::move(parent_object))
+              {}
 
-    // TODO: dtor to reallocate ports, delete copy/move constr/asgn.
 
-    bool initialize(OscSendMessage& init_message) override {
+    bool initialize(OscSendMessage init_message) override {
+        // TODO: Never gets parent: parent is always nullptr - should be set by owning obj while returning `parent_missing`
         if (initialized) {
             throw std::runtime_error("object is already initialized");
         }
@@ -100,7 +117,7 @@ public:
 
     bool send(OscSendMessage& msg) override {
         if (status == Status::ready) {
-            connector.send(msg);
+            connector->send(msg);
             return true;
         }
 
@@ -108,7 +125,7 @@ public:
     }
 
     std::vector<osc::ReceivedMessage> receive(const std::string& address) override {
-        return connector.receive(address);
+        return connector->receive(address);
     }
 
     void update_status() override {
@@ -144,6 +161,29 @@ public:
         initialized = false;
     }
 
+    void flag_for_deletion() override {
+        status = Status::deleted;
+        connector.reset();  // delete socket to allow reallocation of ports
+    }
+
+    int get_send_port() {
+        return connector->get_send_port();
+    }
+
+    int get_recv_port() {
+        return connector->get_recv_port();
+    }
+
+    void set_parent(const std::shared_ptr<BaseOscObject>& parent) {
+        Thread::parent = parent;
+    }
+
+    const std::string& get_parent_name() const {
+        return parent_name;
+    }
+
+
+
 private:
 
     const std::string parent_name;
@@ -151,7 +191,7 @@ private:
 
     const std::string termination_message;
 
-    Connector connector;
+    std::unique_ptr<Connector> connector;
 
 
 };
@@ -163,13 +203,20 @@ public:
     Remote(const std::string& name
            , const std::string& status_base_address
            , const std::string& termination_message
-           , const std::string& parent_name)
-            : BaseOscObject(name
-                            , format_status_address(status_base_address, parent_name))
-              , termination_message(termination_message) {}
+           , const std::string& parent_name
+           , std::shared_ptr<BaseOscObject> parent_object = nullptr)
+            : BaseOscObject(format_full_name(name, parent_name)
+                            , format_address(name, parent_name)
+                            , format_address(status_base_address, parent_name))
+              , termination_message(termination_message)
+              , base_name(name)
+              , parent_name(parent_name)
+              , parent(std::move(parent_object))
+              {}
 
 
-    bool initialize(OscSendMessage& init_message) override {
+    bool initialize(OscSendMessage init_message) override {
+        // TODO: Never gets parent: parent is always nullptr - should be set by owning obj while returning `parent_missing`
         if (initialized) {
             throw std::runtime_error("object is already initialized");
         }
@@ -224,6 +271,10 @@ public:
         initialized = false;
     }
 
+    void flag_for_deletion() override {
+        status = Status::deleted;
+    }
+
 private:
     const std::string base_name;
     const std::string parent_name;
@@ -232,13 +283,16 @@ private:
     const std::string termination_message;
 
 
-    static std::string format_address(std::string& name, std::string& parent_name) {
+    static std::string format_full_name(const std::string& name, const std::string& parent_name) {
         return parent_name + "::" + name;
     }
 
-    static std::string format_status_address(const std::string& status_base_address
-                                             , const std::string& parent_name) {
-        return "/" + parent_name + status_base_address;
+    static std::string format_address(const std::string& base_address, const std::string& parent_name) {
+        if (base_address.find('/' == 0)) {
+            return "/" + parent_name + base_address;
+        } else {
+            return "/" + parent_name + "/" + base_address;
+        }
     }
 };
 

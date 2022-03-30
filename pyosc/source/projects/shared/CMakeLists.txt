@@ -10,7 +10,7 @@ set(SOURCE_FILES
         oscpack_receiver.h
         oscpack_sender.h
         text_gen.h
-        pyosc_base.cpp pyosc_objects.h)
+        pyosc_base.cpp pyosc_objects.h pyosc_manager.cpp pyosc_manager.h)
 
 
 #add_library(
