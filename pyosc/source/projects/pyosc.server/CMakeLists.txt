@@ -19,10 +19,6 @@ include_directories(
 
 set( SOURCE_FILES
 	${PROJECT_NAME}.cpp
-		../shared/connector.h
-	../shared/juce_osc_input_stream.h
-		../shared/juce_osc_receiver.h
-        ../shared/pyosc_max_base.h
         )
 
 

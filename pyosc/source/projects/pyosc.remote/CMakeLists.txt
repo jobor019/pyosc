@@ -19,7 +19,7 @@ include_directories(
 
 set( SOURCE_FILES
 	${PROJECT_NAME}.cpp
-)
+		../shared/max_obj_base.h)
 
 
 add_library( 

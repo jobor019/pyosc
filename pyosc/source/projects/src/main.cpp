@@ -11,6 +11,9 @@
 
 #define OUTPUT_BUFFER_SIZE 1024
 
+
+// TODO: Mutexes in Server/Thread/Remote
+
 int main() {
 
 
@@ -153,6 +156,6 @@ int main() {
     thread1->update_status();
     assert(thread1->get_status() == Status::parent_obj_not_ready);    // not ready once more
 
-    
+
 
 }

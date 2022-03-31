@@ -5,6 +5,10 @@
 
 #include "pyosc_base.h"
 
+// TODO: Mutexes in Server/Thread/Remote
+// TODO: Mutexes in Server/Thread/Remote
+// TODO: Mutexes in Server/Thread/Remote
+
 class Server : public BaseOscObject {
 public:
     /**
@@ -81,7 +85,7 @@ private:
 // ============================================================================================================
 
 
-// TODO: Thread and Remote are more or less identical apart from their send and receive. Refactor.
+// TODO: Thread and Remote are more or less identical apart from their send and receive. Refactor at some point.
 class Thread : public BaseOscObject {
 public:
     Thread(const std::string& name
@@ -99,7 +103,6 @@ public:
 
 
     bool initialize(OscSendMessage init_message) override {
-        // TODO: Never gets parent: parent is always nullptr - should be set by owning obj while returning `parent_missing`
         if (initialized) {
             throw std::runtime_error("object is already initialized");
         }
@@ -216,7 +219,6 @@ public:
 
 
     bool initialize(OscSendMessage init_message) override {
-        // TODO: Never gets parent: parent is always nullptr - should be set by owning obj while returning `parent_missing`
         if (initialized) {
             throw std::runtime_error("object is already initialized");
         }
