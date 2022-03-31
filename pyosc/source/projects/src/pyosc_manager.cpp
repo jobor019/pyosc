@@ -199,23 +199,13 @@ std::unique_ptr<Connector> PyOscManager::create_connector_lock_free(const std::s
         send_port = port_spec->send_port;
         recv_port = port_spec->recv_port;
 
-        // Only check availability for send port - might be bound by external process
-        if (!port_is_available(send_port)) {
+        // No checks: up to the user to ensure that ports aren't used elsewhere. Will throw if recv_port is bound
+        auto connector = std::make_unique<Connector>(ip, send_port, recv_port);
 
-            throw std::runtime_error("port " + std::to_string(send_port) + " is already in use");
-        }
+        block_port(connector->get_send_port());
+        block_port(connector->get_recv_port());
 
-        // Check both availability and if socket is bound for recv port - will fail otherwise
-        if (!port_is_bound(recv_port) && port_is_available(recv_port)) {
-
-            block_port(send_port);
-            block_port(recv_port);
-            return std::make_unique<Connector>(ip, send_port, recv_port);
-
-        } else {
-            throw std::runtime_error("port " + std::to_string(recv_port) + " is not available");
-        }
-
+        return std::move(connector);
 
     } else {
         // Automatic port assignment

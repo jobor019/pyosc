@@ -22,8 +22,7 @@ public:
               , termination_message(termination_message)
               , connector(std::move(connector)) {}
 
-    // TODO: This doesn't work very well with the interface - shouldn't pass OscSendMessage
-    bool initialize(OscSendMessage init_message) override {
+    bool initialize(std::string& init_message) override {
         initialized = true;
         return initialized;
     }
@@ -102,7 +101,7 @@ public:
               {}
 
 
-    bool initialize(OscSendMessage init_message) override {
+    bool initialize(std::string& init_message) override {
         if (initialized) {
             throw std::runtime_error("object is already initialized");
         }
@@ -110,7 +109,10 @@ public:
         update_status();
 
         if (status == Status::uninitialized) {
-            bool res = parent->send(init_message);
+            OscSendMessage msg{address};
+            msg.add_string(init_message);
+
+            bool res = parent->send(msg);
             initialized = res;
             return initialized;
         }
@@ -218,7 +220,7 @@ public:
               {}
 
 
-    bool initialize(OscSendMessage init_message) override {
+    bool initialize(std::string& init_message) override {
         if (initialized) {
             throw std::runtime_error("object is already initialized");
         }
@@ -226,7 +228,10 @@ public:
         update_status();
 
         if (status == Status::uninitialized) {
-            bool res = parent->send(init_message);
+            OscSendMessage msg{address};
+            msg.add_string(init_message);
+
+            bool res = parent->send(msg);
             initialized = res;
             return initialized;
         }

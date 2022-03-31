@@ -33,6 +33,14 @@ public:
         messages.clear();
     }
 
+    unsigned long size() noexcept {
+        return messages.size();
+    }
+
+    bool empty() noexcept {
+        return messages.empty();
+    }
+
 private:
     std::mutex mutex;
 

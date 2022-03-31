@@ -49,7 +49,7 @@ public:
     /**
      * initializes the object on the server
      */
-    virtual bool initialize(OscSendMessage init_message) = 0;
+    virtual bool initialize(std::string& init_message) = 0;
 
 
     /**

@@ -16,7 +16,6 @@
 
 int main() {
 
-
     std::shared_ptr<Server> server1;
     std::shared_ptr<Server> server2;
     std::shared_ptr<Server> server3;

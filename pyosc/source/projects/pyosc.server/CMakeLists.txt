@@ -19,6 +19,7 @@ include_directories(
 
 set( SOURCE_FILES
 	${PROJECT_NAME}.cpp
+		../shared/max_obj_base.h
         )
 
 
@@ -38,15 +39,9 @@ add_library(
 #		PUBLIC
 #		../shared)
 
-#target_link_libraries(${PROJECT_NAME}
-#		PRIVATE
-#		pyosc)
-
-
 target_link_libraries(${PROJECT_NAME}
 		PRIVATE
-		juce::juce_core
-		juce::juce_osc)
+		pyosc)
 
 
 
