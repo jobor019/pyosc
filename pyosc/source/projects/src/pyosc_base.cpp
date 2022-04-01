@@ -6,13 +6,14 @@ BaseOscObject::BaseOscObject(const std::string& name
                              , const std::string& status_address)
         : name(name)
           , address(address)
-          , status_address(status_address)
+          , status_address(format_address(status_address, address))
           , status(Status::offline) {
 }
 
 
 Status BaseOscObject::parse_status(osc::ReceivedMessage& msg) {
     if (msg.ArgumentCount() != 1) {
+        std::cout << "INVALID1 " << msg.AddressPattern() << "\n";
         return Status::invalid_status;
     }
 
@@ -24,6 +25,7 @@ Status BaseOscObject::parse_status(osc::ReceivedMessage& msg) {
     } else if (arg->IsInt64()) {
         status_code = static_cast<int>(arg->AsInt64());
     } else {
+        std::cout << "INVALID2 " << msg.AddressPattern() << "\n";
         return Status::invalid_status;
     }
 
@@ -42,6 +44,7 @@ Status BaseOscObject::read_server_status() {
         // initialize has been called but has not yet received any response from the server
         if (!last_response) {
             status = Status::initializing;
+            last_response = std::chrono::system_clock::now();
             return status;
         }
 
@@ -65,6 +68,29 @@ Status BaseOscObject::read_server_status() {
 
 const std::string& BaseOscObject::get_address() const {
     return address;
+}
+
+const std::string& BaseOscObject::get_status_address() const {
+    return status_address;
+}
+
+std::string BaseOscObject::format_full_name(const std::string& name, const std::string& parent_name) {
+    return parent_name + "::" + name;
+}
+
+std::string BaseOscObject::format_address(const std::string& base_address, const std::string& parent) {
+    std::stringstream ss;
+    if (parent.find('/') != 0) {
+        ss << "/";
+    }
+    ss << parent;
+
+    if (base_address.find('/') != 0) {
+        ss << "/";
+    }
+    ss << base_address;
+
+    return ss.str();
 }
 
 

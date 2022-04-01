@@ -20,7 +20,7 @@ include_directories(
 set( SOURCE_FILES
 	${PROJECT_NAME}.cpp
 		../shared/max_obj_base.h
-        )
+		../shared/atom_osc_parser.h)
 
 
 add_library(

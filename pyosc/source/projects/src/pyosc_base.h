@@ -93,6 +93,7 @@ public:
 
     const std::string& get_address() const;
 
+    const std::string& get_status_address() const;
 
 protected:
     Status status;
@@ -103,6 +104,10 @@ protected:
     Status read_server_status();
 
     static Status parse_status(osc::ReceivedMessage& msg);
+
+    static std::string format_full_name(const std::string& name, const std::string& parent_name);
+
+    static std::string format_address(const std::string& base_address, const std::string& parent);
 
 private:
     std::optional<std::chrono::time_point<std::chrono::system_clock> > last_response;

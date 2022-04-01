@@ -23,6 +23,9 @@ public:
         receiver.run();
     }
 
+    /**
+     * @raises: osc::MalformedMessageException if message has improper formatting
+     */
     void send(OscSendMessage& msg) {
         std::lock_guard<std::mutex> send_lock{send_mutex};
         sender.send(msg);
@@ -33,16 +36,21 @@ public:
         auto new_messages = receiver.receive();
         for (auto& msg: new_messages) {
             std::string msg_address = std::string(msg.AddressPattern());
-
             if (messages.find(msg_address) != messages.end()) {
-                messages.at(msg_address).emplace_back(msg);
+                std::cout << "Appending " << msg_address << " to key " << messages.find(msg_address)->first << " (msg: " << msg.ArgumentsBegin()->AsString() << " )\n";
+                messages.at(msg_address).push_back(msg);
             } else {
+                std::cout << "iNSERTING " << msg.AddressPattern() << " to key " << msg_address << " (msg: " << msg.ArgumentsBegin()->AsString() << " )\n";
                 messages.insert(std::pair<std::string, std::vector<osc::ReceivedMessage>>(msg_address, {msg}));
             }
         }
 
         auto i = messages.find(address);
         if (i != messages.end()) {
+            std::cout << "READING ON " << address << " FINDING RESULTS ON " << i->second[0].AddressPattern() << " (with key " << i->first << ")\n";
+            if (address != i->second[0].AddressPattern()) {
+                std::cout << "NOT THE SAMAe\n";
+            }
             auto msgs = std::move(i->second);
             messages.erase(i);
             return msgs;

@@ -23,6 +23,10 @@ public:
               , connector(std::move(connector)) {}
 
     bool initialize(std::string& init_message) override {
+        if (initialized) {
+            throw std::runtime_error("object has already been initialized");
+        }
+
         initialized = true;
         return initialized;
     }
@@ -212,7 +216,7 @@ public:
            , std::shared_ptr<BaseOscObject> parent_object = nullptr)
             : BaseOscObject(format_full_name(name, parent_name)
                             , format_address(name, parent_name)
-                            , format_address(status_base_address, parent_name))
+                            , status_base_address)
               , termination_message(termination_message)
               , base_name(name)
               , parent_name(parent_name)
@@ -289,18 +293,6 @@ private:
 
     const std::string termination_message;
 
-
-    static std::string format_full_name(const std::string& name, const std::string& parent_name) {
-        return parent_name + "::" + name;
-    }
-
-    static std::string format_address(const std::string& base_address, const std::string& parent_name) {
-        if (base_address.find('/' == 0)) {
-            return "/" + parent_name + base_address;
-        } else {
-            return "/" + parent_name + "/" + base_address;
-        }
-    }
 };
 
 #endif //PYOSC_PYOSC_OBJECTS_H

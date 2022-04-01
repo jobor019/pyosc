@@ -35,12 +35,10 @@ public:
     }
 
     std::vector<osc::ReceivedMessage> receive() {
-
         std::lock_guard<std::mutex> receive_lock{mutex};
         std::vector<osc::ReceivedMessage> vec;
         std::swap(received_messages, vec);
         return vec;
-
     }
 
 protected:
@@ -49,8 +47,8 @@ protected:
         (void) remoteEndpoint; // suppress unused parameter warning
 
         std::lock_guard<std::mutex> receive_lock{mutex};
+        // TODO: FIX!!!
         received_messages.emplace_back(m);
-
     }
 
 private:

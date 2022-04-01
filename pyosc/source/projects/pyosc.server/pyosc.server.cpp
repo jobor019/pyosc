@@ -6,8 +6,8 @@
 #include "c74_min.h"
 #include "../src/pyosc_base.h"
 #include "../src/message_queue.h"
-#include "source/projects/src/pyosc_objects.h"
-#include "source/projects/src/pyosc_manager.h"
+#include "pyosc_manager.h"
+#include "../shared/atom_osc_parser.h"
 
 using namespace c74::min;
 
@@ -87,14 +87,14 @@ public:
         }
     }
 
-    ~server() {
+    ~server() override {
         PyOscManager::get_instance().remove_object(communication_object->get_name());
     }
 
-    message<> initializez{this, "anything", "initialize the remote object", MIN_FUNCTION {
+    message<> initialize{this, "initialize", "initialize the remote object", MIN_FUNCTION {
         std::string init_msg;
 
-        if (!args.empty()) {
+        if (args.empty()) {
             init_msg = "";
         } else if (args.size() == 1 && args[0].type() == message_type::symbol_argument) {
             init_msg = static_cast<std::string>(args[0]);
@@ -103,46 +103,58 @@ public:
             return {};
         }
 
-
         if (initialization_message) {
             cwarn << "initialization message already queued, overwriting current" << endl;
         }
 
 
-        if (communication_object) {
-            try {
-                bool res = communication_object->initialize(init_msg);
-                if (!res) {
-                    // Initialization failed because object isn't ready: queue init message
-                    initialization_message = init_msg;
-                }
-
-            } catch (std::runtime_error& e) {
-                // Object already initialized
-                cerr << e.what() << endl;
-                return {};
+        try {
+            bool res = communication_object->initialize(init_msg);
+            if (!res) {
+                // Initialization failed because object isn't ready: queue init message
+                initialization_message = init_msg;
             }
+            dump_out.send("initialize " + std::to_string(res));
+
+
+        } catch (std::runtime_error& e) {
+            // Object already initialized
+            cerr << e.what() << endl;
+            dump_out.send("initialize " + std::to_string(-1));
+            return {};
         }
 
         return {};
     }};
 
-    message<> send{this, "anything", "send messages to the remote object", MIN_FUNCTION {
-        auto msg = std::make_unique<OscSendMessage>(communication_object->get_address());
-        // TODO: Parse OSCMessage from args!
-        cwarn << "msg is not being parsed" << endl;
-
+    message<> send{this, "send", "send messages to the remote object", MIN_FUNCTION {
+        std::unique_ptr<OscSendMessage> msg;
+        try {
+            // TODO: Fail on error should be settable
+            msg = AtomOscParser::atoms2send(communication_object->get_address(), args, &cwarn, false);
+        } catch (std::runtime_error& e) {
+            cerr << e.what() << endl;
+            return {};
+        }
 
         if (status == Status::ready) {
-            communication_object->send(*msg);
+            try {
+                communication_object->send(*msg);
+            } catch (osc::MalformedMessageException& e) {
+                cerr << e.what() << endl;
+                return {};
+            }
         } else {
             queue.add(std::move(msg));
+            dump_out.send("queued " + std::to_string(queue.size()));
         }
         return {};
     }};
 
     message<> terminate{this, "terminate", "send termination message to the remote object", MIN_FUNCTION {
-        // TODO
+        // TODO: Handle this with boolean check instead
+        communication_object->terminate();
+        dump_out.send("terminated");
         return {};
     }};
 
@@ -150,6 +162,7 @@ public:
                     , MIN_FUNCTION {
                 auto num_messages = queue.size();
                 queue.clear();
+                dump_out.send("queued " + std::to_string(queue.size()));
                 print_out.send("cleared " + std::to_string(num_messages) + " messages");
 
                 return {};
@@ -157,51 +170,40 @@ public:
 
     message<> sendport{this, "sendport", "get send port (fourth outlet)"
                        , MIN_FUNCTION {
-                if (communication_object) {
-                    dump_out.send({"sendport", communication_object->get_send_port()});
-                } else {
-                    cout << "sendport not initialized" << endl;
-                }
+                dump_out.send({"sendport", communication_object->get_send_port()});
                 return {};
             }};
 
     message<> recvport{this, "recvport", "get receive port (fourth outlet)"
                        , MIN_FUNCTION {
-                if (communication_object) {
-                    dump_out.send({"recvport", communication_object->get_recv_port()});
-                } else {
-                    cout << "recvport not initialized" << endl;
-                }
+                dump_out.send({"recvport", communication_object->get_recv_port()});
                 return {};
             }};
 
     timer<> status_poll{this, MIN_FUNCTION {
-        if (communication_object) {
-            communication_object->update_status();
-            auto new_status = communication_object->get_status();
+        communication_object->update_status();
+        auto new_status = communication_object->get_status();
 
-            cout << static_cast<int>(status) << endl;
+        std::cout << new_status << "\n";
 
-            if (new_status != status) {
-                status = new_status;
-                status_out.send(static_cast<int>(new_status));
+        status_out.send(static_cast<int>(new_status));
 
+        if (new_status != status) {
+            status = new_status;
 
+            if (status == Status::uninitialized && initialization_message) {
+                bool res = communication_object->initialize(*initialization_message);
 
-                if (status == Status::uninitialized && initialization_message) {
-                    bool res = communication_object->initialize(*initialization_message);
-
-                    if (res) {
-                        initialization_message = std::nullopt;
-                    }
-
-                } else if (status == Status::ready && !queue.empty()) {
-                    process_queue_unsafe();
+                if (res) {
+                    initialization_message = std::nullopt;
                 }
-                // all other cases: wait for new status
-            }
 
+            } else if (status == Status::ready && !queue.empty()) {
+                process_queue_unsafe();
+            }
+            // all other cases: wait for new status
         }
+
 
         status_poll.delay(statusinterval.get());
         return {};
@@ -210,6 +212,16 @@ public:
 
     timer<> receive_poll{this, MIN_FUNCTION {
         receive_poll.delay(pollinterval.get());
+        auto messages = communication_object->receive(communication_object->get_address());
+        for (auto& msg: messages) {
+            try {
+                // TODO: fail_on_error should be settable
+                auto atms = AtomOscParser::recv2atoms(msg, &cwarn, false);
+                main_out.send(atms);
+            } catch (std::runtime_error& e) {
+                cerr << e.what() << endl;
+            }
+        }
         return {};
     }
     };
@@ -225,7 +237,7 @@ protected:
             auto msg = queue.pop();
             // TODO: Handle this more safely by checking status of each send
             bool res = communication_object->send(*msg);
-
+            dump_out.send("queued ", queue.size());
         }
     }
 
@@ -374,6 +386,12 @@ public:
                               , description{"OSC address for sending and receiving messages from/to this object"}
                               , setter{
                     MIN_FUNCTION {
+
+                        if (args.empty()) {
+                            dump_out.send({"address", communication_object->get_address()});
+                            return {};
+                        }
+
                         // TODO: Fix so that it's settable after initialization
                         if (communication_object) {
                             cout << "cannot set after initialization" << endl;
@@ -418,6 +436,12 @@ public:
                     "OSC address for sending and receiving status messages from/to this object"}
                                     , setter{
                     MIN_FUNCTION {
+
+                        if (args.empty()) {
+                            dump_out.send({"statusaddress", communication_object->get_status_address()});
+                            return {};
+                        }
+
                         // TODO: Fix so that it's settable after initialization
                         if (communication_object) {
                             cout << "cannot set after initialization" << endl;
