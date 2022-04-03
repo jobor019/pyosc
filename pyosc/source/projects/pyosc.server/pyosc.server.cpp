@@ -6,7 +6,7 @@
 #include "c74_min.h"
 #include "../src/pyosc_base.h"
 #include "../src/message_queue.h"
-#include "pyosc_manager.h"
+#include "../src/pyosc_manager.h"
 #include "../shared/atom_osc_parser.h"
 
 using namespace c74::min;

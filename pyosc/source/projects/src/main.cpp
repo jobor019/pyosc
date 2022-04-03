@@ -5,6 +5,8 @@
 #include "text_gen.h"
 #include "pyosc_objects.h"
 #include "pyosc_manager.h"
+#include "c74_min_atom.h"
+//#include "source/min-api/include/c74_min_atom.h"
 #include <chrono>
 #include <thread>
 #include <optional>
@@ -16,6 +18,7 @@
 
 int main() {
 
+    c74::min::atoms atms;
 
     Connector c{"127.0.0.1", 7000, 7001};
 
