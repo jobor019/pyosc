@@ -5,6 +5,7 @@
 
 #include "c74_min_unittest.h"     // required unit test header
 #include "pyosc.server.cpp"    // need the source of our object so that we can access it
+//#include "../src/connector.h"
 
 // Unit tests are written using the Catch framework as described at
 // https://github.com/philsquared/Catch/blob/master/docs/tutorial.md
@@ -35,12 +36,13 @@ SCENARIO("object produces correct output") {
 
 
 SCENARIO("receiving multiple messages from server") {
-    Connector c{"127.0.0.1", 7000, 7001};
 
-    std::stringstream ss;
-    ss << "Created connector (send_port=" << c.get_send_port() << ", recv_port=" <<c.get_recv_port() << ")\n";
-//    INFO(ss.str());
-    std::cout << ss.str() << "\n";
+    Connector c{"127.0.0.1", 7000, 7001};
+//
+//    std::stringstream ss;
+//    ss << "Created connector (send_port=" << c.get_send_port() << ", recv_port=" <<c.get_recv_port() << ")\n";
+////    INFO(ss.str());
+//    std::cout << ss.str() << "\n";
 
 //    c74::min::atoms atms;
 //    atms.push_back({123});

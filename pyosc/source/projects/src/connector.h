@@ -31,27 +31,21 @@ public:
         sender.send(msg);
     }
 
-    std::vector<osc::ReceivedMessage> receive(const std::string& address) {
+    std::vector<c74::min::atoms> receive(const std::string& address) {
         std::lock_guard<std::mutex> recv_lock{recv_mutex};
         auto new_messages = receiver.receive();
         for (auto& msg: new_messages) {
-            std::string msg_address = std::string(msg.AddressPattern());
-            if (messages.find(msg_address) != messages.end()) {
-                std::cout << "Appending " << msg_address << " to key " << messages.find(msg_address)->first << " (msg: " << msg.ArgumentsBegin()->AsString() << " )\n";
-                messages.at(msg_address).push_back(msg);
+            if (messages.find(msg.get_address()) != messages.end()) {
+                messages.at(msg.get_address()).emplace_back(msg.pop_message());
             } else {
-                std::cout << "iNSERTING " << msg.AddressPattern() << " to key " << msg_address << " (msg: " << msg.ArgumentsBegin()->AsString() << " )\n";
-                messages.insert(std::pair<std::string, std::vector<osc::ReceivedMessage>>(msg_address, {msg}));
+                messages.insert(
+                        std::pair<std::string, std::vector<c74::min::atoms> >(msg.get_address(), {msg.pop_message()}));
             }
         }
 
         auto i = messages.find(address);
         if (i != messages.end()) {
-            std::cout << "READING ON " << address << " FINDING RESULTS ON " << i->second[0].AddressPattern() << " (with key " << i->first << ")\n";
-            if (address != i->second[0].AddressPattern()) {
-                std::cout << "NOT THE SAMAe\n";
-            }
-            auto msgs = std::move(i->second);
+            std::vector<c74::min::atoms> msgs = std::move(i->second);
             messages.erase(i);
             return msgs;
         }
@@ -59,11 +53,13 @@ public:
         return {};
     }
 
-    std::vector<osc::ReceivedMessage> terminate() {
-        std::lock_guard<std::mutex> recv_lock{recv_mutex};
-        auto msgs = receiver.stop();
+    // TODO: Should probably return anything left in receiver on terminating, but needs a viable strategy for
+    //  handling addresses, just returning is insufficient (need to place them in `messages`)
+    void terminate() {
+//        std::lock_guard<std::mutex> recv_lock{recv_mutex};
+//        auto msgs = receiver.stop();
         terminated = true;
-        return msgs;
+//        return msgs;
     }
 
     [[nodiscard]] bool is_terminated() const {
@@ -93,7 +89,7 @@ private:
 
     // TODO: Replacing this with a simple vector is probably faster for most use cases:
     //  fetching multiple messages will be slower but inserting much faster
-    std::map<std::string, std::vector<osc::ReceivedMessage>> messages;
+    std::map<std::string, std::vector<c74::min::atoms> > messages;
 
 };
 

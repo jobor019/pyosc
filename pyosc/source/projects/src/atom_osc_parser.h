@@ -1,13 +1,12 @@
-//
-// Created by Joakim Borg on 01/04/2022.
-//
 
 #ifndef PYOSC_ATOM_OSC_PARSER_H
 #define PYOSC_ATOM_OSC_PARSER_H
 
 #include <iostream>
-#include "c74_min.h"
 #include "OscReceivedElements.h"
+#include "osc_send_message.h"
+#include "c74_min.h"
+
 
 class AtomOscParser {
 public:
@@ -40,7 +39,7 @@ public:
         return std::move(msg);
     }
 
-    static c74::min::atoms recv2atoms(osc::ReceivedMessage& msg, c74::min::logger* cwarn, bool fail_on_error) {
+    static c74::min::atoms recv2atoms(const osc::ReceivedMessage& msg) {
         c74::min::atoms args;
         auto it = msg.ArgumentsBegin();
         while (it != msg.ArgumentsEnd()) {
@@ -59,11 +58,7 @@ public:
             } else if (it->IsBool()) {
                 args.push_back(it->AsBool());
             } else {
-                if (fail_on_error) {
-                    throw std::runtime_error("element of unknown data type in received message encountered");
-                } else {
-                    (*cwarn) << "element of unknown data type in received message was ignored" << c74::min::endl;
-                }
+                return {std::string("invalid"), std::string(msg.AddressPattern()), msg.ArgumentCount()};
             }
             ++it;
         }

@@ -38,7 +38,7 @@ public:
         return false;
     }
 
-    std::vector<osc::ReceivedMessage> receive(const std::string& address) override {
+    std::vector<c74::min::atoms> receive(const std::string& address) override {
         if (status != Status::deleted) {
             return connector->receive(address);
         }
@@ -133,7 +133,7 @@ public:
         return false;
     }
 
-    std::vector<osc::ReceivedMessage> receive(const std::string& address) override {
+    std::vector<c74::min::atoms> receive(const std::string& address) override {
         return connector->receive(address);
     }
 
@@ -250,7 +250,7 @@ public:
         return false;
     }
 
-    std::vector<osc::ReceivedMessage> receive(const std::string& address) override {
+    std::vector<c74::min::atoms> receive(const std::string& address) override {
         return parent->receive(address);
     }
 

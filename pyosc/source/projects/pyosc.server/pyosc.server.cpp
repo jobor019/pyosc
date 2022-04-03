@@ -3,11 +3,12 @@
 ///	@copyright	Copyright 2018 The Min-DevKit Authors. All rights reserved.
 ///	@license	Use of this source code is governed by the MIT License found in the License.md file.
 
+
 #include "c74_min.h"
+#include "../src/pyosc_objects.h"
 #include "../src/pyosc_base.h"
 #include "../src/message_queue.h"
 #include "../src/pyosc_manager.h"
-#include "../shared/atom_osc_parser.h"
 
 using namespace c74::min;
 
@@ -215,9 +216,7 @@ public:
         auto messages = communication_object->receive(communication_object->get_address());
         for (auto& msg: messages) {
             try {
-                // TODO: fail_on_error should be settable
-                auto atms = AtomOscParser::recv2atoms(msg, &cwarn, false);
-                main_out.send(atms);
+                main_out.send(msg);
             } catch (std::runtime_error& e) {
                 cerr << e.what() << endl;
             }
@@ -516,3 +515,4 @@ public:
 
 
 MIN_EXTERNAL(server);
+
