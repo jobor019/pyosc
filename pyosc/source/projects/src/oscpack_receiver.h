@@ -11,7 +11,7 @@
 #include "UdpSocket.h"
 
 #include "atom_osc_parser.h"
-//#include "c74_min.h"
+#include "c74_min_api.h"
 
 class RecvMessage {
 public:

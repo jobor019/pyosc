@@ -5,7 +5,7 @@
 #include <iostream>
 #include "OscReceivedElements.h"
 #include "osc_send_message.h"
-#include "c74_min.h"
+#include "c74_min_api.h"
 
 
 class AtomOscParser {

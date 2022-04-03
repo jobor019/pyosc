@@ -27,10 +27,8 @@ set( SOURCE_FILES
         ../src/osc_send_message.h
         ../src/oscpack_receiver.h
         ../src/oscpack_sender.h
-        ../src/pyosc_base.h
-#        ../src/pyosc_base.cpp
-        ../src/pyosc_manager.h
-#        ../src/pyosc_manager.cpp
+        ../src/pyosc_base.cpp
+        ../src/pyosc_manager.cpp
         ../src/pyosc_objects.h
         )
 
