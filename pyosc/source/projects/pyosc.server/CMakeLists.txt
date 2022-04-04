@@ -14,7 +14,15 @@ include(${C74_MIN_API_DIR}/script/min-pretarget.cmake)
 
 include_directories(
         "${C74_INCLUDES}"
+        "${PROJECT_SOURCE_DIR}/../../oscpack/ip"
+        "${PROJECT_SOURCE_DIR}/../../oscpack/osc"
 )
+
+link_directories(
+        "${PROJECT_BINARY_DIR}/../../oscpack"
+)
+
+link_libraries(oscpack)
 
 
 set( SOURCE_FILES
@@ -38,18 +46,6 @@ add_library(
         MODULE
         ${SOURCE_FILES}
 )
-
-target_link_libraries(${PROJECT_NAME}
-        PUBLIC
-        oscpack)
-
-
-target_include_directories(${PROJECT_NAME} PUBLIC
-#        "${PROJECT_BINARY_DIR}"
-#        "${PROJECT_SOURCE_DIR}/"
-        "${PROJECT_SOURCE_DIR}/../../oscpack/ip"
-        "${PROJECT_SOURCE_DIR}/../../oscpack/osc"
-        )
 
 
 

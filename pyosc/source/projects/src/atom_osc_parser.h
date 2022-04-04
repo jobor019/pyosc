@@ -52,6 +52,7 @@ public:
             } else if (it->IsDouble()) {
                 args.push_back(it->AsDouble());
             } else if (it->IsString()) {
+                std::cout << it->AsString() << "\n";
                 args.push_back(it->AsString());
             } else if (it->IsChar()) {
                 args.push_back(it->AsChar());
