@@ -129,6 +129,30 @@ private:
 // =========================================================================================
 
 
+class BaseWithParent : public BaseOscObject {
+public:
+    BaseWithParent(const std::string& name
+                   , const std::string& address
+                   , const std::string& status_address
+                   , const std::string& parent_name)
+            : BaseOscObject(name, address, status_address)
+              , parent_name(parent_name) {}
+
+
+    void set_parent(const std::shared_ptr<BaseOscObject>& new_parent) {
+        BaseWithParent::parent = new_parent;
+    }
+
+
+    const std::string& get_parent_name() const {
+        return parent_name;
+    }
+
+
+protected:
+    const std::string parent_name;
+    std::shared_ptr<BaseOscObject> parent;
+};
 
 
 #endif //PYOSC_PYOSC_BASE_H

@@ -87,15 +87,14 @@ private:
 
 
 // TODO: Thread and Remote are more or less identical apart from their send and receive. Refactor at some point.
-class Thread : public BaseOscObject {
+class Thread : public BaseWithParent {
 public:
     Thread(const std::string& name
            , const std::string& status_address
            , std::unique_ptr<Connector> connector
-           , std::shared_ptr<BaseOscObject> parent_object = nullptr)
-            : BaseOscObject(name, "/" + name, status_address)
-              , connector(std::move(connector))
-              , parent(std::move(parent_object)) {}
+           , const std::string parent_name)
+            : BaseWithParent(name, "/" + name, status_address, parent_name)
+              , connector(std::move(connector)) {}
 
 
     bool initialize(std::string& init_message) override {
@@ -184,34 +183,8 @@ public:
         return connector->get_recv_port();
     }
 
-    void set_parent(const std::shared_ptr<BaseOscObject>& new_parent) {
-        Thread::parent = new_parent;
-    }
-
-
-    const std::string& get_parent_name() const {
-        return parent_name;
-    }
-
-    void set_parent_name(const std::string& new_name) {
-        if (parent || initialized) {
-            throw std::runtime_error("cannot set parent name after setting parent or after initializing");
-        }
-        Thread::parent_name = new_name;
-    }
-
-    void set_termination_message(const std::string& new_message) {
-        if (initialized) {
-            throw std::runtime_error("cannot set termination message after initialization");
-        }
-        Thread::termination_message = new_message;
-    }
-
 
 private:
-
-    std::string parent_name;
-    std::shared_ptr<BaseOscObject> parent;
 
     std::unique_ptr<Connector> connector;
 
@@ -220,20 +193,16 @@ private:
 
 // ============================================================================================================
 
-class Remote : public BaseOscObject {
+class Remote : public BaseWithParent {
 public:
     Remote(const std::string& name
            , const std::string& status_base_address
            , const std::string& termination_message
-           , const std::string& parent_name
-           , std::shared_ptr<BaseOscObject> parent_object = nullptr)
-            : BaseOscObject(format_full_name(name, parent_name)
-                            , format_address(name, parent_name)
-                            , status_base_address)
-              , base_name(name)
-              , parent_name(parent_name)
-              , parent(std::move(parent_object)) {}
-
+           , const std::string& parent_name)
+            : BaseWithParent(format_full_name(name, parent_name)
+                             , format_address(name, parent_name)
+                             , status_base_address, parent_name)
+              , base_name(name) {}
 
     bool initialize(std::string& init_message) override {
         if (initialized) {
@@ -315,8 +284,6 @@ public:
 
 private:
     const std::string base_name;
-    const std::string parent_name;
-    std::shared_ptr<BaseOscObject> parent;
 
 };
 

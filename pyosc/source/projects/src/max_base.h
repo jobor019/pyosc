@@ -161,17 +161,48 @@ protected:
         return std::string{"127.0.0.1"};
     }
 
-    static std::string parse_name(const atoms& args, int name_idx = 0, int min_nargs = 1) {
+    static std::string parse_name(const atoms& args, int name_idx = 0, int min_nargs = 1, bool is_parent = false) {
         if (args.size() >= min_nargs) {
             // name, ...
             if (args[name_idx].type() == message_type::symbol_argument) {
                 return static_cast<std::string>(args[name_idx]);
             } else {
-                throw std::runtime_error("name must be a single symbol");
+                if (is_parent) {
+                    throw std::runtime_error("parent name must be a single symbol");
+                } else {
+                    throw std::runtime_error("name must be a single symbol");
+                }
             }
 
         } else {
-            throw std::runtime_error("a name must be provided");
+            if (is_parent) {
+                throw std::runtime_error("parent name must be provided");
+            } else {
+                throw std::runtime_error("name must be provided");
+            }
+        }
+    }
+
+    void update_status() {
+        communication_object->update_status();
+        auto new_status = communication_object->get_status();
+
+        status_out.send(static_cast<int>(new_status));
+
+        if (new_status != status) {
+            status = new_status;
+
+            if (status == Status::uninitialized && initialization_message) {
+                bool res = communication_object->initialize(*initialization_message);
+
+                if (res) {
+                    initialization_message = std::nullopt;
+                }
+
+            } else if (status == Status::ready && !queue.empty()) {
+                process_queue_unsafe();
+            }
+            // all other cases: wait for new status
         }
     }
 
@@ -339,15 +370,15 @@ public:
             }};
 
     attribute<symbol> test{this, "test", "", description{""}, setter{
-        MIN_FUNCTION {
-            try {
-                throw std::runtime_error("testing");
-            } catch (std::runtime_error& e) {
-                cout << "bad" << endl;
+            MIN_FUNCTION {
+                try {
+                    throw std::runtime_error("testing");
+                } catch (std::runtime_error& e) {
+                    cout << "bad" << endl;
+                    return {};
+                }
                 return {};
             }
-            return {};
-        }
     }};
 
     attribute<symbol> terminationmessage{this, "terminationmessage", ""

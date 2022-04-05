@@ -19,11 +19,17 @@ public:
 
     explicit thread(const atoms& args = {}) {
         try {
-            std::optional<PortSpec> port_spec = parse_ports(args);
-            std::string ip = parse_ip(args);
-            std::string name = parse_name(args);
+            std::string name = parse_name(args, 0, 1, false);
+            std::string parent_name = parse_name(args, 1, 2, true);
+            std::string ip = parse_ip(args, 2, 3);
+            std::optional<PortSpec> port_spec = parse_ports(args, 3, 4, 5);
 
-            communication_object = PyOscManager::get_instance().new_thread(name, statusaddress.get(), ip, port_spec);
+
+            communication_object = PyOscManager::get_instance().new_thread(name
+                                                                           , statusaddress.get()
+                                                                           , ip
+                                                                           , port_spec
+                                                                           , parent_name);
 
             status_poll.delay(0.0);
             receive_poll.delay(0.0);
@@ -44,71 +50,17 @@ public:
 
         status_out.send(static_cast<int>(new_status));
 
-        if (new_status != status) {
-            status = new_status;
+        if (new_status == Status::parent_obj_missing) {
+            auto parent = PyOscManager::get_instance().get_object(communication_object->get_name());
+            if (parent) {
+                std::dynamic_pointer_cast<Thread>(communication_object)->set_parent(parent);
+            }
         }
-        // TODO
+
+        update_status();
     }};
 
 protected:
-
-    attribute<symbol> terminationmessage{this, "terminationmessage", ""
-                                    , description{
-                    "Message to send to parent upon deleting this object in max"}
-                                    , setter{
-                    MIN_FUNCTION {
-
-                        if (args.empty()) {
-                            dump_out.send({"terminationmessage", communication_object->get_status_address()});
-                            return {};
-                        }
-
-                        if (communication_object) {
-                            try {
-                                communication_object->set
-                            }
-                        }
-
-
-                        // TODO: Fix so that it's settable after initialization
-                        if (communication_object) {
-                            cout << "cannot set after initialization" << endl;
-                            return {statusaddress.get()};
-                        }
-
-                        if (status != Status::offline) {
-                            cout << "cannot set statusaddress after initialization" << endl;
-                            dump_out.send({"statusaddress", statusaddress.get()});
-                            return {statusaddress.get()};
-
-                        } else if (args.empty()) {
-                            cout << "must provide a value for statusaddress" << endl;
-                            dump_out.send({"statusaddress", statusaddress.get()});
-                            return {statusaddress.get()};
-
-                        } else if (args.size() == 1 && args[0].type() == message_type::symbol_argument) {
-                            auto s = static_cast<std::string>(args[0]);
-
-                            if (s.find('/') == 0) {
-                                dump_out.send({"statusaddress", args[0]});
-                                return {args};
-
-                            } else {
-                                cout << "OSC statusaddress must begin with '/'" << endl;
-                                dump_out.send({"statusaddress", statusaddress.get()});
-                                return {statusaddress.get()};
-                            }
-
-
-                        } else {
-                            cout << "statusaddress must be a single symbol" << endl;
-                            dump_out.send({"statusaddress", statusaddress.get()});
-                            return {statusaddress.get()};
-                        }
-                    }
-            }};
-
-
 
 
 };
