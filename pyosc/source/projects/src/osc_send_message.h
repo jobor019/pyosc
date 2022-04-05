@@ -77,6 +77,8 @@ public:
 
     [[nodiscard]] osc::OutboundPacketStream* get_sendable_stream() const {
         if (stream->IsMessageInProgress()) {
+            std::cout << "ending message\n";
+            std::cout << (stream.get()) << "\n";
             *stream << osc::EndMessage;
         }
         // While it's technically possibly to pass a bundle to this class at the moment, it shouldn't check for this

@@ -19,16 +19,19 @@ std::shared_ptr<Server> PyOscManager::new_server(const std::string& name
     // Throws std::runtime_error if ports are taken or out of available ports
     auto connector = create_connector_lock_free(ip, port_spec);
 
-    auto object = std::make_shared<Server>(name, status_address, termination_message, std::move(connector));
+    auto object = std::make_shared<Server>(name
+                                           , status_address
+                                           , termination_message
+                                           , std::move(connector));
     objects.emplace_back(object);
 
     return object;
 }
 
-std::shared_ptr<Thread> PyOscManager::new_thread(const std::string& name, const std::string& status_address
-                                                 , const std::string& termination_message, const std::string& ip
-                                                 , const std::optional<PortSpec> port_spec
-                                                 , const std::string& parent_name) {
+std::shared_ptr<Thread> PyOscManager::new_thread(const std::string& name
+                                                 , const std::string& status_address
+                                                 , const std::string& ip
+                                                 , const std::optional<PortSpec> port_spec) {
     std::lock_guard<std::mutex> lock{mutex};
     if (name_exists(name)) {
         throw std::runtime_error("an object with the name " + name + " already exists");
@@ -37,10 +40,7 @@ std::shared_ptr<Thread> PyOscManager::new_thread(const std::string& name, const 
     // Throws std::runtime_error if ports are taken or out of available ports
     auto connector = create_connector_lock_free(ip, port_spec);
 
-    auto parent_object = get_object_lock_free(parent_name); // nullptr if not created yet
-
-    auto object = std::make_shared<Thread>(name, status_address, termination_message
-                                           , std::move(connector), parent_name, parent_object);
+    auto object = std::make_shared<Thread>(name, status_address, std::move(connector));
 
     objects.emplace_back(object);
 

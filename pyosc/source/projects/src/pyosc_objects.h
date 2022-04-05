@@ -16,7 +16,7 @@ public:
      */
     Server(const std::string& name
            , const std::string& status_address
-           , std::optional<std::string>  termination_message
+           , std::optional<std::string> termination_message
            , std::unique_ptr<Connector> connector)
             : BaseOscObject(name, "/" + name, status_address)
               , termination_message(termination_message)
@@ -71,11 +71,11 @@ public:
         connector.reset();  // delete socket to allow reallocation of ports
     }
 
-    int get_send_port() {
+    int get_send_port() override {
         return connector->get_send_port();
     }
 
-    int get_recv_port() {
+    int get_recv_port() override {
         return connector->get_recv_port();
     }
 
@@ -93,21 +93,24 @@ class Thread : public BaseOscObject {
 public:
     Thread(const std::string& name
            , const std::string& status_address
-           , const std::string& termination_message
            , std::unique_ptr<Connector> connector
-           , const std::string& parent_name
            , std::shared_ptr<BaseOscObject> parent_object = nullptr)
             : BaseOscObject(name, "/" + name, status_address)
-              , termination_message(termination_message)
               , connector(std::move(connector))
-              , parent_name(parent_name)
-              , parent(std::move(parent_object))
-              {}
+              , parent(std::move(parent_object)) {}
 
 
     bool initialize(std::string& init_message) override {
         if (initialized) {
             throw std::runtime_error("object is already initialized");
+        }
+
+        if (termination_message.empty()) {
+            throw std::runtime_error("setting termination message is mandatory before initializing");
+        }
+
+        if (parent_name.empty()) {
+            throw std::runtime_error("a parent name must be provided before initializing");
         }
 
         update_status();
@@ -175,30 +178,44 @@ public:
         connector.reset();  // delete socket to allow reallocation of ports
     }
 
-    int get_send_port() {
+    int get_send_port() override {
         return connector->get_send_port();
     }
 
-    int get_recv_port() {
+    int get_recv_port() override {
         return connector->get_recv_port();
     }
 
-    void set_parent(const std::shared_ptr<BaseOscObject>& parent) {
-        Thread::parent = parent;
+    void set_parent(const std::shared_ptr<BaseOscObject>& new_parent) {
+        Thread::parent = new_parent;
     }
+
 
     const std::string& get_parent_name() const {
         return parent_name;
     }
 
+    void set_parent_name(const std::string& new_name) {
+        if (parent || initialized) {
+            throw std::runtime_error("cannot set parent name after setting parent or after initializing");
+        }
+        Thread::parent_name = new_name;
+    }
+
+    void set_termination_message(const std::string& new_message) {
+        if (initialized) {
+            throw std::runtime_error("cannot set termination message after initialization");
+        }
+        Thread::termination_message = new_message;
+    }
 
 
 private:
 
-    const std::string parent_name;
+    std::string parent_name;
     std::shared_ptr<BaseOscObject> parent;
 
-    const std::string termination_message;
+    std::string termination_message;
 
     std::unique_ptr<Connector> connector;
 
@@ -220,8 +237,7 @@ public:
               , termination_message(termination_message)
               , base_name(name)
               , parent_name(parent_name)
-              , parent(std::move(parent_object))
-              {}
+              , parent(std::move(parent_object)) {}
 
 
     bool initialize(std::string& init_message) override {
@@ -284,6 +300,22 @@ public:
 
     void flag_for_deletion() override {
         status = Status::deleted;
+    }
+
+    int get_send_port() override {
+        if (parent) {
+            return parent->get_send_port();
+        } else {
+            return -1;
+        }
+    }
+
+    int get_recv_port() override {
+        if (parent) {
+            return parent->get_recv_port();
+        } else {
+            return -1;
+        }
     }
 
 private:

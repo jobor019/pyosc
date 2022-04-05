@@ -38,6 +38,7 @@ set( SOURCE_FILES
         ../src/pyosc_base.cpp
         ../src/pyosc_manager.cpp
         ../src/pyosc_objects.h
+        ../src/max_base.h
         )
 
 

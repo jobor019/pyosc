@@ -28,12 +28,8 @@ public:
                                        , const std::string& ip
                                        , std::optional<PortSpec> port_spec);
 
-    std::shared_ptr<Thread> new_thread(const std::string& name
-                                       , const std::string& status_address
-                                       , const std::string& termination_message
-                                       , const std::string& ip
-                                       , std::optional<PortSpec> port_spec
-                                       , const std::string& parent_name);
+    std::shared_ptr<Thread> new_thread(const std::string& name, const std::string& status_address, const std::string& ip
+                                       , const std::optional<PortSpec> port_spec);
 
     std::shared_ptr<Remote> new_remote(const std::string& name
                                        , const std::string& status_base_address

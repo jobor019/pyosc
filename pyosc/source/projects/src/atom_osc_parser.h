@@ -19,7 +19,7 @@ public:
         auto it = args.begin();
         while (it != args.end()) {
             if (it->type() == c74::min::message_type::int_argument) {
-                msg->add_long(static_cast<long>(*it));
+                msg->add_int(static_cast<int>(*it));
 
             } else if (it->type() == c74::min::message_type::float_argument) {
                 msg->add_double(static_cast<double>(*it));

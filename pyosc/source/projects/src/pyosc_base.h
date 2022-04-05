@@ -82,6 +82,10 @@ public:
 
     virtual void update_status() = 0;
 
+    virtual int get_send_port() = 0;
+
+    virtual int get_recv_port() = 0;
+
 
     [[nodiscard]] Status get_status() {
         return status;
@@ -94,6 +98,7 @@ public:
     const std::string& get_address() const;
 
     const std::string& get_status_address() const;
+
 
 protected:
     Status status;
