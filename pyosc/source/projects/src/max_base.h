@@ -338,31 +338,54 @@ public:
                     }
             }};
 
+    attribute<symbol> test{this, "test", "", description{""}, setter{
+        MIN_FUNCTION {
+            try {
+                throw std::runtime_error("testing");
+            } catch (std::runtime_error& e) {
+                cout << "bad" << endl;
+                return {};
+            }
+            return {};
+        }
+    }};
+
     attribute<symbol> terminationmessage{this, "terminationmessage", ""
-                                         , description{"Message to send to server upon deletion"}
+                                         , description{"Message to send to remote upon deletion"}
                                          , setter{
                     MIN_FUNCTION {
-                        // TODO: Fix so that it's settable after initialization
-                        if (communication_object) {
-                            cout << "cannot set after initialization" << endl;
-                            return {terminationmessage.get()};
-                        }
-
-                        if (status != Status::offline) {
-                            // TODO: This should be possible to pass at a later stage
-                            cout << "cannot set terminationmessag after initialization" << endl;
-                            dump_out.send({"terminationmessage", terminationmessage.get()});
-                            return {terminationmessage.get()};
-                        } else if (args.empty()) {
-                            dump_out.send({"terminationmessage", ""});
-                            return {terminationmessage.get()};
+                        if (args.empty() && communication_object) {
+                            // Get
+                            auto msg = communication_object->get_termination_message();
+                            if (msg) {
+                                dump_out.send({"terminationmessage", *msg});
+                            } else {
+                                dump_out.send({"terminationmessage", terminationmessage.get()});
+                            }
+                            return {terminationmessage.get()}; // No change
 
                         } else if (args.size() == 1 && args[0].type() == message_type::symbol_argument) {
-                            dump_out.send({"terminationmessage", args[0]});
-                            return {args};
+                            // Set
+                            if (communication_object) {
+                                try {
+                                    auto termination_msg = std::make_optional(static_cast<std::string>(args[0]));
+                                    communication_object->set_termination_message(termination_msg);
+                                    dump_out.send({"terminationmessage", args[0]});
+                                    return {args[0]};
+
+                                } catch (std::runtime_error& e) {
+                                    // Fails if object has already called initialize()
+                                    cerr << e.what() << endl;
+                                    dump_out.send({"terminationmessage", terminationmessage.get()});
+                                    return {terminationmessage.get()};
+                                }
+                            } else {
+                                // construct hasn't been called yet
+                                return {terminationmessage.get()};
+                            }
 
                         } else {
-                            cout << "terminationmessage must be a single symbol" << endl;
+                            cerr << "terminationmessage takes a single symbol as input" << endl;
                             dump_out.send({"terminationmessage", terminationmessage.get()});
                             return {terminationmessage.get()};
                         }

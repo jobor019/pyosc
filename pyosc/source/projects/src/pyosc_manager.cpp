@@ -8,7 +8,6 @@ PyOscManager& PyOscManager::get_instance() {
 
 std::shared_ptr<Server> PyOscManager::new_server(const std::string& name
                                                  , const std::string& status_address
-                                                 , const std::optional<std::string>& termination_message
                                                  , const std::string& ip
                                                  , const std::optional<PortSpec> port_spec) {
     std::lock_guard<std::mutex> lock{mutex};
@@ -21,7 +20,6 @@ std::shared_ptr<Server> PyOscManager::new_server(const std::string& name
 
     auto object = std::make_shared<Server>(name
                                            , status_address
-                                           , termination_message
                                            , std::move(connector));
     objects.emplace_back(object);
 

@@ -86,7 +86,6 @@ public:
 
     virtual int get_recv_port() = 0;
 
-
     [[nodiscard]] Status get_status() {
         return status;
     }
@@ -99,12 +98,17 @@ public:
 
     const std::string& get_status_address() const;
 
+    const std::optional<std::string>& get_termination_message() const;
+
+    void set_termination_message(const std::optional<std::string>& termination_message);
+
 
 protected:
     Status status;
     const std::string status_address;
     bool initialized = false;
     const std::string address;
+    std::optional<std::string> termination_message;
 
     Status read_server_status();
 

@@ -30,10 +30,14 @@ public:
 
             communication_object = PyOscManager::get_instance().new_server(name
                                                                            , statusaddress.get()
-                                                                           , terminationmessage.get()
                                                                            , ip
                                                                            , port_spec);
 
+            // set value of attributes that were not passed in ctor and MAY have been set before ctor
+            auto termination_message = static_cast<std::string>(terminationmessage.get());
+            if (!termination_message.empty()) {
+                communication_object->set_termination_message({termination_message});
+            }
 
             status_poll.delay(0.0);
             receive_poll.delay(0.0);
@@ -51,8 +55,6 @@ public:
     timer<> status_poll{this, MIN_FUNCTION {
         communication_object->update_status();
         auto new_status = communication_object->get_status();
-
-        std::cout << new_status << "\n";
 
         status_out.send(static_cast<int>(new_status));
 

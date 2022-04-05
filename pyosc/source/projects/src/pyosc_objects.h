@@ -16,10 +16,8 @@ public:
      */
     Server(const std::string& name
            , const std::string& status_address
-           , std::optional<std::string> termination_message
            , std::unique_ptr<Connector> connector)
             : BaseOscObject(name, "/" + name, status_address)
-              , termination_message(termination_message)
               , connector(std::move(connector)) {}
 
     bool initialize(std::string& init_message) override {
@@ -79,9 +77,9 @@ public:
         return connector->get_recv_port();
     }
 
+
 private:
     std::unique_ptr<Connector> connector;
-    std::optional<std::string> termination_message;
 };
 
 
@@ -105,7 +103,7 @@ public:
             throw std::runtime_error("object is already initialized");
         }
 
-        if (termination_message.empty()) {
+        if (!termination_message.has_value()) {
             throw std::runtime_error("setting termination message is mandatory before initializing");
         }
 
@@ -164,9 +162,9 @@ public:
 
     void terminate() override {
         // TODO: Doesn't handle the case of a temporary timeout properly
-        if (parent && status == Status::ready) {
+        if (parent && status == Status::ready && termination_message) {
             auto msg = OscSendMessage(address);
-            msg.add_string(termination_message);
+            msg.add_string(*termination_message);
             parent->send(msg);
         }
         // TODO: Should rather wait for response from server
@@ -215,8 +213,6 @@ private:
     std::string parent_name;
     std::shared_ptr<BaseOscObject> parent;
 
-    std::string termination_message;
-
     std::unique_ptr<Connector> connector;
 
 
@@ -234,7 +230,6 @@ public:
             : BaseOscObject(format_full_name(name, parent_name)
                             , format_address(name, parent_name)
                             , status_base_address)
-              , termination_message(termination_message)
               , base_name(name)
               , parent_name(parent_name)
               , parent(std::move(parent_object)) {}
@@ -289,9 +284,9 @@ public:
 
     void terminate() override {
         // TODO: Doesn't handle the case of a temporary timeout properly
-        if (parent && status == Status::ready) {
+        if (parent && status == Status::ready && termination_message) {
             auto msg = OscSendMessage(address);
-            msg.add_string(termination_message);
+            msg.add_string(*termination_message);
             parent->send(msg);
         }
         // TODO: Should rather wait for response from server
@@ -322,8 +317,6 @@ private:
     const std::string base_name;
     const std::string parent_name;
     std::shared_ptr<BaseOscObject> parent;
-
-    const std::string termination_message;
 
 };
 

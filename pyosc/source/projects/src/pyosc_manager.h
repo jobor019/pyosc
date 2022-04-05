@@ -24,7 +24,6 @@ public:
 
     std::shared_ptr<Server> new_server(const std::string& name
                                        , const std::string& status_address
-                                       , const std::optional<std::string>& termination_message
                                        , const std::string& ip
                                        , std::optional<PortSpec> port_spec);
 

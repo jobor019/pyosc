@@ -1,7 +1,6 @@
 #include "pyosc_base.h"
 
 
-
 BaseOscObject::BaseOscObject(const std::string& name
                              , const std::string& address
                              , const std::string& status_address)
@@ -87,6 +86,17 @@ std::string BaseOscObject::format_address(const std::string& base_address, const
     ss << base_address;
 
     return ss.str();
+}
+
+const std::optional<std::string>& BaseOscObject::get_termination_message() const {
+    return termination_message;
+}
+
+void BaseOscObject::set_termination_message(const std::optional<std::string>& termination_message) {
+    if (initialized) {
+        throw std::runtime_error("cannot set termination message after object has been initialized");
+    }
+    BaseOscObject::termination_message = termination_message;
 }
 
 
