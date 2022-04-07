@@ -57,7 +57,8 @@ public:
             }
         }
 
-        update_status();
+        handle_status(new_status);
+        return {};
     }};
 
 protected:

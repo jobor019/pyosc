@@ -13,19 +13,21 @@ include(${C74_MIN_API_DIR}/script/min-pretarget.cmake)
 
 
 include_directories(
-	"${C74_INCLUDES}"
+        "${C74_INCLUDES}"
 )
 
 
-set( SOURCE_FILES
-	${PROJECT_NAME}.cpp
+set(SOURCE_FILES
+        ${PROJECT_NAME}.cpp
         )
 
 
 add_library(
-	${PROJECT_NAME}
-	MODULE
-	${SOURCE_FILES}
+        ${PROJECT_NAME}
+        MODULE
+        EXCLUDE_FROM_ALL
+        ${SOURCE_FILES}
+
 )
 
 #target_include_directories(k
@@ -44,12 +46,9 @@ add_library(
 
 
 target_link_libraries(${PROJECT_NAME}
-		PRIVATE
-		juce::juce_core
-		juce::juce_osc)
-
-
-
+        PRIVATE
+        juce::juce_core
+        juce::juce_osc)
 
 
 include(${C74_MIN_API_DIR}/script/min-posttarget.cmake)

@@ -183,11 +183,7 @@ protected:
         }
     }
 
-    void update_status() {
-        communication_object->update_status();
-        auto new_status = communication_object->get_status();
-
-        status_out.send(static_cast<int>(new_status));
+    void handle_status(const Status& new_status) {
 
         if (new_status != status) {
             status = new_status;
@@ -369,17 +365,6 @@ public:
                     }
             }};
 
-    attribute<symbol> test{this, "test", "", description{""}, setter{
-            MIN_FUNCTION {
-                try {
-                    throw std::runtime_error("testing");
-                } catch (std::runtime_error& e) {
-                    cout << "bad" << endl;
-                    return {};
-                }
-                return {};
-            }
-    }};
 
     attribute<symbol> terminationmessage{this, "terminationmessage", ""
                                          , description{"Message to send to remote upon deletion"}

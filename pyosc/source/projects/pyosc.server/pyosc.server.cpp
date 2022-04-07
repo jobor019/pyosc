@@ -48,7 +48,12 @@ public:
 
 
     timer<> status_poll{this, MIN_FUNCTION {
-        update_status();
+        communication_object->update_status();
+        auto new_status = communication_object->get_status();
+
+        status_out.send(static_cast<int>(new_status));
+
+        handle_status(new_status);
 
         status_poll.delay(statusinterval.get());
         return {};

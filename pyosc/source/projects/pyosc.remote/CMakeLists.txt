@@ -12,20 +12,22 @@ include(${C74_MIN_API_DIR}/script/min-pretarget.cmake)
 #############################################################
 
 
-include_directories( 
-	"${C74_INCLUDES}"
+include_directories(
+        "${C74_INCLUDES}"
 )
 
 
-set( SOURCE_FILES
-	${PROJECT_NAME}.cpp
-		../src/atom_osc_parser.h)
+set(SOURCE_FILES
+        ${PROJECT_NAME}.cpp
+        ../src/atom_osc_parser.h)
 
 
-add_library( 
-	${PROJECT_NAME} 
-	MODULE
-	${SOURCE_FILES}
+add_library(
+        ${PROJECT_NAME}
+        MODULE
+        EXCLUDE_FROM_ALL
+
+        ${SOURCE_FILES}
 )
 
 

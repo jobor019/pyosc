@@ -86,7 +86,7 @@ public:
 
     virtual int get_recv_port() = 0;
 
-    [[nodiscard]] Status get_status() {
+    [[nodiscard]] const Status& get_status() {
         return status;
     }
 
