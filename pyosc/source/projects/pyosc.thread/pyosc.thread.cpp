@@ -15,7 +15,7 @@ public:
     MIN_DESCRIPTION{"Communicate with a server architecture over OSC."};
     MIN_TAGS{"utilities"};
     MIN_AUTHOR{"Joakim Borg"};
-    MIN_RELATED{"pyosc.server, pyosc.remote, udpsend, udpreceive"};
+    MIN_RELATED{"pyosc.server, pyosc.pyosc, udpsend, udpreceive"};
 
     explicit thread(const atoms& args = {}) {
         try {

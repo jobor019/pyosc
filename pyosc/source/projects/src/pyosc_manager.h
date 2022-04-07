@@ -21,22 +21,12 @@ public:
 
     void operator=(PyOscManager const&) = delete;
 
-
-    std::shared_ptr<Server> new_server(const std::string& name
-                                       , const std::string& status_address
-                                       , const std::string& ip
-                                       , std::optional<PortSpec> port_spec);
-
-    std::shared_ptr<Thread> new_thread(const std::string& name
-                                       , const std::string& status_address
-                                       , const std::string& ip
-                                       , std::optional<PortSpec> port_spec
-                                       , const std::string& parent_name);
-
-    std::shared_ptr<Remote> new_remote(const std::string& name
-                                       , const std::string& status_base_address
-                                       , const std::string& termination_message
-                                       , const std::string& parent_name);
+    std::shared_ptr<BaseOscObject> new_object(const std::string& base_name
+                                              , const std::string& status_base_address
+                                              , std::optional<std::string> parent_name
+                                              , const std::optional<std::string> ip
+                                              , const std::optional<PortSpec> port_spec
+                                              , const bool is_remote);
 
 
     std::shared_ptr<BaseOscObject> get_object(const std::string& name);
@@ -58,6 +48,21 @@ private:
 
     PyOscManager();
 
+    std::shared_ptr<Server> new_server(const std::string& name
+                                       , const std::string& status_address
+                                       , std::optional<std::string> ip
+                                       , const std::optional<PortSpec> port_spec);
+
+    std::shared_ptr<Thread> new_thread(const std::string& name
+                                       , const std::string& status_address
+                                       , std::optional<std::string> ip
+                                       , std::optional<PortSpec> port_spec
+                                       , const std::string& parent_name);
+
+    std::shared_ptr<Remote> new_remote(const std::string& base_name
+                                       , const std::string& status_base_address
+                                       , const std::string& parent_name);
+
     bool block_port(int port);
 
     bool unblock_port(int port);
@@ -72,7 +77,7 @@ private:
 
     std::shared_ptr<BaseOscObject> get_object_lock_free(const std::string& object_name);
 
-    std::unique_ptr<Connector> create_connector_lock_free(const std::string& ip
+    std::unique_ptr<Connector> create_connector_lock_free(std::optional<std::string> ip
                                                           , std::optional<PortSpec> port_spec = std::nullopt);
 };
 

@@ -1,6 +1,8 @@
 #ifndef PYOSC_MAX_BASE_H
 #define PYOSC_MAX_BASE_H
 
+#include <regex>
+
 #include "c74_min_api.h"
 #include "../src/pyosc_objects.h"
 #include "../src/pyosc_base.h"
@@ -41,13 +43,13 @@ public:
                 // Initialization failed because object isn't ready: queue init message
                 initialization_message = init_msg;
             }
-            dump_out.send("initialize " + std::to_string(res));
+            dump_out.send({"initialize ", res});
 
 
         } catch (std::runtime_error& e) {
             // Object already initialized
             cerr << e.what() << endl;
-            dump_out.send("initialize " + std::to_string(-1));
+            dump_out.send({"initialize", -1});
             return {};
         }
 
@@ -92,9 +94,23 @@ public:
                     , MIN_FUNCTION {
                 auto num_messages = queue.size();
                 queue.clear();
+
                 dump_out.send("queued " + std::to_string(queue.size()));
                 print_out.send("cleared " + std::to_string(num_messages) + " messages");
 
+                if (initialization_message) {
+                    initialization_message = std::nullopt;
+                    dump_out.send({"initialize", 0});
+                    print_out.send("cleared initialization message");
+                }
+
+                return {};
+            }};
+
+
+    message<> name{this, "name", "get name of object (fourth outlet)"
+                   , MIN_FUNCTION {
+                dump_out.send({"name", communication_object->get_name()});
                 return {};
             }};
 
@@ -107,6 +123,12 @@ public:
     message<> recvport{this, "recvport", "get receive port (fourth outlet)"
                        , MIN_FUNCTION {
                 dump_out.send({"recvport", communication_object->get_recv_port()});
+                return {};
+            }};
+
+    message<> type{this, "type", "get type of object (fourth outlet)"
+                       , MIN_FUNCTION {
+                dump_out.send({"type", communication_object->type()});
                 return {};
             }};
 
@@ -127,13 +149,12 @@ public:
 
 
 protected:
-    static std::optional<PortSpec> parse_ports(const atoms& args, int send_idx = 2, int recv_idx = 3, int nargs = 4) {
-        if (args.size() == nargs) {
-            // name, ip, sendport, recvport
+    static PortSpec parse_ports(const atoms& args, int send_idx = 2, int recv_idx = 3, int nargs = 4) {
+        if (args.size() >= nargs) {
             if (args[send_idx].type() == message_type::int_argument
                 && args[recv_idx].type() == message_type::int_argument) {
-                return std::make_optional(PortSpec{static_cast<int>(args[send_idx])
-                                                   , static_cast<int>(args[recv_idx])});
+                return PortSpec{static_cast<int>(args[send_idx])
+                                , static_cast<int>(args[recv_idx])};
 
             } else {
                 throw std::runtime_error("send and receive ports must be integer values");
@@ -144,15 +165,19 @@ protected:
             throw std::runtime_error("both sendport and recvport must be specified "
                                      "(or leave both unspecified for auto assignment)");
         } else {
-            return std::nullopt;
+            throw std::runtime_error("not enough arguments provided");
         }
     }
 
-    static std::string parse_ip(const atoms& args, int ip_idx = 1, int min_nargs = 2) {
-        if (args.size() >= min_nargs) {
-            // name, ip, ...
+    static std::string parse_ip(const atoms& args, int ip_idx = 1) {
+        if (args.size() > ip_idx) {
             if (args[ip_idx].type() == message_type::symbol_argument) {
-                return static_cast<std::string>(args[ip_idx]);
+                auto ip_str = static_cast<std::string>(args[ip_idx]);
+                if (ip_str == "localhost") {
+                    return "127.0.0.1";
+                } else {
+                    return ip_str;
+                }
             } else {
                 throw std::runtime_error("ip address must be a single symbol");
             }
@@ -161,12 +186,25 @@ protected:
         return std::string{"127.0.0.1"};
     }
 
-    static std::string parse_name(const atoms& args, int name_idx = 0, int min_nargs = 1, bool is_parent = false) {
-        if (args.size() >= min_nargs) {
+    // Note: does not check if address is a valid ip, only whether it's formatted in a manner similar to an ip4 address
+    static bool is_ip_like(const atoms& args, int ip_idx = 1) {
+        if (args.size() > ip_idx && args[ip_idx].type() == message_type::symbol_argument) {
+            std::regex r("([0-9.]+)|localhost");
+            auto ip_candidate = static_cast<std::string>(args[ip_idx]);
+            return std::regex_match(ip_candidate, r);
+
+        } else {
+            return false;
+        }
+    }
+
+
+    static std::string parse_name(const atoms& args, int name_idx = 0, bool is_parent = false) {
+        if (args.size() > name_idx) {
             // name, ...
             if (args[name_idx].type() == message_type::symbol_argument) {
                 return static_cast<std::string>(args[name_idx]);
-            } else {
+            } else { // error: message depends on what type of name is parsed
                 if (is_parent) {
                     throw std::runtime_error("parent name must be a single symbol");
                 } else {
@@ -174,7 +212,7 @@ protected:
                 }
             }
 
-        } else {
+        } else { // error: message depends on what type of name is parsed
             if (is_parent) {
                 throw std::runtime_error("parent name must be provided");
             } else {
@@ -183,24 +221,13 @@ protected:
         }
     }
 
-    void handle_status(const Status& new_status) {
 
-        if (new_status != status) {
-            status = new_status;
-
-            if (status == Status::uninitialized && initialization_message) {
-                bool res = communication_object->initialize(*initialization_message);
-
-                if (res) {
-                    initialization_message = std::nullopt;
-                }
-
-            } else if (status == Status::ready && !queue.empty()) {
-                process_queue_unsafe();
-            }
-            // all other cases: wait for new status
-        }
+    static bool is_remote_str(const atoms& args, int remote_idx = 2) {
+        return args.size() > remote_idx
+               && args[remote_idx].type() == message_type::symbol_argument
+               && static_cast<std::string>(args[remote_idx]) == "remote";
     }
+
 
 protected:
     std::shared_ptr<BaseOscObject> communication_object;
@@ -407,6 +434,8 @@ public:
                         }
                     }
             }};
+
+
 
 };
 

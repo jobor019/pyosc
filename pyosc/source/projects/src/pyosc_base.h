@@ -86,6 +86,8 @@ public:
 
     virtual int get_recv_port() = 0;
 
+    virtual std::string type() = 0;
+
     [[nodiscard]] const Status& get_status() {
         return status;
     }

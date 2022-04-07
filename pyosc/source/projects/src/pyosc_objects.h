@@ -32,6 +32,7 @@ public:
     bool send(OscSendMessage& msg) override {
         if (status == Status::ready) {
             connector->send(msg);
+            return true;
         }
         return false;
     }
@@ -67,6 +68,10 @@ public:
     void flag_for_deletion() override {
         status = Status::deleted;
         connector.reset();  // delete socket to allow reallocation of ports
+    }
+
+    std::string type() override {
+        return "server";
     }
 
     int get_send_port() override {
@@ -113,7 +118,7 @@ public:
         update_status();
 
         if (status == Status::uninitialized) {
-            OscSendMessage msg{address};
+            OscSendMessage msg{parent->get_address()};
             msg.add_string(init_message);
 
             bool res = parent->send(msg);
@@ -175,6 +180,10 @@ public:
         connector.reset();  // delete socket to allow reallocation of ports
     }
 
+    std::string type() override {
+        return "thread";
+    }
+
     int get_send_port() override {
         return connector->get_send_port();
     }
@@ -197,7 +206,6 @@ class Remote : public BaseWithParent {
 public:
     Remote(const std::string& name
            , const std::string& status_base_address
-           , const std::string& termination_message
            , const std::string& parent_name)
             : BaseWithParent(format_full_name(name, parent_name)
                              , format_address(name, parent_name)
@@ -264,6 +272,10 @@ public:
 
     void flag_for_deletion() override {
         status = Status::deleted;
+    }
+
+    std::string type() override {
+        return "remote";
     }
 
     int get_send_port() override {

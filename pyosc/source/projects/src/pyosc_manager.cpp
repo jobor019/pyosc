@@ -6,11 +6,30 @@ PyOscManager& PyOscManager::get_instance() {
     return instance; // Instantiated on first use.
 }
 
+std::shared_ptr<BaseOscObject> PyOscManager::new_object(const std::string& base_name
+                                                        , const std::string& status_base_address
+                                                        , std::optional<std::string> parent_name
+                                                        , const std::optional<std::string> ip
+                                                        , const std::optional<PortSpec> port_spec
+                                                        , const bool is_remote) {
+    std::lock_guard<std::mutex> lock{mutex};
+    if (is_remote) {
+        if (parent_name) {
+            return new_remote(base_name, status_base_address, *parent_name);
+        } else {
+            throw std::runtime_error("A parent name must be provided for remote");
+        }
+    } else if (parent_name) { // parent_name && !is_remote
+        return new_thread(base_name, status_base_address, ip, port_spec, *parent_name);
+    } else {
+        return new_server(base_name, status_base_address, ip, port_spec);
+    }
+}
+
 std::shared_ptr<Server> PyOscManager::new_server(const std::string& name
                                                  , const std::string& status_address
-                                                 , const std::string& ip
+                                                 , std::optional<std::string> ip
                                                  , const std::optional<PortSpec> port_spec) {
-    std::lock_guard<std::mutex> lock{mutex};
     if (name_exists(name)) {
         throw std::runtime_error("an object with the name " + name + " already exists");
     }
@@ -28,10 +47,9 @@ std::shared_ptr<Server> PyOscManager::new_server(const std::string& name
 
 std::shared_ptr<Thread> PyOscManager::new_thread(const std::string& name
                                                  , const std::string& status_address
-                                                 , const std::string& ip
+                                                 , std::optional<std::string> ip
                                                  , std::optional<PortSpec> port_spec
                                                  , const std::string& parent_name) {
-    std::lock_guard<std::mutex> lock{mutex};
     if (name_exists(name)) {
         throw std::runtime_error("an object with the name " + name + " already exists");
     }
@@ -49,19 +67,17 @@ std::shared_ptr<Thread> PyOscManager::new_thread(const std::string& name
     return object;
 }
 
-std::shared_ptr<Remote> PyOscManager::new_remote(const std::string& name
+std::shared_ptr<Remote> PyOscManager::new_remote(const std::string& base_name
                                                  , const std::string& status_base_address
-                                                 , const std::string& termination_message
                                                  , const std::string& parent_name) {
-    std::lock_guard<std::mutex> lock{mutex};
-    throw std::runtime_error("This is incorrect: name should be combined with parent name already at creation");
-    if (name_exists(name)) {
-        throw std::runtime_error("an object with the name " + name + " already exists");
+    throw std::runtime_error(
+            "This is incorrect: base_name should be combined with parent base_name already at creation");
+    if (name_exists(base_name)) {
+        throw std::runtime_error("an object with the base_name " + base_name + " already exists");
     }
 
-    auto object = std::make_shared<Remote>(name
+    auto object = std::make_shared<Remote>(base_name
                                            , status_base_address
-                                           , termination_message
                                            , parent_name);
 
     objects.emplace_back(object);
@@ -193,10 +209,12 @@ std::shared_ptr<BaseOscObject> PyOscManager::get_object_lock_free(const std::str
     return nullptr;
 }
 
-std::unique_ptr<Connector> PyOscManager::create_connector_lock_free(const std::string& ip
+std::unique_ptr<Connector> PyOscManager::create_connector_lock_free(std::optional<std::string> ip
                                                                     , std::optional<PortSpec> port_spec) {
     int send_port = -1;
     int recv_port = -1;
+
+    std::string ip_str = ip ? *ip : "127.0.0.1";
 
     if (port_spec) {
         // Manual port assignment
@@ -204,7 +222,7 @@ std::unique_ptr<Connector> PyOscManager::create_connector_lock_free(const std::s
         recv_port = port_spec->recv_port;
 
         // No checks: up to the user to ensure that ports aren't used elsewhere. Will throw if recv_port is bound
-        auto connector = std::make_unique<Connector>(ip, send_port, recv_port);
+        auto connector = std::make_unique<Connector>(ip_str, send_port, recv_port);
 
         block_port(connector->get_send_port());
         block_port(connector->get_recv_port());
@@ -244,7 +262,7 @@ std::unique_ptr<Connector> PyOscManager::create_connector_lock_free(const std::s
             throw std::runtime_error("not enough ports available");
         }
 
-        return std::make_unique<Connector>(ip, send_port, recv_port);
+        return std::make_unique<Connector>(ip_str, send_port, recv_port);
 
     }
 }
