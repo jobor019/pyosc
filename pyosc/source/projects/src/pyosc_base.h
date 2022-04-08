@@ -5,6 +5,7 @@
 #include <utility>
 
 #include <vector>
+#include <regex>
 #include <sstream>
 #include "connector.h"
 
@@ -104,6 +105,11 @@ public:
 
     bool is_initialized() const;
 
+    static std::string format_full_name(const std::string& name, const std::string& parent_name);
+
+    static std::string format_address(const std::string& base_address, const std::string& parent);
+
+    static std::string address_from_full_name(const std::string& name);
 
 protected:
     Status status;
@@ -116,9 +122,7 @@ protected:
 
     static Status parse_status(c74::min::atoms& msg);
 
-    static std::string format_full_name(const std::string& name, const std::string& parent_name);
 
-    static std::string format_address(const std::string& base_address, const std::string& parent);
 
 private:
     std::optional<std::chrono::time_point<std::chrono::system_clock> > last_response;
@@ -139,6 +143,63 @@ public:
                    , const std::string& parent_name)
             : BaseOscObject(name, address, status_address)
               , parent_name(parent_name) {}
+
+
+    bool initialize(std::unique_ptr<OscSendMessage> init_message
+                    , std::unique_ptr<OscSendMessage> termination_message) override {
+        if (initialized) {
+            throw std::runtime_error("object is already initialized");
+        }
+
+        if (parent_name.empty()) {
+            throw std::runtime_error("a parent name must be provided before initializing");
+        }
+
+        update_status();
+
+        if (status == Status::uninitialized) {
+            // If send fails, this message will regardless be overwritten at next call to initialize
+            this->termination_message = std::move(termination_message);
+
+            bool res = parent->send(*init_message);
+            initialized = res;
+            return initialized;
+        }
+
+        return false;
+    }
+
+
+    void update_status() override {
+        if (status == Status::deleted) {
+            return;
+
+        } else if (!parent) {
+            status = Status::parent_obj_missing;
+
+        } else if (parent->get_status() != Status::ready) {
+
+            if (parent->get_status() == Status::deleted) {
+                parent.reset();
+                status = Status::parent_obj_missing;
+
+            } else {
+                status = Status::parent_obj_not_ready;
+            }
+
+        } else {
+            status = read_server_status();
+        }
+    }
+
+    void terminate() override {
+        // TODO: Doesn't handle the case of a temporary timeout properly
+        if (parent && status == Status::ready && termination_message) {
+            parent->send(*termination_message);
+        }
+        // TODO: Should rather wait for response from server. Also if above is false, need to handle this case properly!
+        initialized = false;
+    }
 
 
     void set_parent(const std::shared_ptr<BaseOscObject>& new_parent) {

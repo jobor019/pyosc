@@ -70,16 +70,12 @@ std::shared_ptr<Thread> PyOscManager::new_thread(const std::string& name
 std::shared_ptr<Remote> PyOscManager::new_remote(const std::string& base_name
                                                  , const std::string& status_base_address
                                                  , const std::string& parent_name) {
-    throw std::runtime_error(
-            "This is incorrect: base_name should be combined with parent base_name already at creation");
-    if (name_exists(base_name)) {
-        throw std::runtime_error("an object with the base_name " + base_name + " already exists");
+    auto name = BaseOscObject::format_full_name(base_name, parent_name);
+    if (name_exists(name)) {
+        throw std::runtime_error("an object with the name '" + name + "' already exists");
     }
 
-    auto object = std::make_shared<Remote>(base_name
-                                           , status_base_address
-                                           , parent_name);
-
+    auto object = std::make_shared<Remote>(name, status_base_address, parent_name);
     objects.emplace_back(object);
 
     return object;

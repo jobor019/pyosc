@@ -88,8 +88,17 @@ std::string BaseOscObject::format_address(const std::string& base_address, const
     return ss.str();
 }
 
+std::string BaseOscObject::address_from_full_name(const std::string& name) {
+    std::stringstream ss;
+    ss << "/";
+    ss << std::regex_replace(name, std::regex("::"), "/");
+    return ss.str();
+}
+
 bool BaseOscObject::is_initialized() const {
     return initialized;
 }
+
+
 
 

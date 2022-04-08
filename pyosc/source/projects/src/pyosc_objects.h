@@ -107,30 +107,6 @@ public:
               , connector(std::move(connector)) {}
 
 
-    bool initialize(std::unique_ptr<OscSendMessage> init_message
-                    , std::unique_ptr<OscSendMessage> termination_message) override {
-        if (initialized) {
-            throw std::runtime_error("object is already initialized");
-        }
-
-        if (parent_name.empty()) {
-            throw std::runtime_error("a parent name must be provided before initializing");
-        }
-
-        update_status();
-
-        if (status == Status::uninitialized) {
-            // If send fails, this message will regardless be overwritten at next call to initialize
-            Thread::termination_message = std::move(termination_message);
-
-            bool res = parent->send(*init_message);
-            initialized = res;
-            return initialized;
-        }
-
-        return false;
-    }
-
     bool send(OscSendMessage& msg) override {
         if (status == Status::ready) {
             connector->send(msg);
@@ -144,36 +120,6 @@ public:
         return connector->receive(address);
     }
 
-    void update_status() override {
-        if (status == Status::deleted) {
-            return;
-
-        } else if (!parent) {
-            status = Status::parent_obj_missing;
-
-        } else if (parent->get_status() != Status::ready) {
-
-            if (parent->get_status() == Status::deleted) {
-                parent.reset();
-                status = Status::parent_obj_missing;
-
-            } else {
-                status = Status::parent_obj_not_ready;
-            }
-
-        } else {
-            status = read_server_status();
-        }
-    }
-
-    void terminate() override {
-        // TODO: Doesn't handle the case of a temporary timeout properly
-        if (parent && status == Status::ready && termination_message) {
-            parent->send(*termination_message);
-        }
-        // TODO: Should rather wait for response from server. Also if above is false, need to handle this case properly!
-        initialized = false;
-    }
 
     void flag_for_deletion() override {
         status = Status::deleted;
@@ -194,7 +140,6 @@ public:
 
 
 private:
-
     std::unique_ptr<Connector> connector;
 
 
@@ -205,30 +150,12 @@ private:
 class Remote : public BaseWithParent {
 public:
     Remote(const std::string& name
-           , const std::string& status_base_address
+           , const std::string& status_address
            , const std::string& parent_name)
-            : BaseWithParent(format_full_name(name, parent_name)
-                             , format_address(name, parent_name)
-                             , status_base_address, parent_name)
-              , base_name(name) {}
-
-    bool initialize(std::unique_ptr<OscSendMessage> init_message
-                    , std::unique_ptr<OscSendMessage> termination_message) override {
-        if (initialized) {
-            throw std::runtime_error("object is already initialized");
-        }
-
-        update_status();
-
-        if (status == Status::uninitialized) {
-            Remote::termination_message = std::move(termination_message);
-
-            bool res = parent->send(*init_message);
-            initialized = res;
-            return initialized;
-        }
-        return false;
-    }
+            : BaseWithParent(name
+                             , address_from_full_name(name)
+                             , status_address
+                             , parent_name) {}
 
 
     bool send(OscSendMessage& msg) override {
@@ -239,34 +166,12 @@ public:
     }
 
     std::vector<c74::min::atoms> receive(const std::string& address) override {
-        return parent->receive(address);
+        if (parent) {
+            return parent->receive(address);
+        }
+        return {};
     }
 
-    void update_status() override {
-        if (status == Status::deleted) {
-            return;
-        } else if (!parent) {
-            status = Status::parent_obj_missing;
-        } else if (parent->get_status() != Status::ready) {
-            if (parent->get_status() == Status::deleted) {
-                parent.reset();
-                status = Status::parent_obj_missing;
-            } else {
-                status = Status::parent_obj_not_ready;
-            }
-        } else {
-            status = read_server_status();
-        }
-    }
-
-    void terminate() override {
-        // TODO: Doesn't handle the case of a temporary timeout properly
-        if (parent && status == Status::ready && termination_message) {
-            parent->send(*termination_message);
-        }
-        // TODO: Should rather wait for response from server. Also if above is false, need to handle this case properly!
-        initialized = false;
-    }
 
     void flag_for_deletion() override {
         status = Status::deleted;
