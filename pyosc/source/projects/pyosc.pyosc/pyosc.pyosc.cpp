@@ -88,7 +88,10 @@ public:
     }
 
     ~pyosc() override {
-        PyOscManager::get_instance().remove_object(communication_object->get_name());
+        if (communication_object) {
+            communication_object->terminate();
+            PyOscManager::get_instance().remove_object(communication_object->get_name());
+        }
     }
 
 
@@ -99,7 +102,6 @@ public:
         status = new_status;
 
         status_out.send(static_cast<int>(status));
-
 
 
         if (status == Status::parent_obj_missing) {
@@ -114,17 +116,12 @@ public:
             }
 
         } else if (status == Status::uninitialized && initialization_message) {
-            bool res = communication_object->initialize(*initialization_message);
-
-            if (res) {
-                initialization_message = std::nullopt;
-            }
+            try_initialize(*initialization_message);
 
         } else if (status == Status::ready && !queue.empty()) {
             process_queue_unsafe();
         }
         // all other cases: wait for new status
-
         status_poll.delay(statusinterval.get());
         return {};
     }

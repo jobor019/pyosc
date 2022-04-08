@@ -9,7 +9,7 @@
 
 using namespace c74::min;
 
-
+// TODO: This entire class should be removed
 class test_sender : public object<test_sender> {
 public:
 

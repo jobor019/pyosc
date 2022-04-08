@@ -20,38 +20,15 @@ public:
     outlet<> print_out{this, "(anything) log messages from server or from this object"};
     outlet<> dump_out{this, "(dumpout)"};
 
-    message<> initialize{this, "initialize", "initialize the remote object", MIN_FUNCTION {
-        std::string init_msg;
 
-        if (args.empty()) {
-            init_msg = "";
-        } else if (args.size() == 1 && args[0].type() == message_type::symbol_argument) {
-            init_msg = static_cast<std::string>(args[0]);
-        } else {
-            cerr << "message 'initialize' takes a single symbol as input" << endl;
-            return {};
-        }
+    message<> initialize{this, "initialize", "initialize the remote object", MIN_FUNCTION {
 
         if (initialization_message) {
             cwarn << "initialization message already queued, overwriting current" << endl;
+            initialization_message = std::nullopt;
         }
 
-
-        try {
-            bool res = communication_object->initialize(init_msg);
-            if (!res) {
-                // Initialization failed because object isn't ready: queue init message
-                initialization_message = init_msg;
-            }
-            dump_out.send({"initialize ", res});
-
-
-        } catch (std::runtime_error& e) {
-            // Object already initialized
-            cerr << e.what() << endl;
-            dump_out.send({"initialize", -1});
-            return {};
-        }
+        try_initialize(args);
 
         return {};
     }};
@@ -88,6 +65,42 @@ public:
         dump_out.send("terminated");
         return {};
     }};
+
+
+    message<> terminationmessage{this
+                                 , "terminationmessage"
+                                 , "Message to send to remote upon termination and/or deletion"
+                                 , MIN_FUNCTION {
+
+                atoms out{"terminationmessage"};
+                if (args.empty()) {
+                    // Get
+                    if (termination_message) {
+                        out.insert(out.end(), (*termination_message).begin(), (*termination_message).end());
+                        dump_out.send(out);
+                        return {};
+
+                    } else {
+                        dump_out.send(out);
+                        return {};
+                    }
+
+
+                } else if (communication_object && communication_object->is_initialized()) {
+                    // Invalid: set while already initialized
+                    cerr << "cannot set initialization message once object has been initialized" << endl;
+                    dump_out.send({"terminationmessage", -1});
+                    return {};
+
+                } else {
+                    // Set
+                    termination_message = std::make_optional(args);
+                    out.insert(out.end(), args.begin(), args.end());
+                    dump_out.send(out);
+                    return {};
+                }
+            }
+    };
 
 
     message<> clear{this, "clear", "remove any non-sent message in the queue (if object isn't initialized)"
@@ -127,7 +140,7 @@ public:
             }};
 
     message<> type{this, "type", "get type of object (fourth outlet)"
-                       , MIN_FUNCTION {
+                   , MIN_FUNCTION {
                 dump_out.send({"type", communication_object->type()});
                 return {};
             }};
@@ -228,11 +241,80 @@ protected:
                && static_cast<std::string>(args[remote_idx]) == "remote";
     }
 
+    void try_initialize(const atoms& init_msg) {
+        try {
+            // both of these throw std::runtime_error on empty messages
+            //               return nullptr if explicitly specified as empty
+            //               return an osc message otherwise
+            auto init_osc_msg = parse_initialization_message(init_msg);
+            auto termination_osc_msg = parse_termination_message(termination_message);
+
+            bool res = communication_object->initialize(std::move(init_osc_msg), std::move(termination_osc_msg));
+
+            if (!res) {
+                // Initialization failed because object isn't ready: queue init message
+                initialization_message = init_msg;
+            } else {
+                // Initialization succeeded: clear message if stored
+                initialization_message = std::nullopt;
+            }
+
+            dump_out.send({"initialize ", res});
+
+        } catch (std::runtime_error& e) {
+            // Object already initialized
+            cerr << e.what() << endl;
+
+            dump_out.send({"initialize", -1});
+        }
+    }
+
+    /**
+     * @throws std::runtime_error if object does not have a parent or if passing an empty message.
+     * @returns nullptr if message is explicitly specified as empty, otherwise string
+     */
+    std::unique_ptr<OscSendMessage> parse_initialization_message(const atoms& message, bool is_initialization = true) {
+        if (!communication_object) {
+            // Should technically never happen
+            throw std::runtime_error("object not yet created");
+        }
+
+        if (message.empty() ||
+            (message.size() == 1
+             && message[0].type() == message_type::symbol_argument
+             && static_cast<std::string>(message[0]).empty())) {
+            // empty message or single message consisting of empty string
+            std::stringstream err;
+            err << "no " << (is_initialization ? "initialization" : "termination") << " message provided";
+            throw std::runtime_error(err.str());
+
+        } else if (message.size() == 1 && message[0].type() == message_type::symbol_argument
+                   && static_cast<std::string>(message[0]) == "null") {
+            // No initialization/termination message
+            return nullptr;
+
+        } else {
+            // parse message. throws std::runtime_error if communication object does not have a termination_address yet
+            return AtomOscParser::atoms2send(communication_object->get_initialization_address()
+                                             , message, &cwarn, false);
+        }
+
+    }
+
+    std::unique_ptr<OscSendMessage> parse_termination_message(std::optional<atoms> message) {
+        if (message) {
+            return parse_initialization_message(*message, false);
+        } else {
+            throw std::runtime_error("no termination message provided");
+        }
+    }
+
 
 protected:
     std::shared_ptr<BaseOscObject> communication_object;
     MessageQueue queue;
-    std::optional<std::string> initialization_message;
+    std::optional<c74::min::atoms> initialization_message;
+    std::optional<c74::min::atoms> termination_message;
     Status status = Status::offline;
 
     void process_queue_unsafe() {
@@ -391,50 +473,6 @@ public:
                         }
                     }
             }};
-
-
-    attribute<symbol> terminationmessage{this, "terminationmessage", ""
-                                         , description{"Message to send to remote upon deletion"}
-                                         , setter{
-                    MIN_FUNCTION {
-                        if (args.empty() && communication_object) {
-                            // Get
-                            auto msg = communication_object->get_termination_message();
-                            if (msg) {
-                                dump_out.send({"terminationmessage", *msg});
-                            } else {
-                                dump_out.send({"terminationmessage", terminationmessage.get()});
-                            }
-                            return {terminationmessage.get()}; // No change
-
-                        } else if (args.size() == 1 && args[0].type() == message_type::symbol_argument) {
-                            // Set
-                            if (communication_object) {
-                                try {
-                                    auto termination_msg = std::make_optional(static_cast<std::string>(args[0]));
-                                    communication_object->set_termination_message(termination_msg);
-                                    dump_out.send({"terminationmessage", args[0]});
-                                    return {args[0]};
-
-                                } catch (std::runtime_error& e) {
-                                    // Fails if object has already called initialize()
-                                    cerr << e.what() << endl;
-                                    dump_out.send({"terminationmessage", terminationmessage.get()});
-                                    return {terminationmessage.get()};
-                                }
-                            } else {
-                                // construct hasn't been called yet
-                                return {terminationmessage.get()};
-                            }
-
-                        } else {
-                            cerr << "terminationmessage takes a single symbol as input" << endl;
-                            dump_out.send({"terminationmessage", terminationmessage.get()});
-                            return {terminationmessage.get()};
-                        }
-                    }
-            }};
-
 
 
 };

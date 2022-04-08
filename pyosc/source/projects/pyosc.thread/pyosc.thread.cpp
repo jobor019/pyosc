@@ -8,7 +8,7 @@
 
 using namespace c74::min;
 
-
+// TODO: This entire class should be removed
 class thread : public maxbase {
 public:
     // TODO: Description, tags, author, related

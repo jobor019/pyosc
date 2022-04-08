@@ -88,15 +88,8 @@ std::string BaseOscObject::format_address(const std::string& base_address, const
     return ss.str();
 }
 
-const std::optional<std::string>& BaseOscObject::get_termination_message() const {
-    return termination_message;
-}
-
-void BaseOscObject::set_termination_message(const std::optional<std::string>& termination_message) {
-    if (initialized) {
-        throw std::runtime_error("cannot set termination message after object has been initialized");
-    }
-    BaseOscObject::termination_message = termination_message;
+bool BaseOscObject::is_initialized() const {
+    return initialized;
 }
 
 

@@ -20,10 +20,13 @@ public:
             : BaseOscObject(name, "/" + name, status_address)
               , connector(std::move(connector)) {}
 
-    bool initialize(std::string& init_message) override {
+    bool initialize(std::unique_ptr<OscSendMessage> init_message
+                    , std::unique_ptr<OscSendMessage> termination_message) override {
         if (initialized) {
             throw std::runtime_error("object has already been initialized");
         }
+
+        Server::termination_message = std::move(termination_message);
 
         initialized = true;
         return initialized;
@@ -56,9 +59,7 @@ public:
     void terminate() override {
         // TODO: Doesn't handle the case of a temporary timeout properly
         if (termination_message && status == Status::ready) {
-            auto msg = OscSendMessage(address);
-            msg.add_string(*termination_message);
-            send(msg);
+            send(*termination_message);
 
         }
         // TODO: It would be better to wait for response from server confirming that it was terminated
@@ -82,6 +83,10 @@ public:
         return connector->get_recv_port();
     }
 
+    const std::string& get_initialization_address() override {
+        return address;
+    }
+
 
 private:
     std::unique_ptr<Connector> connector;
@@ -102,13 +107,10 @@ public:
               , connector(std::move(connector)) {}
 
 
-    bool initialize(std::string& init_message) override {
+    bool initialize(std::unique_ptr<OscSendMessage> init_message
+                    , std::unique_ptr<OscSendMessage> termination_message) override {
         if (initialized) {
             throw std::runtime_error("object is already initialized");
-        }
-
-        if (!termination_message.has_value()) {
-            throw std::runtime_error("setting termination message is mandatory before initializing");
         }
 
         if (parent_name.empty()) {
@@ -118,10 +120,10 @@ public:
         update_status();
 
         if (status == Status::uninitialized) {
-            OscSendMessage msg{parent->get_address()};
-            msg.add_string(init_message);
+            // If send fails, this message will regardless be overwritten at next call to initialize
+            Thread::termination_message = std::move(termination_message);
 
-            bool res = parent->send(msg);
+            bool res = parent->send(*init_message);
             initialized = res;
             return initialized;
         }
@@ -167,11 +169,9 @@ public:
     void terminate() override {
         // TODO: Doesn't handle the case of a temporary timeout properly
         if (parent && status == Status::ready && termination_message) {
-            auto msg = OscSendMessage(address);
-            msg.add_string(*termination_message);
-            parent->send(msg);
+            parent->send(*termination_message);
         }
-        // TODO: Should rather wait for response from server
+        // TODO: Should rather wait for response from server. Also if above is false, need to handle this case properly!
         initialized = false;
     }
 
@@ -212,7 +212,8 @@ public:
                              , status_base_address, parent_name)
               , base_name(name) {}
 
-    bool initialize(std::string& init_message) override {
+    bool initialize(std::unique_ptr<OscSendMessage> init_message
+                    , std::unique_ptr<OscSendMessage> termination_message) override {
         if (initialized) {
             throw std::runtime_error("object is already initialized");
         }
@@ -220,10 +221,9 @@ public:
         update_status();
 
         if (status == Status::uninitialized) {
-            OscSendMessage msg{address};
-            msg.add_string(init_message);
+            Remote::termination_message = std::move(termination_message);
 
-            bool res = parent->send(msg);
+            bool res = parent->send(*init_message);
             initialized = res;
             return initialized;
         }
@@ -262,11 +262,9 @@ public:
     void terminate() override {
         // TODO: Doesn't handle the case of a temporary timeout properly
         if (parent && status == Status::ready && termination_message) {
-            auto msg = OscSendMessage(address);
-            msg.add_string(*termination_message);
-            parent->send(msg);
+            parent->send(*termination_message);
         }
-        // TODO: Should rather wait for response from server
+        // TODO: Should rather wait for response from server. Also if above is false, need to handle this case properly!
         initialized = false;
     }
 

@@ -49,7 +49,7 @@ public:
     /**
      * initializes the object on the server
      */
-    virtual bool initialize(std::string& init_message) = 0;
+    virtual bool initialize(std::unique_ptr<OscSendMessage> init_message, std::unique_ptr<OscSendMessage> termination_message) = 0;
 
 
     /**
@@ -88,6 +88,8 @@ public:
 
     virtual std::string type() = 0;
 
+    virtual const std::string& get_initialization_address() = 0;
+
     [[nodiscard]] const Status& get_status() {
         return status;
     }
@@ -100,9 +102,7 @@ public:
 
     const std::string& get_status_address() const;
 
-    const std::optional<std::string>& get_termination_message() const;
-
-    void set_termination_message(const std::optional<std::string>& termination_message);
+    bool is_initialized() const;
 
 
 protected:
@@ -110,7 +110,7 @@ protected:
     const std::string status_address;
     bool initialized = false;
     const std::string address;
-    std::optional<std::string> termination_message;
+    std::unique_ptr<OscSendMessage> termination_message;
 
     Status read_server_status();
 
@@ -148,6 +148,14 @@ public:
 
     const std::string& get_parent_name() const {
         return parent_name;
+    }
+
+    const std::string& get_initialization_address() override {
+        if (!parent) {
+            throw std::runtime_error("no parent exists");
+        }
+
+        return parent->get_address();
     }
 
 
