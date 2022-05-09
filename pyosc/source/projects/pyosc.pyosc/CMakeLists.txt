@@ -11,16 +11,17 @@ include(${C74_MIN_API_DIR}/script/min-pretarget.cmake)
 # MAX EXTERNAL
 #############################################################
 
+add_subdirectory(oscpack)
+
+message(STATUS "current source dir = ${CMAKE_CURRENT_SOURCE_DIR}")
 
 include_directories(
         "${C74_INCLUDES}"
-        "${PROJECT_SOURCE_DIR}/../../oscpack/ip"
-        "${PROJECT_SOURCE_DIR}/../../oscpack/osc"
+        "${CMAKE_CURRENT_SOURCE_DIR}/oscpack/include/ip"
+        "${CMAKE_CURRENT_SOURCE_DIR}/oscpack/include/osc"
 )
 
-link_directories(
-        "${PROJECT_BINARY_DIR}/../../oscpack"
-)
+
 
 link_libraries(oscpack)
 
@@ -29,8 +30,6 @@ set(SOURCE_FILES
         ${PROJECT_NAME}.cpp
         ../src/atom_osc_parser.h
         ../src/connector.h
-        ../src/juce_osc_input_stream.h
-        ../src/juce_osc_receiver.h
         ../src/message_queue.h
         ../src/osc_send_message.h
         ../src/oscpack_receiver.h

@@ -29,8 +29,6 @@ set( SOURCE_FILES
         ${PROJECT_NAME}.cpp
         ../src/atom_osc_parser.h
         ../src/connector.h
-        ../src/juce_osc_input_stream.h
-        ../src/juce_osc_receiver.h
         ../src/message_queue.h
         ../src/osc_send_message.h
         ../src/oscpack_receiver.h
