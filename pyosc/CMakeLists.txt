@@ -3,6 +3,9 @@ project(Min-DevKit)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_OSX_ARCHITECTURES arm64;x86_64)
+
+
 enable_testing()
 
 string(REGEX REPLACE "(.*)/" "" THIS_PACKAGE_NAME "${CMAKE_CURRENT_SOURCE_DIR}")

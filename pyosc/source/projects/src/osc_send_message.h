@@ -41,7 +41,7 @@ public:
     /**
      * @raises: osc::OutOfBufferMemoryException if buffer is full
      */
-    void add_long(long arg) {
+    void add_long(osc::int64 arg) {
         *stream << arg;
     }
 
