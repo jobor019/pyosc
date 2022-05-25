@@ -19,9 +19,21 @@ public:
     MIN_DESCRIPTION{"Communicate with a server architecture over OSC."};
     MIN_TAGS{"utilities"};
     MIN_AUTHOR{"Joakim Borg"};
-    MIN_RELATED{"pyosc.thread-to-be-removed, pyosc, udpsend, udpreceive"};
+    MIN_RELATED{"udpsend, udpreceive"};
 
 
+    /**
+     * Initialization Messages
+     * Server:                  <name>
+     *                          <name> <ip>
+     *                          <name> <ip> <sendport> <recvport>
+     *
+     * Thread (Agent):          <name> <parent>
+     *                          <name> <parent> <ip>
+     *                          <name> <parent> <ip> <sendport> <recvport>
+     *
+     * Remote (Subcomponent):   <name> <parent> "remote" (literal keyword)
+     */
     explicit pyosc(const atoms& args = {}) {
         try {
 
@@ -41,7 +53,7 @@ public:
                     // Server
                     ip = std::make_optional(parse_ip(args, 1));
                 } else {
-                    //Agent
+                    // Thread
                     parent_name = std::make_optional(parse_name(args, 1, true));
                 }
 

@@ -166,7 +166,7 @@ public:
     }
 
     std::vector<c74::min::atoms> receive(const std::string& address) override {
-        if (parent) {
+        if (parent && parent->get_status() == Status::ready) {
             return parent->receive(address);
         }
         return {};
