@@ -11,12 +11,16 @@
 class AtomOscParser {
 public:
 
-    static std::unique_ptr<OscSendMessage> atoms2send(const std::string& address
-                                                      , const c74::min::atoms& args
-                                                      , c74::min::logger* cwarn
-                                                      , bool fail_on_error) {
+    static std::unique_ptr<OscSendMessage> atoms2send(const c74::min::atoms& args) {
+        if (args.empty()) {
+            throw std::runtime_error("an OSC address must be provided");
+        }
+
+        // throws std::runtime_error if invalid type or invalid OSC address
+        std::string address = parse_address(args[0]);
+
         auto msg = std::make_unique<OscSendMessage>(address);
-        auto it = args.begin();
+        auto it = std::next(args.begin());  // iterate from second element
         while (it != args.end()) {
             if (it->type() == c74::min::message_type::int_argument) {
                 msg->add_int(static_cast<int>(*it));
@@ -28,11 +32,7 @@ public:
                 msg->add_string(static_cast<std::string>(*it));
 
             } else {
-                if (fail_on_error) {
-                    throw std::runtime_error("element of unsupported data type in send message encountered");
-                } else {
-                    (*cwarn) << "element of unsupported data type in send message was ignored" << c74::min::endl;
-                }
+                throw std::runtime_error("element of unsupported data type encountered in message");
             }
             ++it;
         }
@@ -40,7 +40,7 @@ public:
     }
 
     static c74::min::atoms recv2atoms(const osc::ReceivedMessage& msg) {
-        c74::min::atoms args;
+        c74::min::atoms args{std::string(msg.AddressPattern())};
         auto it = msg.ArgumentsBegin();
         while (it != msg.ArgumentsEnd()) {
             if (it->IsInt32()) {
@@ -64,6 +64,16 @@ public:
             ++it;
         }
         return args;
+    }
+
+    static std::string parse_address(const c74::min::atom& address) {
+        if (address.type() == c74::min::message_type::symbol_argument &&
+            static_cast<std::string>(address).find('/') == 0) {
+
+            return static_cast<std::string>(address);
+        }
+
+        throw std::runtime_error("the first argument must be a valid OSC address");
     }
 
 

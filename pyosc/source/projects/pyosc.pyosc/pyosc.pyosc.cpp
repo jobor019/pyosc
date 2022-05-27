@@ -127,8 +127,8 @@ public:
                 }
             }
 
-        } else if (status == Status::uninitialized && initialization_message) {
-            try_initialize(*initialization_message);
+        } else if (status == Status::uninitialized && initialization_message_content) {
+            try_initialize(*initialization_message_content);
 
         } else if (status == Status::ready && !queue.empty()) {
             process_queue_unsafe();

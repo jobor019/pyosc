@@ -23,9 +23,9 @@ public:
 
     message<> initialize{this, "initialize", "initialize the remote object", MIN_FUNCTION {
 
-        if (initialization_message) {
+        if (initialization_message_content) {
             cwarn << "initialization message already queued, overwriting current" << endl;
-            initialization_message = std::nullopt;
+            initialization_message_content = std::nullopt;
         }
 
         try_initialize(args);
@@ -37,8 +37,7 @@ public:
     message<> send{this, "send", "send messages to the remote object", MIN_FUNCTION {
         std::unique_ptr<OscSendMessage> msg;
         try {
-            // TODO: Fail on error should be settable
-            msg = AtomOscParser::atoms2send(communication_object->get_address(), args, &cwarn, false);
+            msg = AtomOscParser::atoms2send(args);
         } catch (std::runtime_error& e) {
             cerr << e.what() << endl;
             return {};
@@ -53,7 +52,7 @@ public:
             }
         } else {
             queue.add(std::move(msg));
-            dump_out.send("queued " + std::to_string(queue.size()));
+            dump_out.send({"queued", queue.size()});
         }
         return {};
     }};
@@ -72,31 +71,27 @@ public:
                                  , "Message to send to remote upon termination and/or deletion"
                                  , MIN_FUNCTION {
 
-                atoms out{"terminationmessage"};
                 if (args.empty()) {
-                    // Get
-                    if (termination_message) {
-                        out.insert(out.end(), (*termination_message).begin(), (*termination_message).end());
-                        dump_out.send(out);
-                        return {};
-
-                    } else {
-                        dump_out.send(out);
-                        return {};
-                    }
-
+                    cerr << "no termination message provided" << endl;
+                    dump_out.send({"terminationmessage", -1});
+                    return {};
 
                 } else if (communication_object && communication_object->is_initialized()) {
                     // Invalid: set while already initialized
-                    cerr << "cannot set initialization message once object has been initialized" << endl;
+                    cerr << "cannot set termination message once object has been initialized" << endl;
                     dump_out.send({"terminationmessage", -1});
                     return {};
 
                 } else {
-                    // Set
-                    termination_message = std::make_optional(args);
-                    out.insert(out.end(), args.begin(), args.end());
-                    dump_out.send(out);
+                    if (is_valid_osc_format(args)) {
+                        termination_message_content = args;
+                        atoms out{"terminationmessage"};
+                        out.insert(out.end(), args.begin(), args.end());
+                        dump_out.send(out);
+                    } else {
+                        // error message already printed by `is_valid_osc_format`
+                        dump_out.send({"terminationmessage", -1});
+                    }
                     return {};
                 }
             }
@@ -108,11 +103,11 @@ public:
                 auto num_messages = queue.size();
                 queue.clear();
 
-                dump_out.send("queued " + std::to_string(queue.size()));
+                dump_out.send({"queued", queue.size()});
                 print_out.send("cleared " + std::to_string(num_messages) + " messages");
 
-                if (initialization_message) {
-                    initialization_message = std::nullopt;
+                if (initialization_message_content) {
+                    initialization_message_content = std::nullopt;
                     dump_out.send({"initialize", 0});
                     print_out.send("cleared initialization message");
                 }
@@ -211,6 +206,17 @@ protected:
         }
     }
 
+    bool is_valid_osc_format(const atoms& args) {
+        try {
+            parse_message(args); // if no errors thrown, format is valid
+            return true;
+        } catch (std::runtime_error& e) {
+            cerr << e.what() << endl;
+            return false;
+        }
+
+    }
+
 
     static std::string parse_name(const atoms& args, int name_idx = 0, bool is_parent = false) {
         if (args.size() > name_idx) {
@@ -241,22 +247,27 @@ protected:
                && static_cast<std::string>(args[remote_idx]) == "remote";
     }
 
-    void try_initialize(const atoms& init_msg) {
+    void try_initialize(const atoms& args) {
         try {
             // both of these throw std::runtime_error on empty messages
             //               return nullptr if explicitly specified as empty
             //               return an osc message otherwise
-            auto init_osc_msg = parse_initialization_message(init_msg);
-            auto termination_osc_msg = parse_termination_message(termination_message);
+            auto init_osc_msg = parse_message(args);
+
+            if (!termination_message_content) {
+                throw std::runtime_error("no termination message provided");
+            }
+
+            auto termination_osc_msg = parse_message(*termination_message_content);
 
             bool res = communication_object->initialize(std::move(init_osc_msg), std::move(termination_osc_msg));
 
             if (!res) {
                 // Initialization failed because object isn't ready: queue init message
-                initialization_message = init_msg;
+                initialization_message_content = args;
             } else {
                 // Initialization succeeded: clear message if stored
-                initialization_message = std::nullopt;
+                initialization_message_content = std::nullopt;
             }
 
             dump_out.send({"initialize ", res});
@@ -273,39 +284,14 @@ protected:
      * @throws std::runtime_error if object does not have a parent or if passing an empty message.
      * @returns nullptr if message is explicitly specified as empty, otherwise string
      */
-    std::unique_ptr<OscSendMessage> parse_initialization_message(const atoms& message, bool is_initialization = true) {
-        if (!communication_object) {
-            // Should technically never happen
-            throw std::runtime_error("object not yet created");
-        }
-
-        if (message.empty() ||
-            (message.size() == 1
-             && message[0].type() == message_type::symbol_argument
-             && static_cast<std::string>(message[0]).empty())) {
-            // empty message or single message consisting of empty string
-            std::stringstream err;
-            err << "no " << (is_initialization ? "initialization" : "termination") << " message provided";
-            throw std::runtime_error(err.str());
-
-        } else if (message.size() == 1 && message[0].type() == message_type::symbol_argument
-                   && static_cast<std::string>(message[0]) == "null") {
-            // No initialization/termination message
+    static std::unique_ptr<OscSendMessage> parse_message(const atoms& message) {
+        // Handle special case where no message is needed
+        if (message.size() == 1 && static_cast<std::string>(message[0]) == "null") {
+            // (Explicit) No message
             return nullptr;
-
         } else {
-            // parse message. throws std::runtime_error if communication object does not have a termination_address yet
-            return AtomOscParser::atoms2send(communication_object->get_initialization_address()
-                                             , message, &cwarn, false);
-        }
-
-    }
-
-    std::unique_ptr<OscSendMessage> parse_termination_message(std::optional<atoms> message) {
-        if (message) {
-            return parse_initialization_message(*message, false);
-        } else {
-            throw std::runtime_error("no termination message provided");
+            // throws std::runtime_error if invalid OSC message
+            return AtomOscParser::atoms2send(message);
         }
     }
 
@@ -313,8 +299,8 @@ protected:
 protected:
     std::shared_ptr<BaseOscObject> communication_object;
     MessageQueue queue;
-    std::optional<c74::min::atoms> initialization_message;
-    std::optional<c74::min::atoms> termination_message;
+    std::optional<c74::min::atoms> initialization_message_content;
+    std::optional<c74::min::atoms> termination_message_content;
     Status status = Status::offline;
 
     void process_queue_unsafe() {

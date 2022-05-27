@@ -12,14 +12,14 @@ BaseOscObject::BaseOscObject(const std::string& name
 
 
 Status BaseOscObject::parse_status(c74::min::atoms& msg) {
-    if (msg.size() != 1) {
+    if (msg.size() != 2) {      // address + status
         return Status::invalid_status;
     }
 
     int status_code;
 
-    if (msg[0].type() == c74::min::message_type::int_argument) {
-        status_code = static_cast<int>(msg[0]);
+    if (msg[1].type() == c74::min::message_type::int_argument) {
+        status_code = static_cast<int>(msg[1]);
     } else {
         return Status::invalid_status;
     }
