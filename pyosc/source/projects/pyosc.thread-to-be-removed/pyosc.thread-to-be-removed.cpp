@@ -15,7 +15,7 @@ public:
     MIN_DESCRIPTION{"Communicate with a server architecture over OSC."};
     MIN_TAGS{"utilities"};
     MIN_AUTHOR{"Joakim Borg"};
-    MIN_RELATED{"pyosc.server-to-be-removed, pyosc.pyosc, udpsend, udpreceive"};
+    MIN_RELATED{"pyosc.argparse, pyosc.pyosc, udpsend, udpreceive"};
 
     explicit thread(const atoms& args = {}) {
         try {
