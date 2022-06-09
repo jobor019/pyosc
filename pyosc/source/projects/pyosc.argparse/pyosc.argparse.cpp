@@ -8,14 +8,12 @@
 
 using namespace c74::min;
 
-// TODO: This entire class should be removed
 class argparse : public object<argparse>  {
 public:
-    // TODO: Description, tags, author, related
     MIN_DESCRIPTION{"Parse arguments with correct format for pyosc.pyosc."};
     MIN_TAGS{"utilities"};
     MIN_AUTHOR{"Joakim Borg"};
-    MIN_RELATED{"pyosc.pyosc"};
+    MIN_RELATED{"pyosc.pyosc, pyosc.syncswitch"};
 
     outlet<> out{this, "(list) formatted message"};
 
