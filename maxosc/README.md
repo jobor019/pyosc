@@ -4,9 +4,9 @@ The python code should be run independently of Max (in a terminal or similar) an
 
 ### Project Status
 
-The project is currently in development.
+Development of this project is largely stalled. Minor fixes will be released when necessary. 
 
-Documentation is currently limited, further documentation will be available later.
+The project is stable but documentation is limited. 
 
 
 
