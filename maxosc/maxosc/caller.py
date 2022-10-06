@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, Dict, Callable, List
+from typing import Any, Dict, Callable, List, Optional
 
 from maxosc.exceptions import DuplicateKeyError, InvalidInputError, MaxOscError
 from maxosc.parser import FunctionParam, Parser
@@ -32,7 +32,7 @@ class Caller(ABC):
         self.__parse_tree_parser: Parser = Parser(parse_parenthesis_as_list)
         self.discard_duplicate_args: bool = discard_duplicate_args
 
-    def call(self, string: str) -> Any:
+    def call(self, string: str, prepend_args: Optional[List[Any]] = None) -> Any:
         # TODO: Update docstring
         """Parses a string and if content of string matches a function, calls that function with provided arguments.
 
@@ -107,7 +107,10 @@ Also note that the symbols `=` (equal) `:` (colon) and `'` (single quote) are no
             raise MaxOscError("[PyOsc Error]: Multiple arguments with the same name/position were given.") from e
         except IndexError as e:
             raise MaxOscError("[PyOsc Error]: ") from e
+
         try:
+            prepend_args = [] if prepend_args is None else prepend_args
+            args = prepend_args + args
             return func(*args, **kwargs)
         except TypeError as e:
             raise TypeError(f"[PyOsc Error]: {e}. The arguments for function {func.__name__} "

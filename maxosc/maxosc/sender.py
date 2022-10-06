@@ -1,6 +1,6 @@
 import logging
 from enum import IntEnum
-from typing import Any
+from typing import Any, Optional
 
 from maxosc.maxformatter import MaxFormatter
 from pythonosc.udp_client import SimpleUDPClient
@@ -23,18 +23,19 @@ class Sender:
         self._client: SimpleUDPClient = SimpleUDPClient(ip, port)
         self._warning_address: str = warning_address
 
-    def send(self, address: str, *args):
+    def send(self, address: str, *args, send_format: Optional[SendFormat] = None):
         """ Raises: ValueError if invalid send format or trying to send custom class, etc.
                     InvalidInputError if unable to format as llll
                     TypeError if trying to send a dict"""
-        if self._send_format == SendFormat.RAW:
+        send_format = send_format if send_format is not None else self._send_format
+        if send_format == SendFormat.RAW:
             self._send_raw(address, *args)
-        elif self._send_format == SendFormat.FLATTEN:
+        elif send_format == SendFormat.FLATTEN:
             self._send_flat(address, *args)
-        elif self._send_format == SendFormat.BACH_LLLL:
+        elif send_format == SendFormat.BACH_LLLL:
             self._send_llll(address, *args)
         else:
-            raise ValueError(f"Invalid send format '{self._send_format}'.")
+            raise ValueError(f"Invalid send format '{str(send_format)}'.")
 
     def _send_raw(self, address: str, *args):
         """ Raises: ValueError if invalid send format"""
@@ -43,7 +44,7 @@ class Sender:
     def _send_flat(self, address: str, *args):
         """ Raises: ValueError if invalid send format or trying to send custom class, etc.
                     TypeError if trying to send a dict"""
-        args_flattened: [Any] = MaxFormatter.flatten(*args, cnmat_compatibility=self._cnmat_compatibility)
+        args_flattened: [Any] = MaxFormatter.flatten(args, cnmat_compatibility=self._cnmat_compatibility)
         self._send_raw(address, args_flattened)
 
     def _send_llll(self, address: str, *args):
