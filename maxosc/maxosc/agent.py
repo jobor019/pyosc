@@ -10,12 +10,10 @@ from typing import Optional, Callable, Awaitable, Union
 from maxosc.caller import Caller
 from maxosc.exceptions import MaxOscError
 from maxosc.maxformatter import MaxFormatter
+from maxosc.oscloghandler import MaxLogLevel, OscLogForwarder
+from maxosc.sender import OscSender
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import AsyncIOOSCUDPServer
-
-from oscloghandler import MaxLogLevel
-from oscloghandler import OscLogForwarder
-from sender import OscSender
 
 
 class Agent(Caller):
@@ -46,6 +44,8 @@ class Agent(Caller):
                  raise_exceptions: bool = True,
                  capture_termination_exceptions: bool = True,
                  discard_duplicate_args: bool = False,
+                 log_on_init: bool = True,
+                 log_on_exit: bool = True,
                  status_callback_interval: float = 0.5):
         super().__init__(parse_parenthesis_as_list=False,
                          discard_duplicate_args=discard_duplicate_args)
@@ -64,6 +64,8 @@ class Agent(Caller):
         self._internal_address: str = max_object_internal_address
         self._raise_exceptions: bool = raise_exceptions
         self._capture_termination_exceptions: bool = capture_termination_exceptions
+        self._log_on_init: bool = log_on_init
+        self._log_on_exit: bool = log_on_exit
         self._status_callback_interval: float = status_callback_interval
 
         self._sender: OscSender = OscSender(ip, send_port)
@@ -139,7 +141,9 @@ class Agent(Caller):
     def terminate(self) -> None:
         self._on_terminate()
         self.send(self.SendProtocol.TERMINATED, osc_address=self._internal_address)
-        self._logger.info(f"Terminating '{self.__class__.__name__}'")
+
+        if self._log_on_exit:
+            self._logger.info(f"Terminating '{self.__class__.__name__}'")
         self.__running = False
 
     def loglevel(self, max_level: Union[int, MaxLogLevel]) -> None:
@@ -157,8 +161,9 @@ class Agent(Caller):
     async def _run(self) -> None:
         self.__running = True
 
-        self._logger.info(f"Starting '{self.__class__.__name__}' "
-                          f"with recv_port={self._recv_port} and send_port={self._send_port}")
+        if self._log_on_init:
+            self._logger.info(f"Starting '{self.__class__.__name__}' "
+                              f"with recv_port={self._recv_port} and send_port={self._send_port}")
 
         # TODO: Does this work when it's single-threaded?
         # if self.osc_log_address:
@@ -216,12 +221,12 @@ class Agent(Caller):
         return ip
 
     @staticmethod
-    def default_argparse_arguments(parser: argparse.ArgumentParser,
-                                   default_recv: int = DEFAULT_RECV_PORT,
-                                   default_send: int = DEFAULT_SEND_PORT,
-                                   default_ip: str = DEFAULT_IP,
-                                   default_log_level: MaxLogLevel = MaxLogLevel.INFO,
-                                   default_log_to_osc: bool = False) -> None:
+    def add_default_argparse_args(parser: argparse.ArgumentParser,
+                                  default_recv: int = DEFAULT_RECV_PORT,
+                                  default_send: int = DEFAULT_SEND_PORT,
+                                  default_ip: str = DEFAULT_IP,
+                                  default_log_level: MaxLogLevel = MaxLogLevel.INFO,
+                                  default_log_to_osc: bool = False) -> None:
         parser.add_argument('--recv_port', metavar='RECV_PORT', type=int,
                             help='input port used by the server',
                             default=default_recv)

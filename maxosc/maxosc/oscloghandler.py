@@ -3,9 +3,7 @@ from enum import IntEnum
 from typing import Union
 
 from deprecated.classic import deprecated
-from maxosc.sender import Sender
-
-from sender import OscSender
+from maxosc.sender import Sender, OscSender
 
 
 class MaxLogLevel(IntEnum):
@@ -27,7 +25,6 @@ class MaxLogLevel(IntEnum):
             return logging.ERROR
         else:
             raise ValueError("Invalid log level. Must be 0 (print), 1 (warn), 2 (error), or 3 (debug).")
-
 
 
 class OscLogForwarder(logging.Handler):
