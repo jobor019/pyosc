@@ -1,4 +1,7 @@
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 
-from .maxosc import MaxOsc
-from .sender import Sender, SendFormat
+from agent import Agent
+from caller import Caller
+from exceptions import MaxOscError, DuplicateKeyError, InvalidInputError
+from oscloghandler import MaxLogLevel, OscLogForwarder
+from sender import OscSender

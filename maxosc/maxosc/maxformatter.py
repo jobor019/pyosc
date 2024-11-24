@@ -1,3 +1,4 @@
+import numpy as np
 import collections.abc
 import json
 import re
@@ -114,6 +115,8 @@ class MaxFormatter:
                 flat_list.append(l)
         elif isinstance(l, collections.abc.Mapping):
             raise TypeError("Cannot parse dicts as return arguments")  # TODO: Handle when implem. dict strategy
+        elif isinstance(l, np.ndarray):
+            MaxFormatter._flatten(flat_list, l.tolist(), cnmat_compatibility=cnmat_compatibility)
         else:
             for e in l:
                 MaxFormatter._flatten(flat_list, e, cnmat_compatibility=cnmat_compatibility)

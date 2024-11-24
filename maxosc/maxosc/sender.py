@@ -2,8 +2,20 @@ import logging
 from enum import IntEnum
 from typing import Any, Optional
 
+from deprecated.classic import deprecated
 from maxosc.maxformatter import MaxFormatter
 from pythonosc.udp_client import SimpleUDPClient
+
+
+class OscSender:
+    def __init__(self, ip: str, port: int):
+        self.logger = logging.getLogger(__name__)
+        self.ip: str = ip
+        self.port: int = port
+        self._client: SimpleUDPClient = SimpleUDPClient(address=ip, port=port)
+
+    def send(self, address: str, *args) -> None:
+        self._client.send_message(address, MaxFormatter.flatten(args, cnmat_compatibility=False))
 
 
 class SendFormat(IntEnum):
@@ -12,6 +24,7 @@ class SendFormat(IntEnum):
     BACH_LLLL = 2
 
 
+@deprecated(version='0.0.7', reason="Use the OscSender class instead.")
 class Sender:
     def __init__(self, ip: str, port: int, send_format: SendFormat = SendFormat.FLATTEN,
                  cnmat_compatibility: bool = True, warning_address: str = "/warning"):

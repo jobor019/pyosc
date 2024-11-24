@@ -1,6 +1,7 @@
 import logging
 from typing import Any, Optional
 
+from deprecated.classic import deprecated
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
 
@@ -10,7 +11,7 @@ from maxosc.maxformatter import MaxFormatter
 from maxosc.oscloghandler import OscLogHandler
 from maxosc.sender import Sender, SendFormat
 
-
+@deprecated(version='0.0.7', reason="Use the Agent class instead.")
 class MaxOsc(Caller):
     # TODO: Update docstring
     """Template class to extend when implementing new Max-OSC projects.
