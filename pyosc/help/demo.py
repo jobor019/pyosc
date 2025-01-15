@@ -2,10 +2,10 @@ import argparse
 import random
 from typing import Optional
 
-from audioutils.osc import OscAgent, MaxLogLevel
+from maxosc import Agent, MaxLogLevel
 
 
-class BasicAdder(OscAgent):
+class BasicAdder(Agent):
     def __init__(self, rhs: int, recv_port: int, send_port: int, ip: str, log_level: MaxLogLevel, log_to_osc: bool):
         super().__init__(recv_port=recv_port,
                          send_port=send_port,
@@ -106,12 +106,12 @@ if __name__ == '__main__':
     parser.add_argument('--rhs', metavar='RHS', type=int,
                         help='rhs value',
                         default=0)
-    OscAgent.add_argparse_arguments(parser)
+    Agent.append_default_argparse_args(parser)
 
     args = parser.parse_args()
     BasicAdder(rhs=args.rhs,
-               recv_port=args.recvport,
-               send_port=args.sendport,
+               recv_port=args.recv_port,
+               send_port=args.send_port,
                ip=args.ip,
-               log_level=args.loglevel,
-               log_to_osc=args.logtoosc).start()
+               log_level=args.log_level,
+               log_to_osc=args.log_to_osc).start()

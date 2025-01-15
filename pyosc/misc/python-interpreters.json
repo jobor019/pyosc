@@ -1,3 +1,3 @@
 {
-    "default": "/opt/homebrew/bin/python3"
+    "default": "/opt/homebrew/Caskroom/miniconda/base/bin/python3"
 }

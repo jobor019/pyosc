@@ -221,12 +221,12 @@ class Agent(Caller):
         return ip
 
     @staticmethod
-    def add_default_argparse_args(parser: argparse.ArgumentParser,
-                                  default_recv: int = DEFAULT_RECV_PORT,
-                                  default_send: int = DEFAULT_SEND_PORT,
-                                  default_ip: str = DEFAULT_IP,
-                                  default_log_level: MaxLogLevel = MaxLogLevel.INFO,
-                                  default_log_to_osc: bool = False) -> None:
+    def append_default_argparse_args(parser: argparse.ArgumentParser,
+                                     default_recv: int = DEFAULT_RECV_PORT,
+                                     default_send: int = DEFAULT_SEND_PORT,
+                                     default_ip: str = DEFAULT_IP,
+                                     default_log_level: MaxLogLevel = MaxLogLevel.INFO,
+                                     default_log_to_osc: bool = False) -> None:
         parser.add_argument('--recv_port', metavar='RECV_PORT', type=int,
                             help='input port used by the server',
                             default=default_recv)

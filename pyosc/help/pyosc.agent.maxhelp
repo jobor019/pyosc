@@ -479,7 +479,7 @@
 
 							}
  ],
-						"originid" : "pat-3098"
+						"originid" : "pat-6740"
 					}
 ,
 					"patching_rect" : [ 573.0, 24.0, 140.0, 22.0 ],
@@ -1095,7 +1095,7 @@
 
 							}
  ],
-						"originid" : "pat-3160"
+						"originid" : "pat-6802"
 					}
 ,
 					"patching_rect" : [ 348.0, 24.0, 82.0, 22.0 ],
@@ -1151,7 +1151,7 @@
 									"parameter_enable" : 0,
 									"patching_rect" : [ 605.0, 504.5, 18.0, 34.0 ],
 									"size" : 2,
-									"value" : 1
+									"value" : 0
 								}
 
 							}
@@ -1289,7 +1289,7 @@
 
 											}
  ],
-										"originid" : "pat-3976"
+										"originid" : "pat-6926"
 									}
 ,
 									"patching_rect" : [ 605.0, 551.5, 127.0, 22.0 ],
@@ -1511,7 +1511,7 @@
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
 									"patching_rect" : [ 31.0, 551.0, 314.0, 22.0 ],
-									"text" : "pyosc.agent null 4567 7654 @autoinitialize 0",
+									"text" : "pyosc.agent null 4567 7654 @autoinitialize 0 @follower 1",
 									"varname" : "follower"
 								}
 
@@ -1980,7 +1980,7 @@
 
 							}
  ],
-						"originid" : "pat-3282"
+						"originid" : "pat-6924"
 					}
 ,
 					"patching_rect" : [ 443.0, 24.0, 116.0, 22.0 ],
@@ -3229,7 +3229,7 @@
 
 							}
  ],
-						"originid" : "pat-3464"
+						"originid" : "pat-7048"
 					}
 ,
 					"patching_rect" : [ 249.0, 24.0, 76.0, 22.0 ],
@@ -4212,7 +4212,7 @@
 
 							}
  ],
-						"originid" : "pat-3526"
+						"originid" : "pat-7110"
 					}
 ,
 					"patching_rect" : [ 184.0, 24.0, 50.0, 22.0 ],
@@ -5694,7 +5694,7 @@
 
 							}
  ],
-						"originid" : "pat-3710"
+						"originid" : "pat-7294"
 					}
 ,
 					"patching_rect" : [ 94.0, 24.0, 81.0, 22.0 ],
@@ -5728,7 +5728,7 @@
 						"showontab" : 1,
 						"boxes" : [  ],
 						"lines" : [  ],
-						"originid" : "pat-3908"
+						"originid" : "pat-7492"
 					}
 ,
 					"patching_rect" : [ 736.0, 24.0, 25.0, 22.0 ],
@@ -5761,6 +5761,17 @@
 						"gridsize" : [ 15.0, 15.0 ],
 						"showontab" : 1,
 						"boxes" : [ 							{
+								"box" : 								{
+									"id" : "obj-47",
+									"maxclass" : "comment",
+									"numinlets" : 1,
+									"numoutlets" : 0,
+									"patching_rect" : [ 898.0, 567.0, 59.0, 20.0 ],
+									"text" : "heartbeat"
+								}
+
+							}
+, 							{
 								"box" : 								{
 									"fontface" : 1,
 									"fontsize" : 14.0,
@@ -6231,13 +6242,13 @@
 , 							{
 								"box" : 								{
 									"id" : "obj-105",
-									"linecount" : 2,
+									"linecount" : 3,
 									"maxclass" : "message",
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 645.0, 598.0, 185.0, 35.0 ],
-									"text" : "interpreter /opt/homebrew/bin/python3"
+									"patching_rect" : [ 645.0, 598.0, 185.0, 49.0 ],
+									"text" : "[INFO]: Starting 'BasicAdder' with recv_port=8081 and send_port=8080"
 								}
 
 							}
@@ -6849,13 +6860,13 @@
 , 							{
 								"box" : 								{
 									"id" : "obj-14",
-									"linecount" : 5,
+									"linecount" : 7,
 									"maxclass" : "message",
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 443.0, 598.0, 171.0, 76.0 ],
-									"text" : "/opt/homebrew/bin/python3 /Users/joakimborg/Mabstractions/io/help/demo.py --recvport 8081 --sendport 8080 --ip 127.0.0.1 --loglevel 0 2>&1"
+									"patching_rect" : [ 443.0, 598.0, 171.0, 102.0 ],
+									"text" : "/opt/homebrew/Caskroom/miniconda/base/bin/python3 /Users/joakimborg/MaxProjects/pyosc/pyosc/help/demo.py --recv_port 8081 --send_port 8080 --ip 127.0.0.1 --log_level 0 2>&1"
 								}
 
 							}
@@ -7116,6 +7127,7 @@
 , 							{
 								"patchline" : 								{
 									"destination" : [ "obj-16", 1 ],
+									"midpoints" : [ 928.5, 559.66015625, 1006.5, 559.66015625 ],
 									"order" : 0,
 									"source" : [ "obj-101", 1 ]
 								}
@@ -7124,6 +7136,7 @@
 , 							{
 								"patchline" : 								{
 									"destination" : [ "obj-27", 0 ],
+									"midpoints" : [ 928.5, 560.2578125, 992.0, 560.2578125 ],
 									"order" : 1,
 									"source" : [ "obj-101", 1 ]
 								}
@@ -7447,7 +7460,7 @@
 
 							}
  ],
-						"originid" : "pat-3910"
+						"originid" : "pat-7494"
 					}
 ,
 					"patching_rect" : [ 28.0, 24.0, 47.0, 22.0 ],
@@ -7461,7 +7474,7 @@
 			}
  ],
 		"lines" : [  ],
-		"originid" : "pat-3096",
+		"originid" : "pat-6738",
 		"dependency_cache" : [ 			{
 				"name" : "helpdetails.js",
 				"bootpath" : "C74:/help/resources",
