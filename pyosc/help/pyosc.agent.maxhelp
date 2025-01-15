@@ -2,44 +2,18 @@
 	"patcher" : 	{
 		"fileversion" : 1,
 		"appversion" : 		{
-			"major" : 8,
-			"minor" : 6,
-			"revision" : 0,
+			"major" : 9,
+			"minor" : 0,
+			"revision" : 3,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 34.0, 87.0, 2117.0, 1258.0 ],
-		"bglocked" : 0,
-		"openinpresentation" : 0,
-		"default_fontsize" : 12.0,
-		"default_fontface" : 0,
-		"default_fontname" : "Arial",
-		"gridonopen" : 1,
+		"rect" : [ 34.0, 87.0, 2124.0, 1256.0 ],
 		"gridsize" : [ 15.0, 15.0 ],
-		"gridsnaponopen" : 1,
-		"objectsnaponopen" : 1,
-		"statusbarvisible" : 2,
-		"toolbarvisible" : 1,
-		"lefttoolbarpinned" : 0,
-		"toptoolbarpinned" : 0,
-		"righttoolbarpinned" : 0,
-		"bottomtoolbarpinned" : 0,
-		"toolbars_unpinned_last_save" : 0,
-		"tallnewobj" : 0,
-		"boxanimatetime" : 200,
-		"enablehscroll" : 1,
-		"enablevscroll" : 1,
-		"devicewidth" : 0.0,
-		"description" : "",
-		"digest" : "",
-		"tags" : "",
-		"style" : "",
-		"subpatcher_template" : "",
 		"showrootpatcherontab" : 0,
 		"showontab" : 0,
-		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
 					"id" : "obj-7",
@@ -49,43 +23,17 @@
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 8,
-							"minor" : 6,
-							"revision" : 0,
+							"major" : 9,
+							"minor" : 0,
+							"revision" : 3,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2117.0, 1232.0 ],
-						"bglocked" : 0,
-						"openinpresentation" : 0,
-						"default_fontsize" : 12.0,
-						"default_fontface" : 0,
-						"default_fontname" : "Arial",
-						"gridonopen" : 1,
+						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
-						"gridsnaponopen" : 1,
-						"objectsnaponopen" : 1,
-						"statusbarvisible" : 2,
-						"toolbarvisible" : 1,
-						"lefttoolbarpinned" : 0,
-						"toptoolbarpinned" : 0,
-						"righttoolbarpinned" : 0,
-						"bottomtoolbarpinned" : 0,
-						"toolbars_unpinned_last_save" : 0,
-						"tallnewobj" : 0,
-						"boxanimatetime" : 200,
-						"enablehscroll" : 1,
-						"enablevscroll" : 1,
-						"devicewidth" : 0.0,
-						"description" : "",
-						"digest" : "",
-						"tags" : "",
-						"style" : "",
-						"subpatcher_template" : "",
 						"showontab" : 1,
-						"assistshowspatchername" : 0,
 						"boxes" : [ 							{
 								"box" : 								{
 									"blinkcolor" : [ 0.980525732, 0.5260759592, 0.0, 1.0 ],
@@ -324,7 +272,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 170.0, 374.0, 55.0, 55.0 ]
+									"patching_rect" : [ 170.0, 374.0, 55.0, 55.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -335,8 +284,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 41.0, 341.0, 270.0, 22.0 ],
-									"text" : "bis.oscagent demo.py 7890 987 @autoinitialize 0"
+									"patching_rect" : [ 41.0, 341.0, 268.0, 22.0 ],
+									"text" : "pyosc.agent demo.py 7890 987 @autoinitialize 0"
 								}
 
 							}
@@ -529,15 +478,13 @@
 								}
 
 							}
- ]
+ ],
+						"originid" : "pat-3098"
 					}
 ,
 					"patching_rect" : [ 573.0, 24.0, 140.0, 22.0 ],
 					"saved_object_attributes" : 					{
-						"description" : "",
-						"digest" : "",
-						"globalpatchername" : "",
-						"tags" : ""
+						"globalpatchername" : ""
 					}
 ,
 					"text" : "p \"state & reinitialization\""
@@ -553,43 +500,17 @@
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 8,
-							"minor" : 6,
-							"revision" : 0,
+							"major" : 9,
+							"minor" : 0,
+							"revision" : 3,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2117.0, 1232.0 ],
-						"bglocked" : 0,
-						"openinpresentation" : 0,
-						"default_fontsize" : 12.0,
-						"default_fontface" : 0,
-						"default_fontname" : "Arial",
-						"gridonopen" : 1,
+						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
-						"gridsnaponopen" : 1,
-						"objectsnaponopen" : 1,
-						"statusbarvisible" : 2,
-						"toolbarvisible" : 1,
-						"lefttoolbarpinned" : 0,
-						"toptoolbarpinned" : 0,
-						"righttoolbarpinned" : 0,
-						"bottomtoolbarpinned" : 0,
-						"toolbars_unpinned_last_save" : 0,
-						"tallnewobj" : 0,
-						"boxanimatetime" : 200,
-						"enablehscroll" : 1,
-						"enablevscroll" : 1,
-						"devicewidth" : 0.0,
-						"description" : "",
-						"digest" : "",
-						"tags" : "",
-						"style" : "",
-						"subpatcher_template" : "",
 						"showontab" : 1,
-						"assistshowspatchername" : 0,
 						"boxes" : [ 							{
 								"box" : 								{
 									"bubble" : 1,
@@ -599,7 +520,6 @@
 									"numinlets" : 1,
 									"numoutlets" : 0,
 									"patching_rect" : [ 837.0, 333.5, 190.0, 37.0 ],
-									"presentation_linecount" : 2,
 									"text" : "exact filepath: use filepath:/path/to/python"
 								}
 
@@ -857,7 +777,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 284.0, 675.0, 55.0, 55.0 ]
+									"patching_rect" : [ 284.0, 675.0, 55.0, 55.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -868,8 +789,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 46.0, 633.0, 495.0, 22.0 ],
-									"text" : "bis.oscagent demo.py 6678 8766 @autoinitialize 0 @interpreter default"
+									"patching_rect" : [ 46.0, 633.0, 384.0, 22.0 ],
+									"text" : "pyosc.agent demo.py 6678 8766 @autoinitialize 0 @interpreter default"
 								}
 
 							}
@@ -957,7 +878,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 427.5, 383.0, 55.0, 55.0 ]
+									"patching_rect" : [ 427.5, 383.0, 55.0, 55.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -968,8 +890,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 41.0, 341.0, 792.0, 22.0 ],
-									"text" : "bis.oscagent demo.py 5678 8765 @autoinitialize 0 @interpreter filepath:/opt/homebrew/Caskroom/miniconda/base/envs/audioutils-3.11/bin/python3"
+									"patching_rect" : [ 41.0, 341.0, 789.0, 22.0 ],
+									"text" : "pyosc.agent demo.py 5678 8765 @autoinitialize 0 @interpreter filepath:/opt/homebrew/Caskroom/miniconda/base/envs/audioutils-3.11/bin/python3"
 								}
 
 							}
@@ -1172,15 +1094,13 @@
 								}
 
 							}
- ]
+ ],
+						"originid" : "pat-3160"
 					}
 ,
 					"patching_rect" : [ 348.0, 24.0, 82.0, 22.0 ],
 					"saved_object_attributes" : 					{
-						"description" : "",
-						"digest" : "",
-						"globalpatchername" : "",
-						"tags" : ""
+						"globalpatchername" : ""
 					}
 ,
 					"text" : "p interpreter"
@@ -1196,44 +1116,192 @@
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 8,
-							"minor" : 6,
-							"revision" : 0,
+							"major" : 9,
+							"minor" : 0,
+							"revision" : 3,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 34.0, 113.0, 2117.0, 1232.0 ],
-						"bglocked" : 0,
-						"openinpresentation" : 0,
-						"default_fontsize" : 12.0,
-						"default_fontface" : 0,
-						"default_fontname" : "Arial",
-						"gridonopen" : 1,
+						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
-						"gridsnaponopen" : 1,
-						"objectsnaponopen" : 1,
-						"statusbarvisible" : 2,
-						"toolbarvisible" : 1,
-						"lefttoolbarpinned" : 0,
-						"toptoolbarpinned" : 0,
-						"righttoolbarpinned" : 0,
-						"bottomtoolbarpinned" : 0,
-						"toolbars_unpinned_last_save" : 0,
-						"tallnewobj" : 0,
-						"boxanimatetime" : 200,
-						"enablehscroll" : 1,
-						"enablevscroll" : 1,
-						"devicewidth" : 0.0,
-						"description" : "",
-						"digest" : "",
-						"tags" : "",
-						"style" : "",
-						"subpatcher_template" : "",
 						"showontab" : 1,
-						"assistshowspatchername" : 0,
 						"boxes" : [ 							{
+								"box" : 								{
+									"id" : "obj-51",
+									"linecount" : 2,
+									"maxclass" : "comment",
+									"numinlets" : 1,
+									"numoutlets" : 0,
+									"patching_rect" : [ 625.0, 505.5, 95.0, 33.0 ],
+									"text" : "use @follower 1\ndisplay warning"
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"disabled" : [ 0, 0 ],
+									"id" : "obj-49",
+									"itemtype" : 0,
+									"maxclass" : "radiogroup",
+									"numinlets" : 1,
+									"numoutlets" : 1,
+									"outlettype" : [ "" ],
+									"parameter_enable" : 0,
+									"patching_rect" : [ 605.0, 504.5, 18.0, 34.0 ],
+									"size" : 2,
+									"value" : 1
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"hidden" : 1,
+									"id" : "obj-20",
+									"maxclass" : "newobj",
+									"numinlets" : 1,
+									"numoutlets" : 2,
+									"outlettype" : [ "", "" ],
+									"patching_rect" : [ 605.0, 582.5, 67.0, 22.0 ],
+									"save" : [ "#N", "thispatcher", ";", "#Q", "end", ";" ],
+									"text" : "thispatcher"
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"id" : "obj-13",
+									"maxclass" : "newobj",
+									"numinlets" : 1,
+									"numoutlets" : 1,
+									"outlettype" : [ "" ],
+									"patcher" : 									{
+										"fileversion" : 1,
+										"appversion" : 										{
+											"major" : 9,
+											"minor" : 0,
+											"revision" : 3,
+											"architecture" : "x64",
+											"modernui" : 1
+										}
+,
+										"classnamespace" : "box",
+										"rect" : [ 59.0, 106.0, 1000.0, 780.0 ],
+										"gridsize" : [ 15.0, 15.0 ],
+										"boxes" : [ 											{
+												"box" : 												{
+													"id" : "obj-46",
+													"linecount" : 3,
+													"maxclass" : "message",
+													"numinlets" : 2,
+													"numoutlets" : 1,
+													"outlettype" : [ "" ],
+													"patching_rect" : [ 196.0, 84.0, 212.0, 49.0 ],
+													"text" : "script replace follower newex 0 0 314 12 pyosc.agent null 4567 7654 @autoinitialize 0 @follower 1"
+												}
+
+											}
+, 											{
+												"box" : 												{
+													"id" : "obj-37",
+													"linecount" : 3,
+													"maxclass" : "message",
+													"numinlets" : 2,
+													"numoutlets" : 1,
+													"outlettype" : [ "" ],
+													"patching_rect" : [ 18.0, 84.0, 176.0, 49.0 ],
+													"text" : "script replace follower newex 0 0 314 12 pyosc.agent null 4567 7654 @autoinitialize 0"
+												}
+
+											}
+, 											{
+												"box" : 												{
+													"id" : "obj-3",
+													"maxclass" : "newobj",
+													"numinlets" : 3,
+													"numoutlets" : 3,
+													"outlettype" : [ "bang", "bang", "" ],
+													"patching_rect" : [ 18.0, 52.0, 238.0, 22.0 ],
+													"text" : "sel 1 0"
+												}
+
+											}
+, 											{
+												"box" : 												{
+													"comment" : "",
+													"id" : "obj-2",
+													"index" : 1,
+													"maxclass" : "outlet",
+													"numinlets" : 1,
+													"numoutlets" : 0,
+													"patching_rect" : [ 18.0, 155.0, 30.0, 30.0 ]
+												}
+
+											}
+, 											{
+												"box" : 												{
+													"comment" : "",
+													"id" : "obj-1",
+													"index" : 1,
+													"maxclass" : "inlet",
+													"numinlets" : 0,
+													"numoutlets" : 1,
+													"outlettype" : [ "" ],
+													"patching_rect" : [ 18.0, 11.0, 30.0, 30.0 ]
+												}
+
+											}
+ ],
+										"lines" : [ 											{
+												"patchline" : 												{
+													"destination" : [ "obj-3", 0 ],
+													"source" : [ "obj-1", 0 ]
+												}
+
+											}
+, 											{
+												"patchline" : 												{
+													"destination" : [ "obj-37", 0 ],
+													"source" : [ "obj-3", 0 ]
+												}
+
+											}
+, 											{
+												"patchline" : 												{
+													"destination" : [ "obj-46", 0 ],
+													"source" : [ "obj-3", 1 ]
+												}
+
+											}
+, 											{
+												"patchline" : 												{
+													"destination" : [ "obj-2", 0 ],
+													"source" : [ "obj-37", 0 ]
+												}
+
+											}
+, 											{
+												"patchline" : 												{
+													"destination" : [ "obj-2", 0 ],
+													"source" : [ "obj-46", 0 ]
+												}
+
+											}
+ ],
+										"originid" : "pat-3976"
+									}
+,
+									"patching_rect" : [ 605.0, 551.5, 127.0, 22.0 ],
+									"saved_object_attributes" : 									{
+										"globalpatchername" : ""
+									}
+,
+									"text" : "p handle_follower_attr"
+								}
+
+							}
+, 							{
 								"box" : 								{
 									"bubble" : 1,
 									"id" : "obj-12",
@@ -1241,21 +1309,8 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 301.0, 844.5, 149.0, 51.0 ],
-									"text" : "without @follower 1, we'll get warnings about port duplications"
-								}
-
-							}
-, 							{
-								"box" : 								{
-									"color" : [ 0.996078431372549, 0.423529411764706, 0.423529411764706, 0.73 ],
-									"id" : "obj-9",
-									"maxclass" : "newobj",
-									"numinlets" : 1,
-									"numoutlets" : 3,
-									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 47.0, 859.0, 250.0, 22.0 ],
-									"text" : "bis.oscagent null 4567 7654 @autoinitialize 0"
+									"patching_rect" : [ 726.0, 496.5, 215.0, 51.0 ],
+									"text" : "without @follower 1, everything works but we'd get warnings about port duplications in the console"
 								}
 
 							}
@@ -1266,7 +1321,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 403.0, 593.0, 174.0, 24.0 ],
+									"patching_rect" : [ 387.0, 498.0, 174.0, 24.0 ],
 									"text" : "cannot initialize a @follower"
 								}
 
@@ -1278,7 +1333,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 350.0, 594.0, 51.0, 22.0 ],
+									"patching_rect" : [ 334.0, 499.0, 51.0, 22.0 ],
 									"text" : "initialize"
 								}
 
@@ -1292,7 +1347,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 162.5, 681.0, 53.0, 53.0 ]
+									"patching_rect" : [ 146.0, 586.0, 53.0, 53.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -1305,7 +1361,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 551.0, 199.0, 359.0, 34.0 ],
+									"patching_rect" : [ 585.0, 150.0, 359.0, 34.0 ],
 									"text" : "def addwithid(self, id: str, v: int) -> None:\n    self.send(id, \"addwithid\", self._rhs + v)"
 								}
 
@@ -1318,7 +1374,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 912.0, 190.5, 255.0, 51.0 ],
+									"patching_rect" : [ 946.0, 141.0, 255.0, 51.0 ],
 									"text" : "The strategy is basically to have a unique id in the function signature and prepend this before any send"
 								}
 
@@ -1331,7 +1387,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 103.5, 521.0, 259.0, 51.0 ],
+									"patching_rect" : [ 87.0, 426.0, 259.0, 51.0 ],
 									"text" : "uses same rhs as above (but this approach can be really useful for stateless interaction witth a single server)"
 								}
 
@@ -1344,7 +1400,7 @@
 									"numoutlets" : 2,
 									"outlettype" : [ "", "bang" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 47.0, 746.0, 50.0, 22.0 ]
+									"patching_rect" : [ 31.0, 651.0, 50.0, 22.0 ]
 								}
 
 							}
@@ -1355,7 +1411,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 2,
 									"outlettype" : [ "", "" ],
-									"patching_rect" : [ 47.0, 712.0, 90.0, 22.0 ],
+									"patching_rect" : [ 31.0, 617.0, 90.0, 22.0 ],
 									"text" : "route addwithid"
 								}
 
@@ -1367,7 +1423,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 2,
 									"outlettype" : [ "", "" ],
-									"patching_rect" : [ 47.0, 681.0, 55.0, 22.0 ],
+									"patching_rect" : [ 31.0, 586.0, 55.0, 22.0 ],
 									"text" : "route id1"
 								}
 
@@ -1379,7 +1435,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 148.0, 584.0, 159.0, 24.0 ],
+									"patching_rect" : [ 132.0, 489.0, 159.0, 24.0 ],
 									"text" : "custom address/id: \"id1\""
 								}
 
@@ -1392,7 +1448,7 @@
 									"numoutlets" : 2,
 									"outlettype" : [ "", "bang" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 47.0, 550.0, 50.0, 22.0 ]
+									"patching_rect" : [ 31.0, 455.0, 50.0, 22.0 ]
 								}
 
 							}
@@ -1403,7 +1459,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 47.0, 586.0, 95.0, 22.0 ],
+									"patching_rect" : [ 31.0, 491.0, 95.0, 22.0 ],
 									"text" : "addwithid id1 $1"
 								}
 
@@ -1416,7 +1472,7 @@
 									"numoutlets" : 2,
 									"outlettype" : [ "", "bang" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 41.0, 454.0, 50.0, 22.0 ]
+									"patching_rect" : [ 25.0, 359.0, 50.0, 22.0 ]
 								}
 
 							}
@@ -1427,7 +1483,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 2,
 									"outlettype" : [ "", "" ],
-									"patching_rect" : [ 41.0, 420.0, 90.0, 22.0 ],
+									"patching_rect" : [ 25.0, 325.0, 90.0, 22.0 ],
 									"text" : "route addwithid"
 								}
 
@@ -1440,20 +1496,23 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 378.0, 638.5, 165.0, 37.0 ],
+									"patching_rect" : [ 362.0, 544.0, 165.0, 37.0 ],
 									"text" : "follower, no initialization but same ports as primary"
 								}
 
 							}
 , 							{
 								"box" : 								{
+									"fontname" : "Arial",
+									"fontsize" : 12.0,
 									"id" : "obj-25",
 									"maxclass" : "newobj",
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 47.0, 646.0, 316.0, 22.0 ],
-									"text" : "bis.oscagent null 4567 7654 @autoinitialize 0 @follower 1"
+									"patching_rect" : [ 31.0, 551.0, 314.0, 22.0 ],
+									"text" : "pyosc.agent null 4567 7654 @autoinitialize 0",
+									"varname" : "follower"
 								}
 
 							}
@@ -1464,7 +1523,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 2,
 									"outlettype" : [ "", "" ],
-									"patching_rect" : [ 41.0, 383.0, 55.0, 22.0 ],
+									"patching_rect" : [ 25.0, 288.0, 55.0, 22.0 ],
 									"text" : "route id0"
 								}
 
@@ -1476,7 +1535,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 357.0, 250.0, 159.0, 24.0 ],
+									"patching_rect" : [ 341.0, 155.0, 159.0, 24.0 ],
 									"text" : "custom address/id: \"id0\""
 								}
 
@@ -1489,7 +1548,7 @@
 									"numoutlets" : 2,
 									"outlettype" : [ "", "bang" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 188.0, 217.0, 50.0, 22.0 ]
+									"patching_rect" : [ 172.0, 122.0, 50.0, 22.0 ]
 								}
 
 							}
@@ -1500,7 +1559,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 188.0, 251.0, 42.0, 22.0 ],
+									"patching_rect" : [ 172.0, 156.0, 42.0, 22.0 ],
 									"text" : "rhs $1"
 								}
 
@@ -1513,7 +1572,7 @@
 									"numoutlets" : 2,
 									"outlettype" : [ "", "bang" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 260.0, 215.0, 50.0, 22.0 ]
+									"patching_rect" : [ 244.0, 120.0, 50.0, 22.0 ]
 								}
 
 							}
@@ -1524,7 +1583,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 260.0, 251.0, 95.0, 22.0 ],
+									"patching_rect" : [ 244.0, 156.0, 95.0, 22.0 ],
 									"text" : "addwithid id0 $1"
 								}
 
@@ -1537,7 +1596,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 320.0, 326.5, 202.0, 51.0 ],
+									"patching_rect" : [ 304.0, 232.0, 202.0, 51.0 ],
 									"text" : "leader, handling initialization and termination (no attribute for this, this is the default behaviour)"
 								}
 
@@ -1551,7 +1610,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 746.0, 704.0, 125.0, 49.0 ],
+									"patching_rect" : [ 730.0, 327.0, 125.0, 49.0 ],
 									"text" : "file:/Users/joakimborg/Mabstractions/io/help/demo.py"
 								}
 
@@ -1564,7 +1623,7 @@
 									"numinlets" : 1,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 601.0, 666.0, 57.0, 22.0 ],
+									"patching_rect" : [ 585.0, 289.0, 57.0, 22.0 ],
 									"text" : "tosymbol"
 								}
 
@@ -1578,7 +1637,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 601.0, 704.0, 129.0, 35.0 ],
+									"patching_rect" : [ 585.0, 327.0, 129.0, 35.0 ],
 									"text" : ";\rmax launchbrowser $1"
 								}
 
@@ -1591,7 +1650,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 2,
 									"outlettype" : [ "", "" ],
-									"patching_rect" : [ 601.0, 638.0, 151.0, 22.0 ],
+									"patching_rect" : [ 585.0, 261.0, 151.0, 22.0 ],
 									"text" : "combine file: s @triggers 1"
 								}
 
@@ -1604,7 +1663,7 @@
 									"numinlets" : 1,
 									"numoutlets" : 2,
 									"outlettype" : [ "", "int" ],
-									"patching_rect" : [ 601.0, 600.0, 133.0, 22.0 ],
+									"patching_rect" : [ 585.0, 223.0, 133.0, 22.0 ],
 									"text" : "conformpath slash boot"
 								}
 
@@ -1617,7 +1676,7 @@
 									"numinlets" : 1,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 601.0, 570.0, 77.0, 22.0 ],
+									"patching_rect" : [ 585.0, 193.0, 77.0, 22.0 ],
 									"text" : "absolutepath"
 								}
 
@@ -1631,7 +1690,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 551.0, 162.0, 74.0, 26.0 ],
+									"patching_rect" : [ 585.0, 113.0, 74.0, 26.0 ],
 									"text" : "demo.py",
 									"textcolor" : [ 1.0, 0.709803921568627, 0.196078431372549, 1.0 ]
 								}
@@ -1644,7 +1703,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 103.5, 251.0, 59.0, 22.0 ],
+									"patching_rect" : [ 87.0, 156.0, 59.0, 22.0 ],
 									"text" : "terminate"
 								}
 
@@ -1656,7 +1715,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 41.0, 251.0, 51.0, 22.0 ],
+									"patching_rect" : [ 25.0, 156.0, 51.0, 22.0 ],
 									"text" : "initialize"
 								}
 
@@ -1670,7 +1729,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 170.0, 374.0, 55.0, 55.0 ]
+									"patching_rect" : [ 154.0, 279.0, 55.0, 55.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -1681,8 +1741,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 41.0, 341.0, 277.0, 22.0 ],
-									"text" : "bis.oscagent demo.py 4567 7654 @autoinitialize 0"
+									"patching_rect" : [ 25.0, 246.0, 274.0, 22.0 ],
+									"text" : "pyosc.agent demo.py 4567 7654 @autoinitialize 0"
 								}
 
 							}
@@ -1726,7 +1786,7 @@
 									"numoutlets" : 3,
 									"outlettype" : [ "", "", "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 41.0, 225.0, 20.0, 20.0 ],
+									"patching_rect" : [ 25.0, 130.0, 20.0, 20.0 ],
 									"rounded" : 60.0,
 									"text" : "1",
 									"textcolor" : [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -1738,6 +1798,14 @@
 								"patchline" : 								{
 									"destination" : [ "obj-8", 0 ],
 									"source" : [ "obj-11", 0 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
+									"destination" : [ "obj-20", 0 ],
+									"hidden" : 1,
+									"source" : [ "obj-13", 0 ]
 								}
 
 							}
@@ -1827,6 +1895,13 @@
 							}
 , 							{
 								"patchline" : 								{
+									"destination" : [ "obj-13", 0 ],
+									"source" : [ "obj-49", 0 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
 									"destination" : [ "obj-25", 0 ],
 									"source" : [ "obj-5", 0 ]
 								}
@@ -1866,7 +1941,7 @@
 								"patchline" : 								{
 									"destination" : [ "obj-77", 1 ],
 									"hidden" : 1,
-									"midpoints" : [ 610.5, 629.5, 742.5, 629.5 ],
+									"midpoints" : [ 594.5, 253.0, 726.5, 253.0 ],
 									"source" : [ "obj-76", 0 ]
 								}
 
@@ -1904,15 +1979,13 @@
 								}
 
 							}
- ]
+ ],
+						"originid" : "pat-3282"
 					}
 ,
 					"patching_rect" : [ 443.0, 24.0, 116.0, 22.0 ],
 					"saved_object_attributes" : 					{
-						"description" : "",
-						"digest" : "",
-						"globalpatchername" : "",
-						"tags" : ""
+						"globalpatchername" : ""
 					}
 ,
 					"text" : "p \"leader & follower\""
@@ -1928,43 +2001,17 @@
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 8,
-							"minor" : 6,
-							"revision" : 0,
+							"major" : 9,
+							"minor" : 0,
+							"revision" : 3,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2117.0, 1232.0 ],
-						"bglocked" : 0,
-						"openinpresentation" : 0,
-						"default_fontsize" : 12.0,
-						"default_fontface" : 0,
-						"default_fontname" : "Arial",
-						"gridonopen" : 1,
+						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
-						"gridsnaponopen" : 1,
-						"objectsnaponopen" : 1,
-						"statusbarvisible" : 2,
-						"toolbarvisible" : 1,
-						"lefttoolbarpinned" : 0,
-						"toptoolbarpinned" : 0,
-						"righttoolbarpinned" : 0,
-						"bottomtoolbarpinned" : 0,
-						"toolbars_unpinned_last_save" : 0,
-						"tallnewobj" : 0,
-						"boxanimatetime" : 200,
-						"enablehscroll" : 1,
-						"enablevscroll" : 1,
-						"devicewidth" : 0.0,
-						"description" : "",
-						"digest" : "",
-						"tags" : "",
-						"style" : "",
-						"subpatcher_template" : "",
 						"showontab" : 1,
-						"assistshowspatchername" : 0,
 						"boxes" : [ 							{
 								"box" : 								{
 									"id" : "obj-78",
@@ -2717,7 +2764,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 170.0, 374.0, 55.0, 55.0 ]
+									"patching_rect" : [ 170.0, 374.0, 55.0, 55.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -2728,8 +2776,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 41.0, 341.0, 277.0, 22.0 ],
-									"text" : "bis.oscagent demo.py 3456 6543 @autoinitialize 0"
+									"patching_rect" : [ 41.0, 341.0, 274.0, 22.0 ],
+									"text" : "pyosc.agent demo.py 3456 6543 @autoinitialize 0"
 								}
 
 							}
@@ -3180,15 +3228,13 @@
 								}
 
 							}
- ]
+ ],
+						"originid" : "pat-3464"
 					}
 ,
 					"patching_rect" : [ 249.0, 24.0, 76.0, 22.0 ],
 					"saved_object_attributes" : 					{
-						"description" : "",
-						"digest" : "",
-						"globalpatchername" : "",
-						"tags" : ""
+						"globalpatchername" : ""
 					}
 ,
 					"text" : "p \"osc limits\""
@@ -3204,43 +3250,17 @@
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 8,
-							"minor" : 6,
-							"revision" : 0,
+							"major" : 9,
+							"minor" : 0,
+							"revision" : 3,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2117.0, 1232.0 ],
-						"bglocked" : 0,
-						"openinpresentation" : 0,
-						"default_fontsize" : 12.0,
-						"default_fontface" : 0,
-						"default_fontname" : "Arial",
-						"gridonopen" : 1,
+						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
-						"gridsnaponopen" : 1,
-						"objectsnaponopen" : 1,
-						"statusbarvisible" : 2,
-						"toolbarvisible" : 1,
-						"lefttoolbarpinned" : 0,
-						"toptoolbarpinned" : 0,
-						"righttoolbarpinned" : 0,
-						"bottomtoolbarpinned" : 0,
-						"toolbars_unpinned_last_save" : 0,
-						"tallnewobj" : 0,
-						"boxanimatetime" : 200,
-						"enablehscroll" : 1,
-						"enablevscroll" : 1,
-						"devicewidth" : 0.0,
-						"description" : "",
-						"digest" : "",
-						"tags" : "",
-						"style" : "",
-						"subpatcher_template" : "",
 						"showontab" : 1,
-						"assistshowspatchername" : 0,
 						"boxes" : [ 							{
 								"box" : 								{
 									"bubble" : 1,
@@ -3261,7 +3281,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 537.0, 290.0, 24.0, 24.0 ]
+									"patching_rect" : [ 537.0, 290.0, 24.0, 24.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -3409,7 +3430,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 609.0, 530.0, 55.0, 55.0 ]
+									"patching_rect" : [ 609.0, 530.0, 55.0, 55.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -3420,8 +3442,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 483.0, 492.0, 270.0, 22.0 ],
-									"text" : "bis.oscagent fatal.py 2347 7432 @autoinitialize 0"
+									"patching_rect" : [ 483.0, 492.0, 267.0, 22.0 ],
+									"text" : "pyosc.agent fatal.py 2347 7432 @autoinitialize 0"
 								}
 
 							}
@@ -3505,7 +3527,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 170.0, 578.0, 55.0, 55.0 ]
+									"patching_rect" : [ 170.0, 578.0, 55.0, 55.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -3516,8 +3539,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 41.0, 545.0, 277.0, 22.0 ],
-									"text" : "bis.oscagent demo.py 2346 6432 @autoinitialize 0"
+									"patching_rect" : [ 41.0, 545.0, 274.0, 22.0 ],
+									"text" : "pyosc.agent demo.py 2346 6432 @autoinitialize 0"
 								}
 
 							}
@@ -3878,7 +3901,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 170.0, 374.0, 55.0, 55.0 ]
+									"patching_rect" : [ 170.0, 374.0, 55.0, 55.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -3889,8 +3913,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 41.0, 341.0, 277.0, 22.0 ],
-									"text" : "bis.oscagent demo.py 2345 5432 @autoinitialize 0"
+									"patching_rect" : [ 41.0, 341.0, 274.0, 22.0 ],
+									"text" : "pyosc.agent demo.py 2345 5432 @autoinitialize 0"
 								}
 
 							}
@@ -4187,15 +4211,13 @@
 								}
 
 							}
- ]
+ ],
+						"originid" : "pat-3526"
 					}
 ,
 					"patching_rect" : [ 184.0, 24.0, 50.0, 22.0 ],
 					"saved_object_attributes" : 					{
-						"description" : "",
-						"digest" : "",
-						"globalpatchername" : "",
-						"tags" : ""
+						"globalpatchername" : ""
 					}
 ,
 					"text" : "p errors"
@@ -4211,43 +4233,17 @@
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 8,
-							"minor" : 6,
-							"revision" : 0,
+							"major" : 9,
+							"minor" : 0,
+							"revision" : 3,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2117.0, 1232.0 ],
-						"bglocked" : 0,
-						"openinpresentation" : 0,
-						"default_fontsize" : 12.0,
-						"default_fontface" : 0,
-						"default_fontname" : "Arial",
-						"gridonopen" : 1,
+						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
-						"gridsnaponopen" : 1,
-						"objectsnaponopen" : 1,
-						"statusbarvisible" : 2,
-						"toolbarvisible" : 1,
-						"lefttoolbarpinned" : 0,
-						"toptoolbarpinned" : 0,
-						"righttoolbarpinned" : 0,
-						"bottomtoolbarpinned" : 0,
-						"toolbars_unpinned_last_save" : 0,
-						"tallnewobj" : 0,
-						"boxanimatetime" : 200,
-						"enablehscroll" : 1,
-						"enablevscroll" : 1,
-						"devicewidth" : 0.0,
-						"description" : "",
-						"digest" : "",
-						"tags" : "",
-						"style" : "",
-						"subpatcher_template" : "",
 						"showontab" : 1,
-						"assistshowspatchername" : 0,
 						"boxes" : [ 							{
 								"box" : 								{
 									"arrows" : 2,
@@ -4366,7 +4362,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 1127.0, 310.0, 24.0, 24.0 ]
+									"patching_rect" : [ 1127.0, 310.0, 24.0, 24.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -4444,7 +4441,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 760.0, 154.5, 181.0, 66.0 ],
+									"patching_rect" : [ 760.0, 154.5, 182.0, 66.0 ],
 									"text" : "since we don't provide a launch script, initialize won't work here. we need to manually launch it"
 								}
 
@@ -4482,8 +4479,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 1105.0, 275.0, 63.0, 22.0 ],
-									"text" : "bis.python"
+									"patching_rect" : [ 1105.0, 275.0, 79.0, 22.0 ],
+									"text" : "pyosc.python"
 								}
 
 							}
@@ -4674,7 +4671,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 764.0, 310.0, 55.0, 55.0 ]
+									"patching_rect" : [ 764.0, 310.0, 55.0, 55.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -4685,8 +4683,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 635.0, 277.0, 277.0, 22.0 ],
-									"text" : "bis.oscagent null 1236 6321 @autoinitialize 0"
+									"patching_rect" : [ 635.0, 277.0, 247.0, 22.0 ],
+									"text" : "pyosc.agent null 1236 6321 @autoinitialize 0"
 								}
 
 							}
@@ -4877,7 +4875,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 170.0, 584.0, 55.0, 55.0 ]
+									"patching_rect" : [ 170.0, 584.0, 55.0, 55.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -4888,8 +4887,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 41.0, 551.0, 367.0, 22.0 ],
-									"text" : "bis.oscagent demo.py 1235 5321 @autoinitialize 0 @args --rhs 999"
+									"patching_rect" : [ 41.0, 551.0, 364.0, 22.0 ],
+									"text" : "pyosc.agent demo.py 1235 5321 @autoinitialize 0 @args --rhs 999"
 								}
 
 							}
@@ -5176,7 +5175,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 170.0, 310.0, 55.0, 55.0 ]
+									"patching_rect" : [ 170.0, 310.0, 55.0, 55.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -5187,8 +5187,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 41.0, 277.0, 277.0, 22.0 ],
-									"text" : "bis.oscagent demo.py 1234 4321 @autoinitialize 0"
+									"patching_rect" : [ 41.0, 277.0, 274.0, 22.0 ],
+									"text" : "pyosc.agent demo.py 1234 4321 @autoinitialize 0"
 								}
 
 							}
@@ -5693,15 +5693,13 @@
 								}
 
 							}
- ]
+ ],
+						"originid" : "pat-3710"
 					}
 ,
 					"patching_rect" : [ 94.0, 24.0, 81.0, 22.0 ],
 					"saved_object_attributes" : 					{
-						"description" : "",
-						"digest" : "",
-						"globalpatchername" : "",
-						"tags" : ""
+						"globalpatchername" : ""
 					}
 ,
 					"text" : "p initialization"
@@ -5717,53 +5715,25 @@
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 8,
-							"minor" : 6,
-							"revision" : 0,
+							"major" : 9,
+							"minor" : 0,
+							"revision" : 3,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2117.0, 1232.0 ],
-						"bglocked" : 0,
-						"openinpresentation" : 0,
-						"default_fontsize" : 12.0,
-						"default_fontface" : 0,
-						"default_fontname" : "Arial",
-						"gridonopen" : 1,
+						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
-						"gridsnaponopen" : 1,
-						"objectsnaponopen" : 1,
-						"statusbarvisible" : 2,
-						"toolbarvisible" : 1,
-						"lefttoolbarpinned" : 0,
-						"toptoolbarpinned" : 0,
-						"righttoolbarpinned" : 0,
-						"bottomtoolbarpinned" : 0,
-						"toolbars_unpinned_last_save" : 0,
-						"tallnewobj" : 0,
-						"boxanimatetime" : 200,
-						"enablehscroll" : 1,
-						"enablevscroll" : 1,
-						"devicewidth" : 0.0,
-						"description" : "",
-						"digest" : "",
-						"tags" : "",
-						"style" : "",
-						"subpatcher_template" : "",
 						"showontab" : 1,
-						"assistshowspatchername" : 0,
 						"boxes" : [  ],
-						"lines" : [  ]
+						"lines" : [  ],
+						"originid" : "pat-3908"
 					}
 ,
 					"patching_rect" : [ 736.0, 24.0, 25.0, 22.0 ],
 					"saved_object_attributes" : 					{
-						"description" : "",
-						"digest" : "",
-						"globalpatchername" : "",
-						"tags" : ""
+						"globalpatchername" : ""
 					}
 ,
 					"text" : "p ?"
@@ -5779,44 +5749,47 @@
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 8,
-							"minor" : 6,
-							"revision" : 0,
+							"major" : 9,
+							"minor" : 0,
+							"revision" : 3,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2117.0, 1232.0 ],
-						"bglocked" : 0,
-						"openinpresentation" : 0,
-						"default_fontsize" : 12.0,
-						"default_fontface" : 0,
-						"default_fontname" : "Arial",
-						"gridonopen" : 1,
+						"rect" : [ 34.0, 113.0, 2124.0, 1230.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
-						"gridsnaponopen" : 1,
-						"objectsnaponopen" : 1,
-						"statusbarvisible" : 2,
-						"toolbarvisible" : 1,
-						"lefttoolbarpinned" : 0,
-						"toptoolbarpinned" : 0,
-						"righttoolbarpinned" : 0,
-						"bottomtoolbarpinned" : 0,
-						"toolbars_unpinned_last_save" : 0,
-						"tallnewobj" : 0,
-						"boxanimatetime" : 200,
-						"enablehscroll" : 1,
-						"enablevscroll" : 1,
-						"devicewidth" : 0.0,
-						"description" : "",
-						"digest" : "",
-						"tags" : "",
-						"style" : "",
-						"subpatcher_template" : "",
 						"showontab" : 1,
-						"assistshowspatchername" : 0,
 						"boxes" : [ 							{
+								"box" : 								{
+									"fontface" : 1,
+									"fontsize" : 14.0,
+									"id" : "obj-34",
+									"maxclass" : "comment",
+									"numinlets" : 1,
+									"numoutlets" : 0,
+									"patching_rect" : [ 902.0, 23.0, 154.0, 22.0 ],
+									"text" : "TODO: Resize all tabs",
+									"textcolor" : [ 0.4616160095, 1.0, 0.8905446529, 1.0 ]
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"bubble" : 1,
+									"fontface" : 1,
+									"fontsize" : 14.0,
+									"id" : "obj-21",
+									"maxclass" : "comment",
+									"numinlets" : 1,
+									"numoutlets" : 0,
+									"patching_rect" : [ 1224.0, 329.0, 168.0, 26.0 ],
+									"text" : "TODO: Create maxref",
+									"textcolor" : [ 0.4616160095, 1.0, 0.8905446529, 1.0 ]
+								}
+
+							}
+, 							{
 								"box" : 								{
 									"id" : "obj-98",
 									"linecount" : 2,
@@ -5932,7 +5905,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 105.875, 433.0, 226.25, 47.0 ],
+									"patching_rect" : [ 105.875, 433.0, 227.0, 47.0 ],
 									"text" : "Mixing \"auto\" with default assigned ports (as is the case in this help file) is normally not recommended"
 								}
 
@@ -6021,7 +5994,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 1435.0, 597.0, 24.0, 24.0 ]
+									"patching_rect" : [ 1435.0, 597.0, 24.0, 24.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -6250,19 +6224,20 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
 									"patching_rect" : [ 1028.0, 598.0, 177.0, 22.0 ],
-									"text" : "/input throw"
+									"text" : "/input loglevel 0"
 								}
 
 							}
 , 							{
 								"box" : 								{
 									"id" : "obj-105",
+									"linecount" : 2,
 									"maxclass" : "message",
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 645.0, 598.0, 185.0, 22.0 ],
-									"text" : "hrows an uncaught exception'"
+									"patching_rect" : [ 645.0, 598.0, 185.0, 35.0 ],
+									"text" : "interpreter /opt/homebrew/bin/python3"
 								}
 
 							}
@@ -6378,7 +6353,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 743.0, 314.0, 541.0, 145.0 ],
+									"patching_rect" : [ 675.0, 313.5, 541.0, 145.0 ],
 									"text" : "attributes: \n@args (default: null): additional arguments at launch \n@autoinitialize (default: 1): launch immediately when created\n @autoterminate (default: 1): shut down when deleted\n@interpreter (default: \"default\" -- see interpreter tab): python interpreter to use\n@stdout (default: 0): output stdout when script finishes\n@stderr (default: 1) output stderr when script finishes \n@loglevel (default: 0): max log level - print (0), warning (1), error (2), debug (3)\n@quiet (default: 0): suppress all non-launch related errors\n@timeout (default: 15000): time in ms until remote is flagged as offline if no heartbeat is received"
 								}
 
@@ -6486,7 +6461,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 467.0, 313.0, 255.0, 78.0 ],
+									"patching_rect" : [ 387.0, 313.0, 255.0, 78.0 ],
 									"text" : "arguments: \n- relative path to launch script (default: null)\n- sendport (default: \"auto\"/8081)\n- recvport (default: \"auto\"/8080)\n- ip (default: 127.0.0.1)"
 								}
 
@@ -6893,7 +6868,8 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 260.0, 374.0, 55.0, 55.0 ]
+									"patching_rect" : [ 260.0, 374.0, 55.0, 55.0 ],
+									"svg" : ""
 								}
 
 							}
@@ -6904,8 +6880,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "int", "" ],
-									"patching_rect" : [ 41.0, 341.0, 419.0, 22.0 ],
-									"text" : "bis.oscagent demo.py auto auto @autoinitialize 0"
+									"patching_rect" : [ 41.0, 341.0, 268.0, 22.0 ],
+									"text" : "pyosc.agent demo.py auto auto @autoinitialize 0"
 								}
 
 							}
@@ -7470,15 +7446,13 @@
 								}
 
 							}
- ]
+ ],
+						"originid" : "pat-3910"
 					}
 ,
 					"patching_rect" : [ 28.0, 24.0, 47.0, 22.0 ],
 					"saved_object_attributes" : 					{
-						"description" : "",
-						"digest" : "",
-						"globalpatchername" : "",
-						"tags" : ""
+						"globalpatchername" : ""
 					}
 ,
 					"text" : "p basic"
@@ -7487,38 +7461,39 @@
 			}
  ],
 		"lines" : [  ],
+		"originid" : "pat-3096",
 		"dependency_cache" : [ 			{
-				"name" : "bis.awaitpatcherargs.maxpat",
-				"bootpath" : "~/Mabstractions/abstraction",
-				"patcherrelativepath" : "../../abstraction",
-				"type" : "JSON",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "bis.defaultarg.maxpat",
-				"bootpath" : "~/Mabstractions/abstraction",
-				"patcherrelativepath" : "../../abstraction",
-				"type" : "JSON",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "bis.oscagent.maxpat",
-				"bootpath" : "~/Mabstractions/io",
-				"patcherrelativepath" : "..",
-				"type" : "JSON",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "bis.python.maxpat",
-				"bootpath" : "~/Mabstractions/io",
-				"patcherrelativepath" : "..",
-				"type" : "JSON",
-				"implicit" : 1
-			}
-, 			{
 				"name" : "helpdetails.js",
 				"bootpath" : "C74:/help/resources",
 				"type" : "TEXT",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "pyosc.agent.maxpat",
+				"bootpath" : "~/MaxProjects/pyosc/pyosc/patchers",
+				"patcherrelativepath" : "../patchers",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "pyosc.awaitpatcherargs.maxpat",
+				"bootpath" : "~/MaxProjects/pyosc/pyosc/patchers",
+				"patcherrelativepath" : "../patchers",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "pyosc.defaultarg.maxpat",
+				"bootpath" : "~/MaxProjects/pyosc/pyosc/patchers",
+				"patcherrelativepath" : "../patchers",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "pyosc.python.maxpat",
+				"bootpath" : "~/MaxProjects/pyosc/pyosc/patchers",
+				"patcherrelativepath" : "../patchers",
+				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{

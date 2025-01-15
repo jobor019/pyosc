@@ -20,7 +20,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 219.0, 417.0, 183.0, 33.0 ],
+					"patching_rect" : [ 219.0, 417.0, 61.0, 33.0 ],
 					"text" : "OSC"
 				}
 
