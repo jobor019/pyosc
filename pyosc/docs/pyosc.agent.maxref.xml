@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes'?>
+
+<c74object name='pyosc.agent' category=''>
+
+	<digest>OSC Agent for using with the python maxosc package</digest>
+	<description>OSC Agent for using with the python maxosc package</description>
+
+
+	<!--METADATA-->
+
+	<metadatalist>
+		<metadata name='author'>Borg </metadata>
+	</metadatalist>
+
+
+	<!--ARGUMENTS-->
+
+	<objarglist>
+
+		<objarg name='filepath' type='symbol' optional='1'>
+			<digest>Relative path to python script to launch (default: null)</digest>
+			<description>Path to python script to launch with the 'initialize' command. To handle launch manually, use 'null' (default) in combination with @autoinitialize 0</description>
+		</objarg>
+
+        <objarg name='sendport' type='int' optional='1'>
+			<digest>OSC send port (default: 'auto'/8081)</digest>
+			<description>OSC send port. Use 'auto' to automatically assign port when using multiple pyosc.agent. The port will be forwarded as the receive port of the remote python Agent class when launched from Max</description>
+		</objarg>
+
+        <objarg name='recvport' type='int' optional='1'>
+			<digest>OSC receive port (default: 'auto'/8080)</digest>
+			<description>OSC receive port. Use 'auto' to automatically assign port when using multiple pyosc.agent. The port will be forwarded as the send port of the remote python Agent class when launched from Max</description>
+		</objarg>
+
+	</objarglist>
+
+
+	<!--MESSAGES-->
+
+	<methodlist>
+
+		<method name='anything'>
+			<digest>Call remote function (async)</digest>
+			<description></description>
+		</method>
+
+		<method name='initialize'>
+			<digest>Initialize the agent. Requires the 'filepath' argument to be non-null</digest>
+			<description>When fully initialized, the pyosc.agent will output the message 'initialized' on its first outlet</description>
+		</method>
+
+		<method name='reinitialize'>
+			<digest>Reinitializes the agent (calls terminate, waits for termination and then calls initialize)</digest>
+			<description></description>
+		</method>
+
+		<method name='terminate'>
+			<digest>Terminate the agent</digest>
+			<description>When terminated, the pyosc.agent will output the message 'terminated' on ints first outlet</description>
+		</method>
+
+        <method name='rawsend'>
+			<digest>Call remote function</digest>
+			<description>This is identical to 'anything' except that it also allows calling functions that conflicts keywords of the pyosc.agent (e.g. rawsend initialize)</description>
+		</method>
+
+	</methodlist>
+
+
+	<!--ATTRIBUTES-->
+
+	<attributelist>
+
+		<attribute name='args' get='0' set='1' type='list' size='1' >
+			<digest>Extra arguments to pass to python script on launch</digest>
+			<description>Typically passed with double dashes, e.g. @args --extra_arg1 123 --extra_arg2 456</description>
+		</attribute>
+
+        <attribute name='autoinitialize' get='0' set='1' type='bool' size='1' >
+			<digest>Launch script immediately when created/started (default: 1)</digest>
+			<description></description>
+		</attribute>
+
+        <attribute name='autoterminate' get='0' set='1' type='bool' size='1' >
+			<digest>Terminate script when the object is deleted (default: 1)</digest>
+			<description></description>
+		</attribute>
+
+        <attribute name='interpreter' get='0' set='1' type='symbol' size='1' >
+			<digest>Set python interpreter (default: "default", see maxhelp)</digest>
+			<description></description>
+		</attribute>
+
+        <attribute name='stdout' get='0' set='1' type='bool' size='1' >
+			<digest>Output stdout when script terminates (default: 0)</digest>
+			<description></description>
+		</attribute>
+
+        <attribute name='stderr' get='0' set='1' type='bool' size='1' >
+			<digest>Output stderr when script terminates (default: 1)</digest>
+			<description></description>
+		</attribute>
+
+        <attribute name='loglevel' get='0' set='1' type='int' size='1' >
+			<digest>Set the log level (0: info, 1: warning, 2: error, 3: debug)</digest>
+			<description></description>
+		</attribute>
+
+        <attribute name='quiet' get='0' set='1' type='bool' size='1' >
+			<digest>Suppress all non-launch related messages to Max console (default: 0)</digest>
+			<description></description>
+		</attribute>
+
+        <attribute name='timeout' get='0' set='1' type='int' size='1' >
+			<digest>Time in milliseonds until remote is flagged as offline if no heartbeat is received (default: 15000)</digest>
+			<description></description>
+		</attribute>
+
+        <attribute name='follower' get='0' set='1' type='bool' size='1' >
+			<digest>For multiple pyosc.agent objects with single remote, see maxhelp (default: 0)"</digest>
+			<description></description>
+		</attribute>
+
+	</attributelist>
+
+
+	<!--RELATED-->
+
+	<seealsolist>
+		<seealso name='udpsend' />
+        <seealso name='udpreceive' />
+        <seealso name='shell' />
+        <seealso name='pyosc.python' />
+	</seealsolist>
+
+
+</c74object>

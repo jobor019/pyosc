@@ -4,13 +4,13 @@
 		"appversion" : 		{
 			"major" : 9,
 			"minor" : 0,
-			"revision" : 3,
+			"revision" : 5,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 34.0, 87.0, 2124.0, 1256.0 ],
+		"rect" : [ 34.0, 100.0, 1069.0, 786.0 ],
 		"gridsize" : [ 15.0, 15.0 ],
 		"showrootpatcherontab" : 0,
 		"showontab" : 0,
@@ -25,19 +25,20 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 3,
+							"revision" : 5,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 34.0, 113.0, 2124.0, 1230.0 ],
+						"rect" : [ 0.0, 26.0, 1069.0, 760.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
 						"showontab" : 1,
 						"boxes" : [ 							{
 								"box" : 								{
 									"bgcolor" : [ 0.4616160095, 1.0, 0.8905446529, 1.0 ],
 									"bgcolor2" : [ 0.172137149796092, 0.172137100044002, 0.172137113045018, 1 ],
+									"bgfillcolor_autogradient" : 0.0,
 									"bgfillcolor_color" : [ 0.172137149796092, 0.172137100044002, 0.172137113045018, 1 ],
 									"bgfillcolor_color1" : [ 0.4616160095, 1.0, 0.8905446529, 1.0 ],
 									"bgfillcolor_color2" : [ 0.172137149796092, 0.172137100044002, 0.172137113045018, 1 ],
@@ -291,8 +292,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 185.0, 372.0, 55.0, 55.0 ],
-									"svg" : ""
+									"patching_rect" : [ 185.0, 372.0, 55.0, 55.0 ]
 								}
 
 							}
@@ -497,14 +497,10 @@
 
 							}
  ],
-						"originid" : "pat-6740"
+						"originid" : "pat-1815"
 					}
 ,
 					"patching_rect" : [ 573.0, 24.0, 140.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p \"state & reinitialization\""
 				}
 
@@ -520,13 +516,13 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 3,
+							"revision" : 5,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
+						"rect" : [ 0.0, 26.0, 1069.0, 760.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
 						"showontab" : 1,
 						"boxes" : [ 							{
@@ -795,8 +791,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 230.5, 622.0, 55.0, 55.0 ],
-									"svg" : ""
+									"patching_rect" : [ 230.5, 622.0, 55.0, 55.0 ]
 								}
 
 							}
@@ -896,8 +891,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 299.0, 377.0, 55.0, 55.0 ],
-									"svg" : ""
+									"patching_rect" : [ 299.0, 377.0, 55.0, 55.0 ]
 								}
 
 							}
@@ -1113,14 +1107,10 @@
 
 							}
  ],
-						"originid" : "pat-6802"
+						"originid" : "pat-1877"
 					}
 ,
 					"patching_rect" : [ 348.0, 24.0, 82.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p interpreter"
 				}
 
@@ -1136,13 +1126,13 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 3,
+							"revision" : 5,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
+						"rect" : [ 0.0, 26.0, 1069.0, 760.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
 						"showontab" : 1,
 						"boxes" : [ 							{
@@ -1199,7 +1189,7 @@
 										"appversion" : 										{
 											"major" : 9,
 											"minor" : 0,
-											"revision" : 3,
+											"revision" : 5,
 											"architecture" : "x64",
 											"modernui" : 1
 										}
@@ -1307,14 +1297,10 @@
 
 											}
  ],
-										"originid" : "pat-6926"
+										"originid" : "pat-2001"
 									}
 ,
 									"patching_rect" : [ 605.0, 551.5, 127.0, 22.0 ],
-									"saved_object_attributes" : 									{
-										"globalpatchername" : ""
-									}
-,
 									"text" : "p handle_follower_attr"
 								}
 
@@ -1375,8 +1361,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 146.0, 586.0, 53.0, 53.0 ],
-									"svg" : ""
+									"patching_rect" : [ 146.0, 586.0, 53.0, 53.0 ]
 								}
 
 							}
@@ -1757,8 +1742,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 154.0, 279.0, 55.0, 55.0 ],
-									"svg" : ""
+									"patching_rect" : [ 154.0, 279.0, 55.0, 55.0 ]
 								}
 
 							}
@@ -2008,14 +1992,10 @@
 
 							}
  ],
-						"originid" : "pat-6924"
+						"originid" : "pat-1999"
 					}
 ,
 					"patching_rect" : [ 443.0, 24.0, 116.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p \"leader & follower\""
 				}
 
@@ -2031,13 +2011,13 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 3,
+							"revision" : 5,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
+						"rect" : [ 0.0, 26.0, 1069.0, 760.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
 						"showontab" : 1,
 						"boxes" : [ 							{
@@ -2804,8 +2784,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 170.0, 374.0, 55.0, 55.0 ],
-									"svg" : ""
+									"patching_rect" : [ 170.0, 374.0, 55.0, 55.0 ]
 								}
 
 							}
@@ -3269,14 +3248,10 @@
 
 							}
  ],
-						"originid" : "pat-7048"
+						"originid" : "pat-2123"
 					}
 ,
 					"patching_rect" : [ 249.0, 24.0, 76.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p \"osc limits\""
 				}
 
@@ -3292,13 +3267,13 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 3,
+							"revision" : 5,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
+						"rect" : [ 0.0, 26.0, 1069.0, 760.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
 						"showontab" : 1,
 						"boxes" : [ 							{
@@ -3321,8 +3296,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 537.0, 290.0, 24.0, 24.0 ],
-									"svg" : ""
+									"patching_rect" : [ 537.0, 290.0, 24.0, 24.0 ]
 								}
 
 							}
@@ -3470,8 +3444,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 609.0, 530.0, 55.0, 55.0 ],
-									"svg" : ""
+									"patching_rect" : [ 609.0, 530.0, 55.0, 55.0 ]
 								}
 
 							}
@@ -3567,8 +3540,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 170.0, 578.0, 55.0, 55.0 ],
-									"svg" : ""
+									"patching_rect" : [ 170.0, 578.0, 55.0, 55.0 ]
 								}
 
 							}
@@ -3941,8 +3913,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 170.0, 374.0, 55.0, 55.0 ],
-									"svg" : ""
+									"patching_rect" : [ 170.0, 374.0, 55.0, 55.0 ]
 								}
 
 							}
@@ -4252,14 +4223,10 @@
 
 							}
  ],
-						"originid" : "pat-7110"
+						"originid" : "pat-2185"
 					}
 ,
 					"patching_rect" : [ 184.0, 24.0, 50.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p errors"
 				}
 
@@ -4275,13 +4242,13 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 3,
+							"revision" : 5,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
+						"rect" : [ 0.0, 26.0, 1069.0, 760.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
 						"showontab" : 1,
 						"boxes" : [ 							{
@@ -4402,8 +4369,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 1127.0, 310.0, 24.0, 24.0 ],
-									"svg" : ""
+									"patching_rect" : [ 1127.0, 310.0, 24.0, 24.0 ]
 								}
 
 							}
@@ -4711,8 +4677,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 764.0, 310.0, 55.0, 55.0 ],
-									"svg" : ""
+									"patching_rect" : [ 764.0, 310.0, 55.0, 55.0 ]
 								}
 
 							}
@@ -4915,8 +4880,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 170.0, 584.0, 55.0, 55.0 ],
-									"svg" : ""
+									"patching_rect" : [ 170.0, 584.0, 55.0, 55.0 ]
 								}
 
 							}
@@ -5215,8 +5179,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 170.0, 310.0, 55.0, 55.0 ],
-									"svg" : ""
+									"patching_rect" : [ 170.0, 310.0, 55.0, 55.0 ]
 								}
 
 							}
@@ -5734,14 +5697,10 @@
 
 							}
  ],
-						"originid" : "pat-7294"
+						"originid" : "pat-2369"
 					}
 ,
 					"patching_rect" : [ 94.0, 24.0, 81.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p initialization"
 				}
 
@@ -5757,25 +5716,21 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 3,
+							"revision" : 5,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
+						"rect" : [ 0.0, 26.0, 1069.0, 760.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
 						"showontab" : 1,
 						"boxes" : [  ],
 						"lines" : [  ],
-						"originid" : "pat-7492"
+						"originid" : "pat-2567"
 					}
 ,
 					"patching_rect" : [ 736.0, 24.0, 25.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p ?"
 				}
 
@@ -5791,16 +5746,28 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 3,
+							"revision" : 5,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 0.0, 26.0, 2124.0, 1230.0 ],
+						"rect" : [ 34.0, 126.0, 1069.0, 760.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
 						"showontab" : 1,
 						"boxes" : [ 							{
+								"box" : 								{
+									"id" : "obj-43",
+									"maxclass" : "newobj",
+									"numinlets" : 1,
+									"numoutlets" : 3,
+									"outlettype" : [ "", "int", "" ],
+									"patching_rect" : [ 330.0, 136.0, 165.0, 22.0 ],
+									"text" : "pyosc.agent @autoinitialize 0"
+								}
+
+							}
+, 							{
 								"box" : 								{
 									"id" : "obj-47",
 									"maxclass" : "comment",
@@ -6045,8 +6012,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 1435.0, 597.0, 24.0, 24.0 ],
-									"svg" : ""
+									"patching_rect" : [ 1435.0, 597.0, 24.0, 24.0 ]
 								}
 
 							}
@@ -6275,19 +6241,20 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
 									"patching_rect" : [ 1028.0, 598.0, 177.0, 22.0 ],
-									"text" : "/input warnme"
+									"text" : "/input loglevel 0"
 								}
 
 							}
 , 							{
 								"box" : 								{
 									"id" : "obj-105",
+									"linecount" : 3,
 									"maxclass" : "message",
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 645.0, 598.0, 185.0, 22.0 ],
-									"text" : "[WARNING]: This is a warning"
+									"patching_rect" : [ 645.0, 598.0, 185.0, 49.0 ],
+									"text" : "interpreter /opt/homebrew/Caskroom/miniconda/base/bin/python3"
 								}
 
 							}
@@ -6399,12 +6366,12 @@
 								"box" : 								{
 									"bubble" : 1,
 									"id" : "obj-83",
-									"linecount" : 10,
+									"linecount" : 11,
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 675.0, 313.5, 541.0, 145.0 ],
-									"text" : "attributes: \n@args (default: null): additional arguments at launch \n@autoinitialize (default: 1): launch immediately when created\n @autoterminate (default: 1): shut down when deleted\n@interpreter (default: \"default\" -- see interpreter tab): python interpreter to use\n@stdout (default: 0): output stdout when script finishes\n@stderr (default: 1) output stderr when script finishes \n@loglevel (default: 0): max log level - print (0), warning (1), error (2), debug (3)\n@quiet (default: 0): suppress all non-launch related errors\n@timeout (default: 15000): time in ms until remote is flagged as offline if no heartbeat is received"
+									"patching_rect" : [ 675.0, 313.5, 547.0, 158.0 ],
+									"text" : "attributes: \n@args (default: null): additional arguments at launch \n@autoinitialize (default: 1): launch immediately when created\n @autoterminate (default: 1): shut down when deleted\n@interpreter (default: \"default\" -- see interpreter tab): python interpreter to use\n@stdout (default: 0): output stdout when script finishes\n@stderr (default: 1) output stderr when script finishes \n@loglevel (default: 0): max log level - print (0), warning (1), error (2), debug (3)\n@quiet (default: 0): suppress all non-launch related errors\n@timeout (default: 15000): time in ms until remote is flagged as offline if no heartbeat is received\n@follower (default: 0): for multiple pyosc.agent objects with single remote, see \"leader & follower\""
 								}
 
 							}
@@ -6918,8 +6885,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 260.0, 374.0, 55.0, 55.0 ],
-									"svg" : ""
+									"patching_rect" : [ 260.0, 374.0, 55.0, 55.0 ]
 								}
 
 							}
@@ -7499,21 +7465,17 @@
 
 							}
  ],
-						"originid" : "pat-7494"
+						"originid" : "pat-2569"
 					}
 ,
 					"patching_rect" : [ 28.0, 24.0, 47.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p basic"
 				}
 
 			}
  ],
 		"lines" : [  ],
-		"originid" : "pat-6738",
+		"originid" : "pat-1813",
 		"dependency_cache" : [ 			{
 				"name" : "helpdetails.js",
 				"bootpath" : "C74:/help/resources",
